@@ -1169,26 +1169,45 @@ function initMap(){
   leafletMap.on('click',()=>{if(window.innerWidth<768)closeDrawer();});
 }
 
+async function geocodeOne(co){
+  // Try Photon (Komoot/OSM) — no strict rate limit, fast
+  const q=encodeURIComponent((co.name||'')+' '+(co.city||'Abu Dhabi')+' UAE');
+  try{
+    const r=await fetch(`https://photon.komoot.io/api/?q=${q}&limit=1&bbox=53.5,23.5,56.5,25.5`);
+    const d=await r.json();
+    const f=d&&d.features&&d.features[0];
+    if(f){co.lat=f.geometry.coordinates[1];co.lng=f.geometry.coordinates[0];return;}
+  }catch(e){}
+  // Fallback: Nominatim
+  try{
+    const r2=await fetch(`https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1&countrycodes=ae`,{headers:{'Accept-Language':'en'}});
+    const d2=await r2.json();
+    if(d2&&d2[0]){co.lat=parseFloat(d2[0].lat);co.lng=parseFloat(d2[0].lon);return;}
+  }catch(e){}
+  // Last resort: random scatter near Abu Dhabi centre
+  co.lat=ABU_DHABI[0]+(Math.random()-0.5)*0.04;
+  co.lng=ABU_DHABI[1]+(Math.random()-0.5)*0.04;
+  co._geoFallback=true;
+}
+
 async function geocodeAll(){
   const needed=data.filter(c=>!c.lat||!c.lng);
   if(!needed.length)return;
   const prog=document.getElementById('geo-progress');
   prog.style.display='block';
-  for(let i=0;i<needed.length;i++){
-    document.getElementById('geo-msg').textContent=`Locating ${i+1}/${needed.length}: ${needed[i].name}`;
+  const BATCH=4; // run 4 in parallel — Photon has no hard per-IP rate limit
+  let done=0;
+  for(let i=0;i<needed.length;i+=BATCH){
+    const chunk=needed.slice(i,i+BATCH);
+    document.getElementById('geo-msg').textContent=`Locating ${Math.min(i+BATCH,needed.length)}/${needed.length}…`;
     document.getElementById('geo-bar').style.width=`${Math.round((i/needed.length)*100)}%`;
-    const co=needed[i];
-    const q=encodeURIComponent((co.name||'')+' '+(co.city||'Abu Dhabi')+' UAE');
-    try{
-      const r=await fetch(`https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1&countrycodes=ae`,{headers:{'Accept-Language':'en'}});
-      const d=await r.json();
-      if(d&&d[0]){co.lat=parseFloat(d[0].lat);co.lng=parseFloat(d[0].lon);}
-      else{co.lat=ABU_DHABI[0]+(Math.random()-0.5)*0.04;co.lng=ABU_DHABI[1]+(Math.random()-0.5)*0.04;co._geoFallback=true;}
-    }catch(e){co.lat=ABU_DHABI[0]+(Math.random()-0.5)*0.04;co.lng=ABU_DHABI[1]+(Math.random()-0.5)*0.04;co._geoFallback=true;}
-    if(i<needed.length-1)await new Promise(r=>setTimeout(r,1150));
+    await Promise.all(chunk.map(co=>geocodeOne(co)));
+    done+=chunk.length;
+    plotAllCompanies(); // update map as each batch lands
+    if(i+BATCH<needed.length)await new Promise(r=>setTimeout(r,300));
   }
   document.getElementById('geo-bar').style.width='100%';
-  document.getElementById('geo-msg').textContent='All companies located ✓';
+  document.getElementById('geo-msg').textContent=`All ${needed.length} companies located ✓`;
   setTimeout(()=>{prog.style.display='none';},1800);
   scheduleSave('Geocode companies');
   plotAllCompanies();
