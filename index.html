@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Abu Dhabi Client Tracker</title>
+<title>UAE Client Tracker</title>
 <style>
 :root {
   --bg: #0f1117;
@@ -11,221 +11,170 @@
   --surface2: #222535;
   --border: #2e3248;
   --accent: #4f6ef7;
-  --accent2: #7c3aed;
   --text: #e8eaf0;
   --text2: #8892a4;
   --success: #10b981;
   --warn: #f59e0b;
   --danger: #ef4444;
-  --new-highlight: #1a2a3a;
+  --new-row: #162030;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; font-size: 14px; }
 
-/* LOGIN */
-#login-screen {
-  min-height: 100vh; display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(135deg, #0f1117 0%, #1a1d27 100%);
-}
-.login-box {
-  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-  padding: 40px; width: 100%; max-width: 380px; text-align: center;
-}
-.login-box h1 { font-size: 1.5rem; margin-bottom: 6px; }
-.login-box p { color: var(--text2); font-size: 0.85rem; margin-bottom: 28px; }
-.login-box input {
-  width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px;
-  background: var(--bg); color: var(--text); font-size: 0.95rem; margin-bottom: 12px; outline: none;
-}
-.login-box input:focus { border-color: var(--accent); }
-.login-box button {
-  width: 100%; padding: 12px; background: var(--accent); color: #fff; border: none;
-  border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s;
-}
-.login-box button:hover { opacity: 0.9; }
-.login-error { color: var(--danger); font-size: 0.82rem; margin-top: 8px; }
+/* ── LOGIN ── */
+#login-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; }
+.login-box { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:40px; width:100%; max-width:360px; text-align:center; }
+.login-box h1 { font-size:1.4rem; margin-bottom:6px; }
+.login-box p { color:var(--text2); font-size:0.83rem; margin-bottom:24px; }
+.login-box input { width:100%; padding:11px 14px; border:1px solid var(--border); border-radius:8px; background:var(--bg); color:var(--text); font-size:0.9rem; margin-bottom:10px; outline:none; }
+.login-box input:focus { border-color:var(--accent); }
+.login-box button { width:100%; padding:12px; background:var(--accent); color:#fff; border:none; border-radius:8px; font-size:0.92rem; font-weight:600; cursor:pointer; }
+.login-box button:hover { opacity:0.88; }
+.login-error { color:var(--danger); font-size:0.8rem; margin-top:8px; }
 
-/* MAIN APP */
-#app { display: none; }
-.header {
-  background: var(--surface); border-bottom: 1px solid var(--border);
-  padding: 14px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
-  position: sticky; top: 0; z-index: 100;
-}
-.header h1 { font-size: 1.1rem; font-weight: 700; white-space: nowrap; }
-.header-spacer { flex: 1; }
-.search-wrap { position: relative; }
-.search-wrap input {
-  padding: 8px 12px 8px 36px; border: 1px solid var(--border); border-radius: 8px;
-  background: var(--bg); color: var(--text); font-size: 0.85rem; width: 220px; outline: none;
-}
-.search-wrap input:focus { border-color: var(--accent); }
-.search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text2); font-size: 0.85rem; }
-.btn {
-  padding: 8px 14px; border-radius: 8px; border: none; cursor: pointer;
-  font-size: 0.82rem; font-weight: 600; transition: all 0.15s; white-space: nowrap;
-}
-.btn-primary { background: var(--accent); color: #fff; }
-.btn-primary:hover { opacity: 0.88; }
-.btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-.btn-secondary:hover { border-color: var(--accent); }
-.btn-ghost { background: transparent; color: var(--text2); border: 1px solid var(--border); }
-.btn-ghost:hover { color: var(--text); border-color: var(--text2); }
+/* ── APP ── */
+#app { display:none; }
 
-/* SAVE STATUS */
-.save-status {
-  font-size: 0.75rem; color: var(--text2); display: flex; align-items: center; gap: 5px;
-}
-.save-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text2); }
-.save-dot.saving { background: var(--warn); animation: pulse 1s infinite; }
-.save-dot.saved { background: var(--success); }
-.save-dot.error { background: var(--danger); }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+/* ── HEADER ── */
+.header { background:var(--surface); border-bottom:1px solid var(--border); padding:12px 18px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; position:sticky; top:0; z-index:200; }
+.header h1 { font-size:1rem; font-weight:700; white-space:nowrap; }
+.search-wrap { position:relative; }
+.search-wrap input { padding:7px 12px 7px 32px; border:1px solid var(--border); border-radius:7px; background:var(--bg); color:var(--text); font-size:0.83rem; width:200px; outline:none; }
+.search-wrap input:focus { border-color:var(--accent); }
+.search-icon { position:absolute; left:9px; top:50%; transform:translateY(-50%); color:var(--text2); font-size:0.8rem; pointer-events:none; }
+.spacer { flex:1; }
+.save-badge { font-size:0.72rem; color:var(--text2); display:flex; align-items:center; gap:4px; }
+.save-dot { width:6px; height:6px; border-radius:50%; background:var(--text2); }
+.save-dot.saving { background:var(--warn); animation:pulse 1s infinite; }
+.save-dot.saved { background:var(--success); }
+.save-dot.error { background:var(--danger); }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+.btn { padding:7px 13px; border-radius:7px; border:1px solid transparent; cursor:pointer; font-size:0.8rem; font-weight:600; transition:all 0.15s; white-space:nowrap; }
+.btn-primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+.btn-primary:hover { opacity:0.88; }
+.btn-ghost { background:transparent; color:var(--text2); border-color:var(--border); }
+.btn-ghost:hover { color:var(--text); border-color:var(--text2); }
 
-/* FILTER BAR */
-.filter-bar {
-  padding: 12px 20px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
-  background: var(--surface); border-bottom: 1px solid var(--border);
-}
-.filter-chip {
-  padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border);
-  background: var(--bg); color: var(--text2); font-size: 0.78rem; cursor: pointer;
-  transition: all 0.15s; white-space: nowrap;
-}
-.filter-chip:hover { border-color: var(--accent); color: var(--text); }
-.filter-chip.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+/* ── FILTER ROWS ── */
+.filter-section { background:var(--surface); border-bottom:1px solid var(--border); }
+.filter-row { padding:8px 18px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; border-bottom:1px solid #1e2235; }
+.filter-row:last-child { border-bottom:none; }
+.filter-label { font-size:0.68rem; color:var(--text2); font-weight:700; text-transform:uppercase; letter-spacing:0.06em; white-space:nowrap; min-width:60px; }
+.chip { padding:4px 11px; border-radius:20px; border:1px solid var(--border); background:var(--bg); color:var(--text2); font-size:0.75rem; cursor:pointer; transition:all 0.15s; white-space:nowrap; }
+.chip:hover { border-color:var(--accent); color:var(--text); }
+.chip.active { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600; }
+.chip.auh.active { background:#1a3a6a; border-color:#3a7aef; color:#90c0ff; }
+.chip.dxb.active { background:#3a1a6a; border-color:#9a3aef; color:#d0a0ff; }
+.chip.shj.active { background:#3a3a1a; border-color:#c0c030; color:#e8e870; }
 
-/* STATS */
-.stats-bar {
-  padding: 10px 20px; display: flex; gap: 20px; flex-wrap: wrap;
-  border-bottom: 1px solid var(--border); background: var(--bg);
-}
-.stat { font-size: 0.78rem; color: var(--text2); }
-.stat span { color: var(--text); font-weight: 600; }
+/* ── STATS BAR ── */
+.stats-bar { padding:7px 18px; display:flex; gap:18px; flex-wrap:wrap; background:var(--bg); border-bottom:1px solid var(--border); }
+.stat { font-size:0.75rem; color:var(--text2); }
+.stat b { color:var(--text); font-weight:600; }
 
-/* TABLE VIEW */
-.table-wrap { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; min-width: 900px; }
+/* ── ADD FORM ── */
+.add-form { background:var(--surface2); border-bottom:1px solid var(--border); padding:14px 18px; display:none; }
+.add-form.open { display:block; }
+.add-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:8px; margin-bottom:10px; }
+.add-grid label { font-size:0.7rem; color:var(--text2); display:block; margin-bottom:3px; }
+.add-grid input, .add-grid select { width:100%; padding:7px 9px; border:1px solid var(--border); border-radius:6px; background:var(--bg); color:var(--text); font-size:0.82rem; outline:none; }
+.add-grid input:focus, .add-grid select:focus { border-color:var(--accent); }
+.add-actions { display:flex; gap:8px; }
+
+/* ── TABLE ── */
+.tbl-wrap { overflow-x:auto; }
+table { width:100%; border-collapse:collapse; font-size:0.8rem; min-width:1000px; }
 thead th {
-  background: var(--surface); padding: 10px 12px; text-align: left;
-  color: var(--text2); font-weight: 600; font-size: 0.75rem; text-transform: uppercase;
-  letter-spacing: 0.04em; border-bottom: 1px solid var(--border); white-space: nowrap;
-  position: sticky; top: 0;
+  background:var(--surface); padding:9px 10px; text-align:left;
+  color:var(--text2); font-size:0.7rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.04em; border-bottom:1px solid var(--border);
+  white-space:nowrap; position:sticky; top:0; z-index:10; cursor:pointer; user-select:none;
 }
-tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
-tbody tr:hover { background: var(--surface2); }
-tbody tr.new-entry { background: var(--new-highlight); }
-tbody tr.new-entry:hover { background: #1e3045; }
-td { padding: 9px 12px; vertical-align: middle; }
-td.num { color: var(--text2); font-size: 0.75rem; width: 36px; }
+thead th:hover { color:var(--text); }
+thead th .sort-icon { opacity:0.3; margin-left:3px; }
+thead th.sort-asc .sort-icon::after { content:'▲'; opacity:1; }
+thead th.sort-desc .sort-icon::after { content:'▼'; opacity:1; }
+thead th.sort-asc .sort-icon, thead th.sort-desc .sort-icon { opacity:1; color:var(--accent); }
+tbody tr { border-bottom:1px solid var(--border); transition:background 0.1s; }
+tbody tr:hover { background:var(--surface2); }
+tbody tr.new-row { background:var(--new-row); }
+tbody tr.new-row:hover { background:#1e2f40; }
+td { padding:8px 10px; vertical-align:middle; }
+td.num { color:var(--text2); font-size:0.7rem; }
+
+/* City pills */
+.city-pill { display:inline-block; padding:1px 7px; border-radius:10px; font-size:0.65rem; font-weight:600; white-space:nowrap; }
+.city-auh { background:#152440; color:#6aacff; border:1px solid #1e3a6a; }
+.city-dxb { background:#261540; color:#c080ff; border:1px solid #4a1a80; }
+.city-shj { background:#2a2a10; color:#d4d440; border:1px solid #5a5a10; }
 
 /* Category badges */
-.badge {
-  display: inline-block; padding: 2px 8px; border-radius: 20px;
-  font-size: 0.7rem; font-weight: 600; white-space: nowrap;
-}
-.badge-interior { background: #1e3a5f; color: #60aeff; }
-.badge-design { background: #1e3a30; color: #34d399; }
-.badge-consultant { background: #3a2e1e; color: #fbbf24; }
-.badge-hotel { background: #3a1e2e; color: #f472b6; }
-.badge-holding { background: #2e1e3a; color: #a78bfa; }
-.badge-royal { background: #3a2e1e; color: #f97316; }
-.badge-ffe { background: #1e3a3a; color: #2dd4bf; }
-.badge-joinery { background: #2e2e1e; color: #d4d44c; }
+.badge { display:inline-block; padding:2px 7px; border-radius:20px; font-size:0.68rem; font-weight:600; white-space:nowrap; }
+.b-interior  { background:#1e3a5f; color:#60aeff; }
+.b-design    { background:#1e3a30; color:#34d399; }
+.b-consult   { background:#3a2e1e; color:#fbbf24; }
+.b-hotel     { background:#3a1e2e; color:#f472b6; }
+.b-holding   { background:#2e1e3a; color:#a78bfa; }
+.b-royal     { background:#3a2a1a; color:#fb923c; }
+.b-ffe       { background:#1e3a3a; color:#2dd4bf; }
+.b-joinery   { background:#2e2e1e; color:#d4d44c; }
 
-/* Links inside table */
-.site-link, .map-link {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-size: 0.75rem; color: var(--accent); text-decoration: none; white-space: nowrap;
-}
-.site-link:hover, .map-link:hover { text-decoration: underline; }
-.map-link { color: #34d399; }
-.link-col { display: flex; flex-direction: column; gap: 4px; }
-
-/* Checkboxes */
-.cb-wrap { display: flex; justify-content: center; }
-input[type=checkbox] {
-  width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer;
-}
+/* Links */
+.link-col { display:flex; flex-direction:column; gap:3px; }
+a.site-lnk { font-size:0.73rem; color:var(--accent); text-decoration:none; }
+a.site-lnk:hover { text-decoration:underline; }
+a.map-lnk { font-size:0.73rem; color:#34d399; text-decoration:none; }
+a.map-lnk:hover { text-decoration:underline; }
 
 /* Editable cells */
-td[contenteditable=true] { outline: none; cursor: text; }
-td[contenteditable=true]:focus { background: rgba(79,110,247,0.08); outline: 1px solid var(--accent); border-radius: 4px; }
+td[contenteditable] { outline:none; cursor:text; }
+td[contenteditable]:focus { background:rgba(79,110,247,0.07); box-shadow:0 0 0 1px var(--accent) inset; border-radius:3px; }
 
-/* Actions */
-.actions { display: flex; gap: 6px; }
-.btn-icon {
-  background: none; border: 1px solid transparent; border-radius: 6px;
-  padding: 4px 7px; cursor: pointer; color: var(--text2); font-size: 0.78rem;
-  transition: all 0.15s;
-}
-.btn-icon:hover { border-color: var(--border); color: var(--text); }
-.btn-icon.del:hover { border-color: var(--danger); color: var(--danger); }
+/* Checkboxes */
+.cb { display:flex; justify-content:center; }
+input[type=checkbox] { width:15px; height:15px; accent-color:var(--accent); cursor:pointer; }
 
-/* ADD FORM */
-.add-form-wrap {
-  background: var(--surface); border-bottom: 1px solid var(--border);
-  padding: 16px 20px; display: none;
-}
-.add-form-wrap.open { display: block; }
-.add-form-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px;
-  margin-bottom: 12px;
-}
-.add-form-grid input, .add-form-grid select, .add-form-grid textarea {
-  padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px;
-  background: var(--bg); color: var(--text); font-size: 0.82rem; outline: none; width: 100%;
-}
-.add-form-grid input:focus, .add-form-grid select:focus { border-color: var(--accent); }
-.add-form-grid textarea { resize: vertical; min-height: 60px; grid-column: span 2; font-family: inherit; }
-.form-label { font-size: 0.72rem; color: var(--text2); margin-bottom: 3px; }
-.add-form-actions { display: flex; gap: 8px; }
+/* Delete */
+.del-btn { background:none; border:none; color:var(--text2); cursor:pointer; padding:3px 6px; border-radius:5px; font-size:0.8rem; }
+.del-btn:hover { color:var(--danger); background:rgba(239,68,68,0.1); }
 
-/* MOBILE CARDS */
-.cards-wrap { display: none; padding: 12px; }
-.card {
-  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-  margin-bottom: 10px; overflow: hidden;
-}
-.card.new-entry { border-color: #2a4a6a; background: var(--new-highlight); }
-.card-header {
-  padding: 12px 14px; display: flex; align-items: flex-start; gap: 10px; cursor: pointer;
-}
-.card-num { color: var(--text2); font-size: 0.72rem; min-width: 20px; padding-top: 2px; }
-.card-title { font-size: 0.88rem; font-weight: 600; flex: 1; line-height: 1.3; }
-.card-badge { margin-top: 4px; }
-.card-chevron { color: var(--text2); font-size: 0.75rem; transition: transform 0.2s; padding-top: 2px; }
-.card.expanded .card-chevron { transform: rotate(180deg); }
-.card-body { display: none; padding: 0 14px 14px; }
-.card.expanded .card-body { display: block; }
-.card-links { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
-.card-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 0.8rem; }
-.card-row:last-of-type { border-bottom: none; }
-.card-row-label { color: var(--text2); }
-.card-row-val { text-align: right; max-width: 60%; }
-.card-checks { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 10px; }
-.card-check-item { display: flex; flex-direction: column; align-items: center; gap: 3px; }
-.card-check-label { font-size: 0.62rem; color: var(--text2); text-align: center; }
-.card-actions { display: flex; gap: 8px; margin-top: 10px; }
-.card-actions .btn { flex: 1; text-align: center; }
+/* ── MOBILE CARDS ── */
+.cards { display:none; padding:10px; }
+.card { background:var(--surface); border:1px solid var(--border); border-radius:11px; margin-bottom:9px; overflow:hidden; }
+.card.new-row { border-color:#2a4a6a; background:var(--new-row); }
+.card-head { padding:11px 13px; display:flex; align-items:flex-start; gap:9px; cursor:pointer; }
+.card-info { flex:1; }
+.card-name { font-size:0.88rem; font-weight:600; line-height:1.3; margin-bottom:5px; }
+.card-tags { display:flex; gap:5px; flex-wrap:wrap; align-items:center; }
+.card-chevron { color:var(--text2); font-size:0.7rem; padding-top:3px; transition:transform 0.2s; }
+.card.open .card-chevron { transform:rotate(180deg); }
+.card-body { display:none; padding:0 13px 13px; }
+.card.open .card-body { display:block; }
+.card-links { display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+.card-field { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--border); font-size:0.78rem; }
+.card-field:last-of-type { border-bottom:none; }
+.cf-label { color:var(--text2); }
+.cf-val { text-align:right; max-width:58%; }
+.card-checks { display:grid; grid-template-columns:repeat(5,1fr); gap:5px; margin-top:10px; text-align:center; }
+.cc-label { font-size:0.6rem; color:var(--text2); margin-bottom:3px; }
 
-/* EMPTY STATE */
-.empty { padding: 60px; text-align: center; color: var(--text2); }
-.empty h3 { font-size: 1.1rem; margin-bottom: 8px; }
+/* ── EMPTY ── */
+.empty { text-align:center; padding:60px 20px; color:var(--text2); }
+.empty h3 { font-size:1rem; margin-bottom:6px; }
 
-/* RESPONSIVE SWITCH */
-@media (max-width: 767px) {
-  .header { padding: 10px 14px; gap: 10px; }
-  .header h1 { font-size: 0.95rem; }
-  .search-wrap input { width: 160px; }
-  .filter-bar { padding: 8px 14px; }
-  .stats-bar { padding: 8px 14px; gap: 12px; }
-  .table-wrap { display: none; }
-  .cards-wrap { display: block; }
+/* ── RESPONSIVE ── */
+@media(max-width:767px) {
+  .header { padding:9px 12px; gap:9px; }
+  .header h1 { font-size:0.9rem; }
+  .search-wrap input { width:150px; }
+  .tbl-wrap { display:none; }
+  .cards { display:block; }
+  .filter-row { padding:6px 12px; }
+  .stats-bar { padding:6px 12px; }
 }
-@media (min-width: 768px) {
-  .table-wrap { display: block; }
-  .cards-wrap { display: none; }
+@media(min-width:768px) {
+  .tbl-wrap { display:block; }
+  .cards { display:none; }
 }
 </style>
 </head>
@@ -234,485 +183,387 @@ td[contenteditable=true]:focus { background: rgba(79,110,247,0.08); outline: 1px
 <!-- LOGIN -->
 <div id="login-screen">
   <div class="login-box">
-    <h1>🏙️ Abu Dhabi Tracker</h1>
-    <p>Client & Prospect Management</p>
-    <input type="password" id="pw-input" placeholder="Password" autocomplete="current-password">
-    <input type="text" id="token-input" placeholder="GitHub Token (optional — for saving)" autocomplete="off">
+    <h1>🏙️ UAE Client Tracker</h1>
+    <p>Abu Dhabi &amp; Dubai Prospect Management</p>
+    <input type="password" id="pw" placeholder="Password" autocomplete="current-password">
+    <input type="text" id="tok" placeholder="GitHub Token (for saving)" autocomplete="off">
     <button onclick="doLogin()">Sign In</button>
-    <div class="login-error" id="login-error"></div>
+    <div class="login-error" id="lerr"></div>
   </div>
 </div>
 
-<!-- MAIN APP -->
+<!-- APP -->
 <div id="app">
+
   <!-- HEADER -->
   <div class="header">
-    <h1>🏙️ Abu Dhabi Tracker</h1>
+    <h1>🏙️ UAE Client Tracker</h1>
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
-      <input type="text" id="search-input" placeholder="Search companies…" oninput="renderAll()">
+      <input type="text" id="q" placeholder="Search…" oninput="render()">
     </div>
-    <div class="header-spacer"></div>
-    <div class="save-status" id="save-status">
-      <div class="save-dot" id="save-dot"></div>
-      <span id="save-text">Ready</span>
-    </div>
-    <button class="btn btn-secondary" onclick="toggleAddForm()">+ Add</button>
-    <button class="btn btn-ghost" onclick="exportCSV()">⬇ CSV</button>
+    <div class="spacer"></div>
+    <div class="save-badge"><div class="save-dot" id="sdot"></div><span id="stxt">Ready</span></div>
+    <button class="btn btn-ghost" onclick="toggleAdd()">+ Add</button>
+    <button class="btn btn-ghost" onclick="doExport()">⬇ CSV</button>
     <button class="btn btn-ghost" onclick="doLogout()">Sign out</button>
   </div>
 
   <!-- ADD FORM -->
-  <div class="add-form-wrap" id="add-form">
-    <div class="add-form-grid">
-      <div>
-        <div class="form-label">Company Name *</div>
-        <input type="text" id="af-name" placeholder="Company name">
-      </div>
-      <div>
-        <div class="form-label">City *</div>
+  <div class="add-form" id="addForm">
+    <div class="add-grid">
+      <div><label>Company Name *</label><input id="af-name" placeholder="Company name"></div>
+      <div><label>Emirate *</label>
         <select id="af-city">
           <option value="Abu Dhabi">Abu Dhabi</option>
           <option value="Dubai">Dubai</option>
+          <option value="Sharjah">Sharjah</option>
+          <option value="RAK">Ras Al Khaimah</option>
+          <option value="Ajman">Ajman</option>
         </select>
       </div>
-      <div>
-        <div class="form-label">Category *</div>
+      <div><label>Category *</label>
         <select id="af-cat">
-          <option value="Interior Companies">Interior Companies</option>
-          <option value="Design Companies">Design Companies</option>
-          <option value="Consultants">Consultants</option>
-          <option value="Hotels">Hotels</option>
-          <option value="Holding Companies">Holding Companies</option>
-          <option value="Royal HH Offices">Royal HH Offices</option>
-          <option value="FF&E Buying Companies">FF&E Buying Companies</option>
-          <option value="Joinery Companies">Joinery Companies</option>
+          <option>Interior Companies</option>
+          <option>Design Companies</option>
+          <option>Consultants</option>
+          <option>Hotels</option>
+          <option>Holding Companies</option>
+          <option>Royal HH Offices</option>
+          <option>FF&amp;E Buying Companies</option>
+          <option>Joinery Companies</option>
         </select>
       </div>
-      <div>
-        <div class="form-label">Website</div>
-        <input type="text" id="af-web" placeholder="https://example.com">
-      </div>
-      <div>
-        <div class="form-label">Address / Location</div>
-        <input type="text" id="af-addr" placeholder="Abu Dhabi">
-      </div>
-      <div>
-        <div class="form-label">Procurement Email</div>
-        <input type="email" id="af-email" placeholder="procurement@company.com">
-      </div>
-      <div>
-        <div class="form-label">Office Phone</div>
-        <input type="text" id="af-phone" placeholder="+971 2 xxx xxxx">
-      </div>
-      <div>
-        <div class="form-label">Procurement Officer</div>
-        <input type="text" id="af-officer" placeholder="Name">
-      </div>
-      <div>
-        <div class="form-label">Notes</div>
-        <input type="text" id="af-notes" placeholder="Notes…">
-      </div>
+      <div><label>Website</label><input id="af-web" placeholder="https://"></div>
+      <div><label>Address</label><input id="af-addr" placeholder="Location"></div>
+      <div><label>Procurement Email</label><input id="af-email" type="email" placeholder="email@company.com"></div>
+      <div><label>Office Phone</label><input id="af-phone" placeholder="+971 2 xxx xxxx"></div>
+      <div><label>Procurement Officer</label><input id="af-officer" placeholder="Name"></div>
+      <div><label>Notes</label><input id="af-notes" placeholder="Notes"></div>
     </div>
-    <div class="add-form-actions">
-      <button class="btn btn-primary" onclick="addCompany()">Add Company</button>
-      <button class="btn btn-ghost" onclick="toggleAddForm()">Cancel</button>
+    <div class="add-actions">
+      <button class="btn btn-primary" onclick="addCo()">Add Company</button>
+      <button class="btn btn-ghost" onclick="toggleAdd()">Cancel</button>
     </div>
   </div>
 
-  <!-- CITY FILTER -->
-  <div class="filter-bar" style="background:#12151f;border-bottom:1px solid #1e2235;padding:8px 20px;gap:8px">
-    <span style="font-size:0.72rem;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:0.06em">City</span>
-    <button class="filter-chip active" id="city-all" onclick="setCity('All',this)">All</button>
-    <button class="filter-chip" id="city-auh" onclick="setCity('Abu Dhabi',this)">🏙 Abu Dhabi</button>
-    <button class="filter-chip" id="city-dxb" onclick="setCity('Dubai',this)">Dubai</button>
-  </div>
-
-  <!-- FILTER BAR -->
-  <div class="filter-bar" id="filter-bar">
-    <button class="filter-chip active" data-cat="All" onclick="setFilter('All', this)">All</button>
-    <button class="filter-chip" data-cat="Interior Companies" onclick="setFilter('Interior Companies', this)">Interiors</button>
-    <button class="filter-chip" data-cat="Design Companies" onclick="setFilter('Design Companies', this)">Design</button>
-    <button class="filter-chip" data-cat="Consultants" onclick="setFilter('Consultants', this)">Consultants</button>
-    <button class="filter-chip" data-cat="Hotels" onclick="setFilter('Hotels', this)">Hotels</button>
-    <button class="filter-chip" data-cat="Holding Companies" onclick="setFilter('Holding Companies', this)">Holding</button>
-    <button class="filter-chip" data-cat="Royal HH Offices" onclick="setFilter('Royal HH Offices', this)">Royal HH</button>
-    <button class="filter-chip" data-cat="FF&amp;E Buying Companies" onclick="setFilter('FF&amp;E Buying Companies', this)">FF&amp;E</button>
-    <button class="filter-chip" data-cat="Joinery Companies" onclick="setFilter('Joinery Companies', this)">Joinery</button>
+  <!-- FILTERS -->
+  <div class="filter-section">
+    <div class="filter-row">
+      <span class="filter-label">Emirate</span>
+      <button class="chip active" id="fc-all" onclick="setCity('All',this)">All</button>
+      <button class="chip auh" id="fc-auh" onclick="setCity('Abu Dhabi',this)">🏛 Abu Dhabi</button>
+      <button class="chip dxb" id="fc-dxb" onclick="setCity('Dubai',this)">🌆 Dubai</button>
+      <button class="chip shj" id="fc-shj" onclick="setCity('Sharjah',this)">Sharjah</button>
+    </div>
+    <div class="filter-row" id="cat-row">
+      <span class="filter-label">Type</span>
+      <button class="chip active" onclick="setCat('All',this)">All</button>
+      <button class="chip" onclick="setCat('Interior Companies',this)">Interiors</button>
+      <button class="chip" onclick="setCat('Design Companies',this)">Design</button>
+      <button class="chip" onclick="setCat('Consultants',this)">Consultants</button>
+      <button class="chip" onclick="setCat('Hotels',this)">Hotels</button>
+      <button class="chip" onclick="setCat('Holding Companies',this)">Holding</button>
+      <button class="chip" onclick="setCat('Royal HH Offices',this)">Royal HH</button>
+      <button class="chip" onclick="setCat('FF&E Buying Companies',this)">FF&amp;E</button>
+      <button class="chip" onclick="setCat('Joinery Companies',this)">Joinery</button>
+    </div>
   </div>
 
   <!-- STATS -->
-  <div class="stats-bar" id="stats-bar"></div>
+  <div class="stats-bar" id="statsBar"></div>
 
-  <!-- TABLE (desktop) -->
-  <div class="table-wrap">
+  <!-- TABLE -->
+  <div class="tbl-wrap">
     <table>
       <thead>
         <tr>
-          <th>#</th>
-          <th>Company</th>
-          <th>Category</th>
+          <th onclick="sortBy('_idx')">#<span class="sort-icon"></span></th>
+          <th onclick="sortBy('name')">Company<span class="sort-icon"></span></th>
+          <th onclick="sortBy('city')">Emirate<span class="sort-icon"></span></th>
+          <th onclick="sortBy('category')">Type<span class="sort-icon"></span></th>
           <th>Links</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>Officer</th>
+          <th onclick="sortBy('procurement_email')">Email<span class="sort-icon"></span></th>
+          <th onclick="sortBy('office_phone')">Phone<span class="sort-icon"></span></th>
+          <th onclick="sortBy('procurement_officer')">Officer<span class="sort-icon"></span></th>
           <th>Notes</th>
           <th title="Physical Meeting 1">PM1</th>
           <th title="Call 1">C1</th>
           <th title="Call 2">C2</th>
           <th title="Call 3">C3</th>
           <th title="Physical Meeting 2">PM2</th>
-          <th>Actions</th>
+          <th></th>
         </tr>
       </thead>
-      <tbody id="table-body"></tbody>
+      <tbody id="tbody"></tbody>
     </table>
   </div>
 
   <!-- CARDS (mobile) -->
-  <div class="cards-wrap" id="cards-wrap"></div>
+  <div class="cards" id="cards"></div>
 
-  <div class="empty" id="empty-state" style="display:none">
-    <h3>No results</h3>
-    <p>Try adjusting your search or filter.</p>
+  <div class="empty" id="empty" style="display:none">
+    <h3>No results</h3><p>Try a different search or filter.</p>
   </div>
 </div>
 
 <script>
-const REPO_OWNER = 'omg9401';
-const REPO_NAME = 'ad-tracker';
-const DATA_FILE = 'companies.json';
-const PW_HASH = 'am9teWtvY2hlcnkxQA=='; // jomykochery1@
+const OWNER='omg9401', REPO='ad-tracker', FILE='companies.json';
+const PW_HASH='am9teWtvY2hlcnkxQA==';
 
-let companies = [];
-let fileSha = null;
-let activeFilter = 'All';
-let activeCity = 'All';
-let saveTimer = null;
-let todayStr = new Date().toISOString().slice(0, 10);
+let data=[], sha=null, activeCity='All', activeCat='All', sortCol='_idx', sortDir=1;
+let saveTimer=null;
+const today=new Date().toISOString().slice(0,10);
 
-// ─── AUTH ────────────────────────────────────────────────────────────
-function doLogin() {
-  const pw = document.getElementById('pw-input').value;
-  const tok = document.getElementById('token-input').value.trim();
-  if (btoa(pw) !== PW_HASH) {
-    document.getElementById('login-error').textContent = 'Incorrect password.';
-    return;
-  }
-  sessionStorage.setItem('auth', '1');
-  if (tok) sessionStorage.setItem('ght', tok);
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  loadData();
+/* ── AUTH ── */
+function doLogin(){
+  const pw=document.getElementById('pw').value;
+  const tok=document.getElementById('tok').value.trim();
+  if(btoa(pw)!==PW_HASH){document.getElementById('lerr').textContent='Incorrect password.';return;}
+  sessionStorage.setItem('auth','1');
+  if(tok) sessionStorage.setItem('ght',tok);
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='block';
+  load();
 }
-document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-document.getElementById('token-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-
-function doLogout() {
-  sessionStorage.clear();
-  location.reload();
+['pw','tok'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();}));
+function doLogout(){sessionStorage.clear();location.reload();}
+if(sessionStorage.getItem('auth')==='1'){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='block';
+  load();
 }
 
-if (sessionStorage.getItem('auth') === '1') {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  loadData();
+/* ── LOAD ── */
+async function load(){
+  setSave('saving','Loading…');
+  const tok=sessionStorage.getItem('ght');
+  try{
+    const h={'Accept':'application/vnd.github+json'};
+    if(tok) h['Authorization']='token '+tok;
+    const r=await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE}`,{headers:h});
+    if(r.ok){const m=await r.json();sha=m.sha;data=JSON.parse(atob(m.content.replace(/\n/g,'')));setSave('saved','Loaded');render();return;}
+  }catch(e){}
+  try{const r=await fetch('./'+FILE+'?_='+Date.now());if(r.ok){data=await r.json();setSave('saved','Read-only');render();return;}}catch(e){}
+  setSave('error','Load failed');
 }
 
-// ─── DATA LOAD ───────────────────────────────────────────────────────
-async function loadData() {
-  setSaveStatus('loading', 'Loading…');
-  const tok = sessionStorage.getItem('ght');
-  try {
-    let headers = { 'Accept': 'application/vnd.github+json' };
-    if (tok) headers['Authorization'] = 'token ' + tok;
-    const r = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${DATA_FILE}`, { headers });
-    if (r.ok) {
-      const meta = await r.json();
-      fileSha = meta.sha;
-      companies = JSON.parse(atob(meta.content.replace(/\n/g, '')));
-      setSaveStatus('saved', 'Loaded');
-      renderAll();
-      return;
-    }
-  } catch(e) {}
-  // Fallback to raw
-  try {
-    const r2 = await fetch(`./${DATA_FILE}?_=${Date.now()}`);
-    if (r2.ok) { companies = await r2.json(); setSaveStatus('saved', 'Loaded (read-only)'); renderAll(); return; }
-  } catch(e) {}
-  setSaveStatus('error', 'Load failed');
+/* ── SAVE ── */
+function scheduleSave(msg){clearTimeout(saveTimer);setSave('saving','Saving…');saveTimer=setTimeout(()=>save(msg),1200);}
+async function save(msg){
+  const tok=sessionStorage.getItem('ght');
+  if(!tok){setSave('error','No token');return;}
+  try{
+    const rg=await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE}`,{headers:{'Authorization':'token '+tok,'Accept':'application/vnd.github+json'}});
+    if(rg.ok){const m=await rg.json();sha=m.sha;}
+    const body={message:msg||'Update',content:btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2)))),sha};
+    const rp=await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE}`,{method:'PUT',headers:{'Authorization':'token '+tok,'Content-Type':'application/json','Accept':'application/vnd.github+json'},body:JSON.stringify(body)});
+    if(rp.ok){const d=await rp.json();sha=d.content.sha;setSave('saved','Saved ✓');}
+    else setSave('error','Save failed');
+  }catch(e){setSave('error','Error');}
+}
+function setSave(state,txt){
+  document.getElementById('stxt').textContent=txt;
+  document.getElementById('sdot').className='save-dot'+(state!=='ready'?' '+state:'');
 }
 
-// ─── SAVE ────────────────────────────────────────────────────────────
-function scheduleSave(msg) {
-  clearTimeout(saveTimer);
-  setSaveStatus('saving', 'Saving…');
-  saveTimer = setTimeout(() => saveToGitHub(msg || 'Update tracker data'), 1200);
+/* ── FILTERS ── */
+function setCity(v,el){
+  activeCity=v;
+  document.querySelectorAll('#fc-all,#fc-auh,#fc-dxb,#fc-shj').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');render();
+}
+function setCat(v,el){
+  activeCat=v;
+  document.querySelectorAll('#cat-row .chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');render();
 }
 
-async function saveToGitHub(msg) {
-  const tok = sessionStorage.getItem('ght');
-  if (!tok) { setSaveStatus('error', 'No token — changes not saved'); return; }
-  setSaveStatus('saving', 'Saving…');
-  try {
-    // Get current sha
-    const rg = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${DATA_FILE}`, {
-      headers: { 'Authorization': 'token ' + tok, 'Accept': 'application/vnd.github+json' }
-    });
-    if (rg.ok) { const meta = await rg.json(); fileSha = meta.sha; }
-
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(companies, null, 2))));
-    const body = { message: msg, content, sha: fileSha };
-    const rp = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${DATA_FILE}`, {
-      method: 'PUT',
-      headers: { 'Authorization': 'token ' + tok, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github+json' },
-      body: JSON.stringify(body)
-    });
-    if (rp.ok) {
-      const d = await rp.json(); fileSha = d.content.sha;
-      setSaveStatus('saved', 'Saved ✓');
-    } else { setSaveStatus('error', 'Save failed'); }
-  } catch(e) { setSaveStatus('error', 'Save error'); }
+/* ── SORT ── */
+function sortBy(col){
+  if(sortCol===col) sortDir*=-1; else{sortCol=col;sortDir=1;}
+  document.querySelectorAll('thead th').forEach(th=>{th.classList.remove('sort-asc','sort-desc');});
+  const ths=document.querySelectorAll('thead th');
+  const cols=['_idx','name','city','category',null,'procurement_email','office_phone','procurement_officer',null,'physical_meeting_1','call_1','call_2','call_3','physical_meeting_2',null];
+  cols.forEach((c,i)=>{if(c===col&&ths[i]) ths[i].classList.add(sortDir===1?'sort-asc':'sort-desc');});
+  render();
 }
 
-function setSaveStatus(state, text) {
-  const dot = document.getElementById('save-dot');
-  document.getElementById('save-text').textContent = text;
-  dot.className = 'save-dot' + (state !== 'ready' ? ' ' + state : '');
-}
-
-// ─── CATEGORY HELPERS ────────────────────────────────────────────────
-function badgeClass(cat) {
-  const m = { 'Interior Companies':'interior','Design Companies':'design','Consultants':'consultant','Hotels':'hotel','Holding Companies':'holding','Royal HH Offices':'royal','FF&E Buying Companies':'ffe','Joinery Companies':'joinery' };
-  return 'badge badge-' + (m[cat] || 'interior');
-}
-function shortCat(cat) {
-  const m = { 'Interior Companies':'Interior','Design Companies':'Design','Consultants':'Consult.','Hotels':'Hotel','Holding Companies':'Holding','Royal HH Offices':'Royal HH','FF&E Buying Companies':'FF&E','Joinery Companies':'Joinery' };
-  return m[cat] || cat;
-}
-
-// ─── FILTER ──────────────────────────────────────────────────────────
-function setCity(city, el) {
-  activeCity = city;
-  document.querySelectorAll('#city-all,#city-auh,#city-dxb').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  renderAll();
-}
-
-function setFilter(cat, el) {
-  activeFilter = cat;
-  // Only reset category chips, not city chips
-  document.querySelectorAll('#filter-bar .filter-chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  renderAll();
-}
-
-function filteredCompanies() {
-  const q = (document.getElementById('search-input').value || '').toLowerCase();
-  return companies.filter(c => {
-    const matchCity = activeCity === 'All' || (c.city || 'Abu Dhabi') === activeCity;
-    const matchCat = activeFilter === 'All' || c.category === activeFilter;
-    const matchQ = !q || [c.name, c.category, c.procurement_email, c.office_phone, c.procurement_officer, c.notes].join(' ').toLowerCase().includes(q);
-    return matchCity && matchCat && matchQ;
+/* ── FILTER+SORT ── */
+function filtered(){
+  const q=(document.getElementById('q').value||'').toLowerCase();
+  let list=data.filter(c=>{
+    const matchCity=activeCity==='All'||(c.city||'Abu Dhabi')===activeCity;
+    const matchCat=activeCat==='All'||c.category===activeCat;
+    const matchQ=!q||[c.name,c.category,c.city,c.procurement_email,c.office_phone,c.procurement_officer,c.notes].join(' ').toLowerCase().includes(q);
+    return matchCity&&matchCat&&matchQ;
   });
+  if(sortCol!=='_idx'){
+    list=[...list].sort((a,b)=>{
+      let av=a[sortCol]||'', bv=b[sortCol]||'';
+      if(typeof av==='boolean') av=av?1:0, bv=bv?1:0;
+      return av>bv?sortDir:av<bv?-sortDir:0;
+    });
+  }
+  return list;
 }
 
-// ─── RENDER ──────────────────────────────────────────────────────────
-function renderAll() {
-  const list = filteredCompanies();
+/* ── RENDER ── */
+function render(){
+  const list=filtered();
   renderStats(list);
   renderTable(list);
   renderCards(list);
-  document.getElementById('empty-state').style.display = list.length === 0 ? 'block' : 'none';
+  document.getElementById('empty').style.display=list.length?'none':'block';
 }
 
-function renderStats(list) {
-  const total = list.length;
-  const auh = list.filter(c => (c.city||'Abu Dhabi') === 'Abu Dhabi').length;
-  const dxb = list.filter(c => c.city === 'Dubai').length;
-  const pm1 = list.filter(c => c.physical_meeting_1).length;
-  const anyCall = list.filter(c => c.call_1 || c.call_2 || c.call_3).length;
-  const pm2 = list.filter(c => c.physical_meeting_2).length;
-  document.getElementById('stats-bar').innerHTML =
-    `<div class="stat">Showing <span>${total}</span></div>` +
-    `<div class="stat">Abu Dhabi <span>${auh}</span></div>` +
-    `<div class="stat">Dubai <span>${dxb}</span></div>` +
-    `<div class="stat">PM1 <span>${pm1}</span></div>` +
-    `<div class="stat">Called <span>${anyCall}</span></div>` +
-    `<div class="stat">PM2 <span>${pm2}</span></div>`;
+function renderStats(list){
+  const auh=list.filter(c=>(c.city||'Abu Dhabi')==='Abu Dhabi').length;
+  const dxb=list.filter(c=>c.city==='Dubai').length;
+  const other=list.length-auh-dxb;
+  const pm1=list.filter(c=>c.physical_meeting_1).length;
+  const called=list.filter(c=>c.call_1||c.call_2||c.call_3).length;
+  const pm2=list.filter(c=>c.physical_meeting_2).length;
+  document.getElementById('statsBar').innerHTML=
+    `<div class="stat">Showing <b>${list.length}</b></div>`+
+    `<div class="stat">Abu Dhabi <b>${auh}</b></div>`+
+    `<div class="stat">Dubai <b>${dxb}</b></div>`+
+    (other?`<div class="stat">Other <b>${other}</b></div>`:'')+
+    `<div class="stat">PM1 done <b>${pm1}</b></div>`+
+    `<div class="stat">Called <b>${called}</b></div>`+
+    `<div class="stat">PM2 done <b>${pm2}</b></div>`;
 }
 
-function linksCell(c) {
-  let html = '<div class="link-col">';
-  if (c.website) html += `<a class="site-link" href="${esc(c.website)}" target="_blank" rel="noopener">🌐 Website</a>`;
-  const mapsUrl = c.maps || `https://maps.google.com/?q=${encodeURIComponent((c.name||'') + ' Abu Dhabi')}`;
-  html += `<a class="map-link" href="${esc(mapsUrl)}" target="_blank" rel="noopener">📍 Maps</a>`;
-  html += '</div>';
-  return html;
+function cityPill(city){
+  const cls=city==='Dubai'?'city-dxb':city==='Sharjah'?'city-shj':'city-auh';
+  return `<span class="city-pill ${cls}">${esc(city||'Abu Dhabi')}</span>`;
+}
+function badgeClass(cat){
+  const m={'Interior Companies':'interior','Design Companies':'design','Consultants':'consult','Hotels':'hotel','Holding Companies':'holding','Royal HH Offices':'royal','FF&E Buying Companies':'ffe','Joinery Companies':'joinery'};
+  return 'badge b-'+(m[cat]||'interior');
+}
+function shortCat(cat){
+  const m={'Interior Companies':'Interior','Design Companies':'Design','Consultants':'Consult.','Hotels':'Hotel','Holding Companies':'Holding','Royal HH Offices':'Royal HH','FF&E Buying Companies':'FF&E','Joinery Companies':'Joinery'};
+  return m[cat]||cat;
+}
+function linksHTML(c){
+  const maps=c.maps||`https://maps.google.com/?q=${encodeURIComponent((c.name||'')+' '+(c.city||'Abu Dhabi'))}`;
+  return `<div class="link-col">${c.website?`<a class="site-lnk" href="${esc(c.website)}" target="_blank">🌐 Website</a>`:''}<a class="map-lnk" href="${esc(maps)}" target="_blank">📍 Maps</a></div>`;
 }
 
-function renderTable(list) {
-  const tbody = document.getElementById('table-body');
-  if (list.length === 0) { tbody.innerHTML = ''; return; }
-  tbody.innerHTML = list.map((c, i) => {
-    const isNew = c.added_date === todayStr;
-    return `<tr class="${isNew ? 'new-entry' : ''}" data-id="${c.id}">
-      <td class="num">${i + 1}</td>
-      <td style="font-weight:600;min-width:160px">
-        ${esc(c.name)}
-        <div style="font-size:0.68rem;color:var(--text2);margin-top:2px">${esc(c.city||'Abu Dhabi')}</div>
-      </td>
+function renderTable(list){
+  const tb=document.getElementById('tbody');
+  if(!list.length){tb.innerHTML='';return;}
+  tb.innerHTML=list.map((c,i)=>`
+    <tr class="${c.added_date===today?'new-row':''}" data-id="${c.id}">
+      <td class="num">${i+1}</td>
+      <td style="font-weight:600;min-width:150px">${esc(c.name)}</td>
+      <td>${cityPill(c.city)}</td>
       <td><span class="${badgeClass(c.category)}">${shortCat(c.category)}</span></td>
-      <td>${linksCell(c)}</td>
-      <td contenteditable="true" data-field="procurement_email" style="min-width:140px;font-size:0.78rem">${esc(c.procurement_email||'')}</td>
-      <td contenteditable="true" data-field="office_phone" style="min-width:120px;font-size:0.78rem">${esc(c.office_phone||'')}</td>
-      <td contenteditable="true" data-field="procurement_officer" style="min-width:120px">${esc(c.procurement_officer||'')}</td>
-      <td contenteditable="true" data-field="notes" style="min-width:180px;max-width:240px;font-size:0.78rem;color:var(--text2)">${esc(c.notes||'')}</td>
-      <td class="cb-wrap"><input type="checkbox" ${c.physical_meeting_1 ? 'checked' : ''} onchange="toggleField(${c.id},'physical_meeting_1',this.checked)"></td>
-      <td class="cb-wrap"><input type="checkbox" ${c.call_1 ? 'checked' : ''} onchange="toggleField(${c.id},'call_1',this.checked)"></td>
-      <td class="cb-wrap"><input type="checkbox" ${c.call_2 ? 'checked' : ''} onchange="toggleField(${c.id},'call_2',this.checked)"></td>
-      <td class="cb-wrap"><input type="checkbox" ${c.call_3 ? 'checked' : ''} onchange="toggleField(${c.id},'call_3',this.checked)"></td>
-      <td class="cb-wrap"><input type="checkbox" ${c.physical_meeting_2 ? 'checked' : ''} onchange="toggleField(${c.id},'physical_meeting_2',this.checked)"></td>
-      <td><div class="actions">
-        <button class="btn-icon del" onclick="deleteCompany(${c.id})" title="Delete">✕</button>
-      </div></td>
-    </tr>`;
-  }).join('');
-
-  // Inline edit
-  tbody.querySelectorAll('td[contenteditable=true]').forEach(td => {
-    td.addEventListener('blur', () => {
-      const row = td.closest('tr');
-      const id = parseInt(row.dataset.id);
-      const field = td.dataset.field;
-      const co = companies.find(c => c.id === id);
-      if (co && co[field] !== td.textContent) {
-        co[field] = td.textContent.trim();
-        scheduleSave('Edit ' + field);
-      }
+      <td>${linksHTML(c)}</td>
+      <td contenteditable data-f="procurement_email" style="min-width:130px;font-size:0.76rem">${esc(c.procurement_email||'')}</td>
+      <td contenteditable data-f="office_phone" style="min-width:110px;font-size:0.76rem">${esc(c.office_phone||'')}</td>
+      <td contenteditable data-f="procurement_officer" style="min-width:110px">${esc(c.procurement_officer||'')}</td>
+      <td contenteditable data-f="notes" style="min-width:170px;max-width:220px;font-size:0.75rem;color:var(--text2)">${esc(c.notes||'')}</td>
+      <td class="cb"><input type="checkbox" ${c.physical_meeting_1?'checked':''} onchange="toggle(${c.id},'physical_meeting_1',this.checked)"></td>
+      <td class="cb"><input type="checkbox" ${c.call_1?'checked':''} onchange="toggle(${c.id},'call_1',this.checked)"></td>
+      <td class="cb"><input type="checkbox" ${c.call_2?'checked':''} onchange="toggle(${c.id},'call_2',this.checked)"></td>
+      <td class="cb"><input type="checkbox" ${c.call_3?'checked':''} onchange="toggle(${c.id},'call_3',this.checked)"></td>
+      <td class="cb"><input type="checkbox" ${c.physical_meeting_2?'checked':''} onchange="toggle(${c.id},'physical_meeting_2',this.checked)"></td>
+      <td><button class="del-btn" onclick="del(${c.id})">✕</button></td>
+    </tr>`).join('');
+  tb.querySelectorAll('td[contenteditable]').forEach(td=>{
+    td.addEventListener('blur',()=>{
+      const id=parseInt(td.closest('tr').dataset.id);
+      const f=td.dataset.f;
+      const co=data.find(c=>c.id===id);
+      if(co&&co[f]!==td.textContent.trim()){co[f]=td.textContent.trim();scheduleSave('Edit '+f);}
     });
   });
 }
 
-function renderCards(list) {
-  const wrap = document.getElementById('cards-wrap');
-  if (list.length === 0) { wrap.innerHTML = ''; return; }
-  wrap.innerHTML = list.map((c, i) => {
-    const isNew = c.added_date === todayStr;
-    const mapsUrl = c.maps || `https://maps.google.com/?q=${encodeURIComponent((c.name||'') + ' Abu Dhabi')}`;
-    const checks = [
-      { field: 'physical_meeting_1', label: 'PM 1', checked: c.physical_meeting_1 },
-      { field: 'call_1', label: 'Call 1', checked: c.call_1 },
-      { field: 'call_2', label: 'Call 2', checked: c.call_2 },
-      { field: 'call_3', label: 'Call 3', checked: c.call_3 },
-      { field: 'physical_meeting_2', label: 'PM 2', checked: c.physical_meeting_2 },
-    ];
-    return `<div class="card ${isNew ? 'new-entry' : ''}" id="card-${c.id}">
-      <div class="card-header" onclick="toggleCard(${c.id})">
-        <div class="card-num">${i+1}</div>
-        <div style="flex:1">
-          <div class="card-title">${esc(c.name)}</div>
-          <div style="display:flex;gap:6px;align-items:center;margin-top:4px;flex-wrap:wrap">
+function renderCards(list){
+  const wrap=document.getElementById('cards');
+  if(!list.length){wrap.innerHTML='';return;}
+  wrap.innerHTML=list.map((c,i)=>{
+    const maps=c.maps||`https://maps.google.com/?q=${encodeURIComponent((c.name||'')+' '+(c.city||'Abu Dhabi'))}`;
+    return `<div class="card ${c.added_date===today?'new-row':''}" id="cd${c.id}">
+      <div class="card-head" onclick="toggleCard(${c.id})">
+        <div class="card-info">
+          <div class="card-name">${esc(c.name)}</div>
+          <div class="card-tags">
             <span class="${badgeClass(c.category)}">${shortCat(c.category)}</span>
-            <span style="font-size:0.65rem;color:var(--text2);background:var(--bg);padding:1px 7px;border-radius:10px;border:1px solid var(--border)">${esc(c.city||'Abu Dhabi')}</span>
+            ${cityPill(c.city)}
           </div>
         </div>
         <div class="card-chevron">▼</div>
       </div>
       <div class="card-body">
         <div class="card-links">
-          ${c.website ? `<a class="site-link" href="${esc(c.website)}" target="_blank" rel="noopener">🌐 Website</a>` : ''}
-          <a class="map-link" href="${esc(mapsUrl)}" target="_blank" rel="noopener">📍 Google Maps</a>
+          ${c.website?`<a class="site-lnk" href="${esc(c.website)}" target="_blank">🌐 Website</a>`:''}
+          <a class="map-lnk" href="${esc(maps)}" target="_blank">📍 Google Maps</a>
         </div>
-        ${c.procurement_email ? `<div class="card-row"><span class="card-row-label">Email</span><span class="card-row-val"><a href="mailto:${esc(c.procurement_email)}" style="color:var(--accent)">${esc(c.procurement_email)}</a></span></div>` : ''}
-        ${c.office_phone ? `<div class="card-row"><span class="card-row-label">Phone</span><span class="card-row-val"><a href="tel:${esc(c.office_phone)}" style="color:var(--accent)">${esc(c.office_phone)}</a></span></div>` : ''}
-        ${c.procurement_officer ? `<div class="card-row"><span class="card-row-label">Officer</span><span class="card-row-val">${esc(c.procurement_officer)}</span></div>` : ''}
-        ${c.notes ? `<div class="card-row"><span class="card-row-label">Notes</span><span class="card-row-val" style="color:var(--text2);font-size:0.75rem">${esc(c.notes)}</span></div>` : ''}
+        ${c.procurement_email?`<div class="card-field"><span class="cf-label">Email</span><span class="cf-val"><a href="mailto:${esc(c.procurement_email)}" style="color:var(--accent)">${esc(c.procurement_email)}</a></span></div>`:''}
+        ${c.office_phone?`<div class="card-field"><span class="cf-label">Phone</span><span class="cf-val"><a href="tel:${esc(c.office_phone)}" style="color:var(--accent)">${esc(c.office_phone)}</a></span></div>`:''}
+        ${c.procurement_officer?`<div class="card-field"><span class="cf-label">Officer</span><span class="cf-val">${esc(c.procurement_officer)}</span></div>`:''}
+        ${c.notes?`<div class="card-field"><span class="cf-label">Notes</span><span class="cf-val" style="color:var(--text2);font-size:0.73rem">${esc(c.notes)}</span></div>`:''}
         <div class="card-checks">
-          ${checks.map(ch => `
-            <div class="card-check-item">
-              <div class="card-check-label">${ch.label}</div>
-              <input type="checkbox" ${ch.checked ? 'checked' : ''} onchange="toggleField(${c.id},'${ch.field}',this.checked)">
-            </div>`).join('')}
+          ${[['physical_meeting_1','PM 1'],['call_1','Call 1'],['call_2','Call 2'],['call_3','Call 3'],['physical_meeting_2','PM 2']].map(([f,l])=>`
+            <div><div class="cc-label">${l}</div><input type="checkbox" ${c[f]?'checked':''} onchange="toggle(${c.id},'${f}',this.checked)"></div>`).join('')}
         </div>
+        <div style="margin-top:10px"><button class="del-btn" onclick="del(${c.id})" style="font-size:0.75rem">✕ Delete</button></div>
       </div>
     </div>`;
   }).join('');
 }
+function toggleCard(id){document.getElementById('cd'+id).classList.toggle('open');}
 
-function toggleCard(id) {
-  const card = document.getElementById('card-' + id);
-  card.classList.toggle('expanded');
+/* ── MUTATIONS ── */
+function toggle(id,field,val){
+  const co=data.find(c=>c.id===id);
+  if(co){co[field]=val;scheduleSave('Toggle '+field);renderStats(filtered());}
+}
+function del(id){
+  const co=data.find(c=>c.id===id);
+  if(!co||!confirm(`Delete "${co.name}"?`))return;
+  data=data.filter(c=>c.id!==id);render();scheduleSave('Delete '+co.name);
 }
 
-// ─── FIELD UPDATES ───────────────────────────────────────────────────
-function toggleField(id, field, val) {
-  const co = companies.find(c => c.id === id);
-  if (co) { co[field] = val; scheduleSave('Toggle ' + field); renderStats(filteredCompanies()); }
+/* ── ADD ── */
+function toggleAdd(){document.getElementById('addForm').classList.toggle('open');}
+function addCo(){
+  const name=document.getElementById('af-name').value.trim();
+  if(!name){alert('Name required');return;}
+  const city=document.getElementById('af-city').value;
+  const maxId=data.reduce((m,c)=>Math.max(m,c.id),0);
+  data.push({
+    id:maxId+1, name, city,
+    category:document.getElementById('af-cat').value,
+    website:document.getElementById('af-web').value.trim(),
+    address:document.getElementById('af-addr').value.trim()||city,
+    maps:`https://maps.google.com/?q=${encodeURIComponent(name+' '+city)}`,
+    procurement_email:document.getElementById('af-email').value.trim(),
+    office_phone:document.getElementById('af-phone').value.trim(),
+    procurement_officer:document.getElementById('af-officer').value.trim(),
+    notes:document.getElementById('af-notes').value.trim(),
+    physical_meeting_1:false,call_1:false,call_2:false,call_3:false,physical_meeting_2:false,
+    added_date:today
+  });
+  ['af-name','af-web','af-addr','af-email','af-phone','af-officer','af-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('addForm').classList.remove('open');
+  render();scheduleSave('Add '+name);
 }
 
-// ─── ADD ─────────────────────────────────────────────────────────────
-function toggleAddForm() {
-  document.getElementById('add-form').classList.toggle('open');
+/* ── EXPORT ── */
+function doExport(){
+  const headers=['#','Name','Emirate','Category','Website','Maps','Email','Phone','Officer','Notes','PM1','C1','C2','C3','PM2'];
+  const rows=data.map((c,i)=>[i+1,c.name,c.city||'Abu Dhabi',c.category,c.website||'',c.maps||'',c.procurement_email||'',c.office_phone||'',c.procurement_officer||'',c.notes||'',c.physical_meeting_1?'Yes':'',c.call_1?'Yes':'',c.call_2?'Yes':'',c.call_3?'Yes':'',c.physical_meeting_2?'Yes':''].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','));
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent([headers.join(','),...rows].join('\n'));
+  a.download='uae-tracker.csv';a.click();
 }
 
-function addCompany() {
-  const name = document.getElementById('af-name').value.trim();
-  if (!name) { alert('Company name required'); return; }
-  const maxId = companies.reduce((m, c) => Math.max(m, c.id), 0);
-  const addr = document.getElementById('af-addr').value.trim() || 'Abu Dhabi';
-  const co = {
-    id: maxId + 1,
-    name,
-    city: document.getElementById('af-city').value || 'Abu Dhabi',
-    category: document.getElementById('af-cat').value,
-    website: document.getElementById('af-web').value.trim(),
-    address: addr,
-    maps: `https://maps.google.com/?q=${encodeURIComponent(name + ' ' + (document.getElementById('af-city').value || 'Abu Dhabi'))}`,
-    procurement_email: document.getElementById('af-email').value.trim(),
-    office_phone: document.getElementById('af-phone').value.trim(),
-    procurement_officer: document.getElementById('af-officer').value.trim(),
-    notes: document.getElementById('af-notes').value.trim(),
-    physical_meeting_1: false, call_1: false, call_2: false, call_3: false, physical_meeting_2: false,
-    added_date: todayStr
-  };
-  companies.push(co);
-  ['af-name','af-web','af-addr','af-email','af-phone','af-officer','af-notes'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('add-form').classList.remove('open');
-  renderAll();
-  scheduleSave('Add ' + name);
-}
-
-// ─── DELETE ──────────────────────────────────────────────────────────
-function deleteCompany(id) {
-  const co = companies.find(c => c.id === id);
-  if (!co || !confirm(`Delete "${co.name}"?`)) return;
-  companies = companies.filter(c => c.id !== id);
-  renderAll();
-  scheduleSave('Delete ' + co.name);
-}
-
-// ─── EXPORT ──────────────────────────────────────────────────────────
-function exportCSV() {
-  const headers = ['#','Name','Category','Website','Maps','Email','Phone','Officer','Notes','PM1','C1','C2','C3','PM2'];
-  const rows = companies.map((c, i) => [
-    i+1, c.name, c.category, c.website||'', c.maps||'', c.procurement_email||'', c.office_phone||'',
-    c.procurement_officer||'', c.notes||'',
-    c.physical_meeting_1?'Yes':'', c.call_1?'Yes':'', c.call_2?'Yes':'', c.call_3?'Yes':'', c.physical_meeting_2?'Yes':''
-  ].map(v => `"${String(v).replace(/"/g,'""')}"`).join(','));
-  const csv = [headers.join(','), ...rows].join('\n');
-  const a = document.createElement('a');
-  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-  a.download = 'abu-dhabi-tracker.csv';
-  a.click();
-}
-
-// ─── UTIL ────────────────────────────────────────────────────────────
-function esc(s) {
-  if (!s) return '';
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 </script>
 </body>
 </html>
