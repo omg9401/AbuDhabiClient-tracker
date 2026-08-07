@@ -230,6 +230,7 @@ td.status-cell{width:28px;text-align:center;padding:8px 4px;}
 #map-drawer.open{transform:translateY(0);}
 .drawer-handle{width:36px;height:4px;border-radius:2px;background:#2e3248;margin:10px auto 0;cursor:pointer;}
 #drawer-title{padding:8px 16px 4px;font-size:0.78rem;font-weight:700;color:var(--text2);}
+#nearby-list{padding-bottom:76px;}
 .nearby-item{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid #1e2235;cursor:pointer;transition:background 0.1s;}
 .nearby-item:hover,.nearby-item:active{background:#222535;}
 .ni-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
@@ -270,8 +271,6 @@ td.status-cell{width:28px;text-align:center;padding:8px 4px;}
 #route-footer.show{display:flex;}
 #route-footer-btn{flex:1;padding:10px;background:#7c3aed;color:#fff;border:none;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;}
 #route-footer-btn:hover{background:#6d28d9;}
-#route-footer-clear{padding:10px 12px;background:transparent;color:var(--text2);border:1px solid var(--border);border-radius:10px;font-size:0.8rem;cursor:pointer;}
-#route-footer-clear:hover{color:var(--danger);border-color:var(--danger);}
 /* Desktop: drawer as sidebar */
 @media(min-width:768px){
   #map-wrap{flex-direction:row;}
@@ -488,8 +487,7 @@ td.status-cell{width:28px;text-align:center;padding:8px 4px;}
         <div id="map-legend" style="padding:5px 14px 3px;display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid #1e2235;overflow-x:auto;scrollbar-width:none"></div>
         <div id="nearby-list"></div>
         <div id="route-footer">
-          <button id="route-footer-clear" onclick="clearSelection()">✕ Clear</button>
-          <button id="route-footer-btn" onclick="planRoute()">🗺️ Route <span id="sel-count-label"></span></button>
+          <button id="route-footer-btn" onclick="planRoute()">🗺️ Route</button>
         </div>
       </div>
     </div>
@@ -1346,31 +1344,48 @@ function showNearbyCompanies(){
   openDrawer();
 }
 
+let isRouteMode=false;
 function toggleSelect(id,e){
   e&&e.stopPropagation();
+  if(isRouteMode){
+    // Remove this stop, revert to selection mode
+    selectedIds.delete(id);
+    isRouteMode=false;
+    if(routeLayer){leafletMap.removeLayer(routeLayer);routeLayer=null;}
+    document.getElementById('route-bar').style.display='none';
+    const btn=document.getElementById('route-footer-btn');
+    btn.textContent=selectedIds.size>0?`🗺️ Route ${selectedIds.size} stops`:'🗺️ Route';
+    btn.onclick=planRoute;
+    plotAllCompanies();
+    showNearbyCompanies();
+    return;
+  }
   if(selectedIds.has(id))selectedIds.delete(id);else selectedIds.add(id);
   updateSelectionUI();
 }
-function clearSelection(){
+function clearRoute(){
+  isRouteMode=false;
   selectedIds.clear();
   if(routeLayer){leafletMap.removeLayer(routeLayer);routeLayer=null;}
   document.getElementById('route-bar').style.display='none';
+  const btn=document.getElementById('route-footer-btn');
+  btn.textContent='🗺️ Route';btn.onclick=planRoute;
+  document.getElementById('route-footer').classList.remove('show');
   plotAllCompanies();
-  updateSelectionUI();
   showNearbyCompanies();
 }
 function updateSelectionUI(){
+  if(isRouteMode)return;
   const n=selectedIds.size;
   const footer=document.getElementById('route-footer');
-  const label=document.getElementById('sel-count-label');
+  const btn=document.getElementById('route-footer-btn');
   if(n>0){
     footer.classList.add('show');
-    label.textContent=`(${n} selected)`;
-    document.getElementById('route-footer-btn').textContent=`🗺️ Route ${n} stops`;
+    btn.textContent=`🗺️ Route ${n} stop${n>1?'s':''}`;
+    btn.onclick=planRoute;
   }else{
     footer.classList.remove('show');
   }
-  // Refresh item highlights in list
   document.querySelectorAll('.nearby-item[data-cid]').forEach(el=>{
     const id=parseInt(el.dataset.cid);
     el.classList.toggle('selected',selectedIds.has(id));
@@ -1417,21 +1432,19 @@ function focusCompany(id){
 
 async function planRoute(){
   if(!userLatLng){showToast('📍 Find your location first');return;}
-  // Use selected companies if any; else auto-pick closest 4 within radius
   let targets;
   if(selectedIds.size>0){
     targets=data.filter(c=>selectedIds.has(c.id)&&c.lat&&c.lng);
-    if(!targets.length){showToast('Selected companies have no location data');return;}
+    if(!targets.length){showToast('Selected companies have no GPS yet');return;}
   }else{
     const near=data.filter(c=>c.lat&&c.lng&&haversine(userLatLng,[c.lat,c.lng])<=RADIUS_KM)
       .sort((a,b)=>haversine(userLatLng,[a.lat,a.lng])-haversine(userLatLng,[b.lat,b.lng]));
-    if(!near.length){showToast('No companies within 10km');return;}
+    if(!near.length){showToast('No geocoded companies within 10km');return;}
     targets=near.slice(0,4);
-    showToast(`Auto-selected ${targets.length} nearest companies`);
+    showToast(`Routing ${targets.length} nearest companies`);
   }
   const footerBtn=document.getElementById('route-footer-btn');
-  const origLabel=footerBtn.textContent;
-  footerBtn.textContent='⏳ Routing…';
+  footerBtn.textContent='⏳ Routing…';footerBtn.onclick=null;
   if(routeLayer){leafletMap.removeLayer(routeLayer);routeLayer=null;}
   const coords=[userLatLng,...targets.map(c=>[c.lat,c.lng])];
   const coordStr=coords.map(([lat,lng])=>`${lng},${lat}`).join(';');
@@ -1443,43 +1456,41 @@ async function planRoute(){
     routeLayer=L.geoJSON(trip.geometry,{style:{color:'#7c3aed',weight:4,opacity:0.85,dashArray:'8,5'}}).addTo(leafletMap);
     const hrs=Math.floor(trip.duration/3600),mins=Math.round((trip.duration%3600)/60);
     const km=(trip.distance/1000).toFixed(1);
-    const ri2=rushInfo();
-    const rushNote=ri2.label?` · ${ri2.label}`:'';
+    const rushNote=rushInfo().label?` · ${rushInfo().label}`:'';
     document.getElementById('route-info').textContent=`${targets.length} stops · ${km}km · ~${hrs?hrs+'h ':''}${mins}min${rushNote}`;
     document.getElementById('route-bar').style.display='block';
-    // Re-number markers by OSRM stop order
     const order=rd.waypoints.slice(1).map(w=>w.waypoint_index-1);
     mapMarkers.forEach(m=>leafletMap.removeLayer(m));mapMarkers=[];
     order.forEach((origIdx,stopNum)=>{
       const co=targets[origIdx];
-      const m=L.marker([co.lat,co.lng],{icon:makeStopIcon(stopNum+1)})
+      const mk=L.marker([co.lat,co.lng],{icon:makeStopIcon(stopNum+1)})
         .addTo(leafletMap).bindPopup(popupHTML(co,haversine(userLatLng,[co.lat,co.lng])),{className:'map-popup',maxWidth:290});
-      m._coId=co.id;mapMarkers.push(m);
+      mk._coId=co.id;mapMarkers.push(mk);
     });
-    // Update drawer list in optimized stop order
-    const dTitle=document.getElementById('drawer-title');
-    dTitle.textContent=`🗺️ Route: ${targets.length} stops`;
+    isRouteMode=true;
+    document.getElementById('drawer-title').textContent=`🗺️ ${targets.length} stops — tap ✕ to remove`;
     document.getElementById('nearby-list').innerHTML=order.map((oi,sn)=>{
       const c=targets[oi];
+      const cc2=catColor(c.category);const sc=STATUS_COLORS[c.status||''];
       const fresh=!(c.visits&&c.visits.length);
-      return `<div class="nearby-item" onclick="focusCompany(${c.id})">
+      const dist=haversine(userLatLng,[c.lat,c.lng]).toFixed(1);
+      return `<div class="nearby-item selected" data-cid="${c.id}" onclick="focusCompany(${c.id})">
         <div style="width:24px;height:24px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0">${sn+1}</div>
-        <div class="ni-info"><div class="ni-name">${esc(c.name)}</div><div class="ni-meta">${esc((c.category||'').replace(' Companies',''))}${fresh?' · <span class="ni-fresh">✨ First!</span>':''}</div></div>
-        <div class="ni-dist" style="color:#7c3aed;font-size:0.72rem">${haversine(userLatLng,[c.lat,c.lng]).toFixed(1)}km</div>
+        <div class="ni-info"><div class="ni-name">${esc(c.name)}</div><div class="ni-meta">${esc((c.category||'').replace(' Companies',''))}${fresh?'  · <span class="ni-fresh">✨ First!</span>':''}</div></div>
+        <div class="ni-dist" style="color:#7c3aed;font-size:0.72rem">${dist}km</div>
+        <div class="sel-circle on" onclick="toggleSelect(${c.id},event)" title="Remove stop" style="background:#dc2626;border-color:#dc2626;color:#fff">✕</div>
       </div>`;
     }).join('');
     openDrawer();
     leafletMap.fitBounds(routeLayer.getBounds(),{padding:[40,40]});
-    footerBtn.textContent='✕ Clear Route';
-    footerBtn.onclick=()=>{
-      if(routeLayer){leafletMap.removeLayer(routeLayer);routeLayer=null;}
-      document.getElementById('route-bar').style.display='none';
-      footerBtn.textContent=origLabel;
-      footerBtn.onclick=planRoute;
-      plotAllCompanies();
-      showNearbyCompanies();
-    };
-  }catch(e){showToast('Route failed — try again');footerBtn.textContent=origLabel;}
+    footerBtn.textContent='✕ Clear All Stops';
+    footerBtn.onclick=clearRoute;
+    document.getElementById('route-footer').classList.add('show');
+  }catch(e){
+    showToast('Route failed — try again');
+    footerBtn.textContent=selectedIds.size>0?`🗺️ Route ${selectedIds.size} stops`:'🗺️ Route';
+    footerBtn.onclick=planRoute;
+  }
 }
 
 function mapLogVisit(id){
