@@ -366,6 +366,37 @@ input[type=checkbox]{width:15px;height:15px;accent-color:var(--accent);cursor:po
 const OWNER='omg9401',REPO='ad-tracker',F_DATA='companies.json',F_SET='settings.json';
 const PW_HASH='am9teWtvY2hlcnkxQA==';
 
+/* ── CRYPTO: AES-256-GCM, key from password, runs entirely in browser ── */
+async function cryptoKey(pw){
+  const raw=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),{name:'PBKDF2'},false,['deriveKey']);
+  return crypto.subtle.deriveKey(
+    {name:'PBKDF2',salt:new TextEncoder().encode('uae-tracker-v1'),iterations:100000,hash:'SHA-256'},
+    raw,{name:'AES-GCM',length:256},false,['encrypt','decrypt']
+  );
+}
+async function encryptObj(obj,pw){
+  const key=await cryptoKey(pw);
+  const iv=crypto.getRandomValues(new Uint8Array(12));
+  const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,new TextEncoder().encode(JSON.stringify(obj,null,2)));
+  const out=new Uint8Array(12+ct.byteLength);
+  out.set(iv);out.set(new Uint8Array(ct),12);
+  // Return as base64 string — this IS the file content stored in GitHub
+  return btoa(String.fromCharCode(...out));
+}
+async function decryptStr(b64,pw){
+  const key=await cryptoKey(pw);
+  const bytes=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));
+  const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:bytes.slice(0,12)},key,bytes.slice(12));
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+async function smartParse(fileContent,pw){
+  // Try plain JSON first (handles existing unencrypted files)
+  try{return JSON.parse(fileContent);}catch(e){}
+  // Fall back to decrypt
+  if(pw){try{return await decryptStr(fileContent,pw);}catch(e){}}
+  return null;
+}
+
 let data=[], settings={assignees:['Aashel','Majen'],categories:[],cities:[]};
 let shaData=null, shaSet=null;
 let activeCity='All', activeCat='All', activeAssignee='All';
@@ -380,6 +411,7 @@ function doLogin(){
   const tok=document.getElementById('tok').value.trim();
   if(btoa(pw)!==PW_HASH){document.getElementById('lerr').textContent='Incorrect password.';return;}
   sessionStorage.setItem('auth','1');
+  sessionStorage.setItem('upw',pw);
   if(tok) sessionStorage.setItem('ght',tok);
   document.getElementById('login-screen').style.display='none';
   document.getElementById('app').style.display='block';
@@ -406,6 +438,7 @@ function showTab(id,el){
 async function loadAll(){
   setSave('saving','Loading…');
   const tok=sessionStorage.getItem('ght');
+  const pw=sessionStorage.getItem('upw');
   const h={'Accept':'application/vnd.github+json'};
   if(tok) h['Authorization']='token '+tok;
   try{
@@ -413,8 +446,17 @@ async function loadAll(){
       fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${F_DATA}`,{headers:h}),
       fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${F_SET}`,{headers:h})
     ]);
-    if(rd.ok){const m=await rd.json();shaData=m.sha;data=JSON.parse(atob(m.content.replace(/\n/g,'')));}
-    if(rs.ok){const m=await rs.json();shaSet=m.sha;settings=JSON.parse(atob(m.content.replace(/\n/g,'')));}
+    if(rd.ok){
+      const m=await rd.json();shaData=m.sha;
+      // fileContent = the raw file bytes decoded from GitHub's base64 wrapper
+      const fileContent=atob(m.content.replace(/\n/g,''));
+      data=await smartParse(fileContent,pw)||[];
+    }
+    if(rs.ok){
+      const m=await rs.json();shaSet=m.sha;
+      const fileContent=atob(m.content.replace(/\n/g,''));
+      settings=await smartParse(fileContent,pw)||settings;
+    }
     setSave('saved','Loaded');
   }catch(e){
     try{data=await(await fetch('./'+F_DATA+'?_='+Date.now())).json();}catch(e2){}
@@ -426,27 +468,37 @@ async function loadAll(){
 
 /* ── SAVE DATA ── */
 function scheduleSave(msg){clearTimeout(saveTimer);setSave('saving','Saving…');saveTimer=setTimeout(()=>saveData(msg),1200);}
+async function pushFile(path,obj,sha,msg){
+  const tok=sessionStorage.getItem('ght');
+  const pw=sessionStorage.getItem('upw');
+  if(!tok) return null;
+  // Encrypt in browser, then base64-wrap for GitHub API content field
+  const encrypted=await encryptObj(obj,pw);         // base64 of iv+ciphertext
+  const content=btoa(encrypted);                     // base64 of that b64 string (GitHub requires b64)
+  const rg=await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`,{headers:{'Authorization':'token '+tok,'Accept':'application/vnd.github+json'}});
+  if(rg.ok){const m=await rg.json();sha=m.sha;}
+  const rp=await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`,{
+    method:'PUT',
+    headers:{'Authorization':'token '+tok,'Content-Type':'application/json','Accept':'application/vnd.github+json'},
+    body:JSON.stringify({message:msg||'Update',content,sha})
+  });
+  if(rp.ok){const d=await rp.json();return d.content.sha;}
+  return null;
+}
 async function saveData(msg){
   const tok=sessionStorage.getItem('ght');
-  if(!tok){setSave('error','No token');return;}
+  if(!tok){setSave('error','No token — changes not saved');return;}
+  setSave('saving','Saving…');
   try{
-    const rg=await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${F_DATA}`,{headers:{'Authorization':'token '+tok,'Accept':'application/vnd.github+json'}});
-    if(rg.ok){const m=await rg.json();shaData=m.sha;}
-    const content=btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2))));
-    const rp=await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${F_DATA}`,{method:'PUT',headers:{'Authorization':'token '+tok,'Content-Type':'application/json','Accept':'application/vnd.github+json'},body:JSON.stringify({message:msg||'Update',content,sha:shaData})});
-    if(rp.ok){const d=await rp.json();shaData=d.content.sha;setSave('saved','Saved ✓');}
+    const newSha=await pushFile(F_DATA,data,shaData,msg||'Update data');
+    if(newSha){shaData=newSha;setSave('saved','Saved ✓');}
     else setSave('error','Save failed');
   }catch(e){setSave('error','Error');}
 }
 async function saveSettings(){
-  const tok=sessionStorage.getItem('ght');
-  if(!tok) return;
   try{
-    const rg=await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${F_SET}`,{headers:{'Authorization':'token '+tok,'Accept':'application/vnd.github+json'}});
-    if(rg.ok){const m=await rg.json();shaSet=m.sha;}
-    const content=btoa(unescape(encodeURIComponent(JSON.stringify(settings,null,2))));
-    const rp=await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${F_SET}`,{method:'PUT',headers:{'Authorization':'token '+tok,'Content-Type':'application/json','Accept':'application/vnd.github+json'},body:JSON.stringify({message:'Update settings',content,sha:shaSet})});
-    if(rp.ok){const d=await rp.json();shaSet=d.content.sha;}
+    const newSha=await pushFile(F_SET,settings,shaSet,'Update settings');
+    if(newSha) shaSet=newSha;
   }catch(e){}
 }
 function setSave(state,txt){
