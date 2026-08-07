@@ -6,175 +6,190 @@
 <title>UAE Client Tracker</title>
 <style>
 :root {
-  --bg: #0f1117;
-  --surface: #1a1d27;
-  --surface2: #222535;
-  --border: #2e3248;
-  --accent: #4f6ef7;
-  --text: #e8eaf0;
-  --text2: #8892a4;
-  --success: #10b981;
-  --warn: #f59e0b;
-  --danger: #ef4444;
-  --new-row: #162030;
+  --bg:#0f1117; --surface:#1a1d27; --surface2:#222535; --border:#2e3248;
+  --accent:#4f6ef7; --text:#e8eaf0; --text2:#8892a4;
+  --success:#10b981; --warn:#f59e0b; --danger:#ef4444; --new-row:#162030;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; font-size: 14px; }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;font-size:14px;}
 
-/* ── LOGIN ── */
-#login-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; }
-.login-box { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:40px; width:100%; max-width:360px; text-align:center; }
-.login-box h1 { font-size:1.4rem; margin-bottom:6px; }
-.login-box p { color:var(--text2); font-size:0.83rem; margin-bottom:24px; }
-.login-box input { width:100%; padding:11px 14px; border:1px solid var(--border); border-radius:8px; background:var(--bg); color:var(--text); font-size:0.9rem; margin-bottom:10px; outline:none; }
-.login-box input:focus { border-color:var(--accent); }
-.login-box button { width:100%; padding:12px; background:var(--accent); color:#fff; border:none; border-radius:8px; font-size:0.92rem; font-weight:600; cursor:pointer; }
-.login-box button:hover { opacity:0.88; }
-.login-error { color:var(--danger); font-size:0.8rem; margin-top:8px; }
+/* LOGIN */
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;}
+.login-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px;width:100%;max-width:360px;text-align:center;}
+.login-box h1{font-size:1.4rem;margin-bottom:6px;}
+.login-box p{color:var(--text2);font-size:0.83rem;margin-bottom:24px;}
+.login-box input{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.9rem;margin-bottom:10px;outline:none;}
+.login-box input:focus{border-color:var(--accent);}
+.login-box button{width:100%;padding:12px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:0.92rem;font-weight:600;cursor:pointer;}
+.login-box button:hover{opacity:0.88;}
+.login-error{color:var(--danger);font-size:0.8rem;margin-top:8px;}
 
-/* ── APP ── */
-#app { display:none; }
+/* APP */
+#app{display:none;}
 
-/* ── HEADER ── */
-.header { background:var(--surface); border-bottom:1px solid var(--border); padding:12px 18px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; position:sticky; top:0; z-index:200; }
-.header h1 { font-size:1rem; font-weight:700; white-space:nowrap; }
-.search-wrap { position:relative; }
-.search-wrap input { padding:7px 12px 7px 32px; border:1px solid var(--border); border-radius:7px; background:var(--bg); color:var(--text); font-size:0.83rem; width:200px; outline:none; }
-.search-wrap input:focus { border-color:var(--accent); }
-.search-icon { position:absolute; left:9px; top:50%; transform:translateY(-50%); color:var(--text2); font-size:0.8rem; pointer-events:none; }
-.spacer { flex:1; }
-.save-badge { font-size:0.72rem; color:var(--text2); display:flex; align-items:center; gap:4px; }
-.save-dot { width:6px; height:6px; border-radius:50%; background:var(--text2); }
-.save-dot.saving { background:var(--warn); animation:pulse 1s infinite; }
-.save-dot.saved { background:var(--success); }
-.save-dot.error { background:var(--danger); }
-@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
-.btn { padding:7px 13px; border-radius:7px; border:1px solid transparent; cursor:pointer; font-size:0.8rem; font-weight:600; transition:all 0.15s; white-space:nowrap; }
-.btn-primary { background:var(--accent); color:#fff; border-color:var(--accent); }
-.btn-primary:hover { opacity:0.88; }
-.btn-ghost { background:transparent; color:var(--text2); border-color:var(--border); }
-.btn-ghost:hover { color:var(--text); border-color:var(--text2); }
+/* HEADER */
+.header{background:var(--surface);border-bottom:1px solid var(--border);padding:11px 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;position:sticky;top:0;z-index:200;}
+.header h1{font-size:1rem;font-weight:700;white-space:nowrap;}
+.search-wrap{position:relative;}
+.search-wrap input{padding:7px 12px 7px 30px;border:1px solid var(--border);border-radius:7px;background:var(--bg);color:var(--text);font-size:0.82rem;width:190px;outline:none;}
+.search-wrap input:focus{border-color:var(--accent);}
+.si{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--text2);font-size:0.78rem;pointer-events:none;}
+.spacer{flex:1;}
+.save-badge{font-size:0.71rem;color:var(--text2);display:flex;align-items:center;gap:4px;}
+.save-dot{width:6px;height:6px;border-radius:50%;background:var(--text2);}
+.save-dot.saving{background:var(--warn);animation:pulse 1s infinite;}
+.save-dot.saved{background:var(--success);}
+.save-dot.error{background:var(--danger);}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.btn{padding:7px 12px;border-radius:7px;border:1px solid transparent;cursor:pointer;font-size:0.79rem;font-weight:600;transition:all 0.15s;white-space:nowrap;}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.btn-primary:hover{opacity:0.88;}
+.btn-ghost{background:transparent;color:var(--text2);border-color:var(--border);}
+.btn-ghost:hover{color:var(--text);border-color:var(--text2);}
 
-/* ── FILTER ROWS ── */
-.filter-section { background:var(--surface); border-bottom:1px solid var(--border); }
-.filter-row { padding:8px 18px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; border-bottom:1px solid #1e2235; }
-.filter-row:last-child { border-bottom:none; }
-.filter-label { font-size:0.68rem; color:var(--text2); font-weight:700; text-transform:uppercase; letter-spacing:0.06em; white-space:nowrap; min-width:60px; }
-.chip { padding:4px 11px; border-radius:20px; border:1px solid var(--border); background:var(--bg); color:var(--text2); font-size:0.75rem; cursor:pointer; transition:all 0.15s; white-space:nowrap; }
-.chip:hover { border-color:var(--accent); color:var(--text); }
-.chip.active { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600; }
-.chip.auh.active { background:#1a3a6a; border-color:#3a7aef; color:#90c0ff; }
-.chip.dxb.active { background:#3a1a6a; border-color:#9a3aef; color:#d0a0ff; }
-.chip.shj.active { background:#3a3a1a; border-color:#c0c030; color:#e8e870; }
+/* NAV TABS */
+.nav-tabs{display:flex;gap:0;background:var(--surface);border-bottom:1px solid var(--border);}
+.nav-tab{padding:10px 18px;font-size:0.82rem;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;}
+.nav-tab:hover{color:var(--text);}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
 
-/* ── STATS BAR ── */
-.stats-bar { padding:7px 18px; display:flex; gap:18px; flex-wrap:wrap; background:var(--bg); border-bottom:1px solid var(--border); }
-.stat { font-size:0.75rem; color:var(--text2); }
-.stat b { color:var(--text); font-weight:600; }
+/* TAB PANELS */
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
 
-/* ── ADD FORM ── */
-.add-form { background:var(--surface2); border-bottom:1px solid var(--border); padding:14px 18px; display:none; }
-.add-form.open { display:block; }
-.add-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:8px; margin-bottom:10px; }
-.add-grid label { font-size:0.7rem; color:var(--text2); display:block; margin-bottom:3px; }
-.add-grid input, .add-grid select { width:100%; padding:7px 9px; border:1px solid var(--border); border-radius:6px; background:var(--bg); color:var(--text); font-size:0.82rem; outline:none; }
-.add-grid input:focus, .add-grid select:focus { border-color:var(--accent); }
-.add-actions { display:flex; gap:8px; }
+/* FILTER SECTION */
+.filter-section{background:var(--surface);border-bottom:1px solid var(--border);}
+.filter-row{padding:7px 18px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;border-bottom:1px solid #1e2235;}
+.filter-row:last-child{border-bottom:none;}
+.filter-label{font-size:0.67rem;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;white-space:nowrap;min-width:65px;}
+.chip{padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:var(--bg);color:var(--text2);font-size:0.74rem;cursor:pointer;transition:all 0.15s;white-space:nowrap;}
+.chip:hover{border-color:var(--accent);color:var(--text);}
+.chip.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;}
+.chip.auh.active{background:#1a3a6a;border-color:#3a7aef;color:#90c0ff;}
+.chip.dxb.active{background:#3a1a6a;border-color:#9a3aef;color:#d0a0ff;}
+.chip.shj.active{background:#3a3a1a;border-color:#c0c030;color:#e8e870;}
 
-/* ── TABLE ── */
-.tbl-wrap { overflow-x:auto; }
-table { width:100%; border-collapse:collapse; font-size:0.8rem; min-width:1000px; }
-thead th {
-  background:var(--surface); padding:9px 10px; text-align:left;
-  color:var(--text2); font-size:0.7rem; font-weight:700; text-transform:uppercase;
-  letter-spacing:0.04em; border-bottom:1px solid var(--border);
-  white-space:nowrap; position:sticky; top:0; z-index:10; cursor:pointer; user-select:none;
-}
-thead th:hover { color:var(--text); }
-thead th .sort-icon { opacity:0.3; margin-left:3px; }
-thead th.sort-asc .sort-icon::after { content:'▲'; opacity:1; }
-thead th.sort-desc .sort-icon::after { content:'▼'; opacity:1; }
-thead th.sort-asc .sort-icon, thead th.sort-desc .sort-icon { opacity:1; color:var(--accent); }
-tbody tr { border-bottom:1px solid var(--border); transition:background 0.1s; }
-tbody tr:hover { background:var(--surface2); }
-tbody tr.new-row { background:var(--new-row); }
-tbody tr.new-row:hover { background:#1e2f40; }
-td { padding:8px 10px; vertical-align:middle; }
-td.num { color:var(--text2); font-size:0.7rem; }
+/* STATS */
+.stats-bar{padding:7px 18px;display:flex;gap:16px;flex-wrap:wrap;background:var(--bg);border-bottom:1px solid var(--border);}
+.stat{font-size:0.74rem;color:var(--text2);}
+.stat b{color:var(--text);font-weight:600;}
+
+/* ADD FORM */
+.add-form{background:var(--surface2);border-bottom:1px solid var(--border);padding:14px 18px;display:none;}
+.add-form.open{display:block;}
+.add-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:8px;margin-bottom:10px;}
+.add-grid label{font-size:0.69rem;color:var(--text2);display:block;margin-bottom:3px;}
+.add-grid input,.add-grid select{width:100%;padding:7px 9px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:0.81rem;outline:none;}
+.add-grid input:focus,.add-grid select:focus{border-color:var(--accent);}
+.add-actions{display:flex;gap:8px;}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:0.79rem;min-width:1050px;}
+thead th{background:var(--surface);padding:9px 10px;text-align:left;color:var(--text2);font-size:0.69rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;border-bottom:1px solid var(--border);white-space:nowrap;position:sticky;top:0;z-index:10;cursor:pointer;user-select:none;}
+thead th:hover{color:var(--text);}
+thead th.sort-asc::after{content:' ▲';color:var(--accent);font-size:0.65rem;}
+thead th.sort-desc::after{content:' ▼';color:var(--accent);font-size:0.65rem;}
+thead th.no-sort{cursor:default;}
+tbody tr{border-bottom:1px solid var(--border);transition:background 0.1s;}
+tbody tr:hover{background:var(--surface2);}
+tbody tr.new-row{background:var(--new-row);}
+tbody tr.new-row:hover{background:#1e2f40;}
+td{padding:8px 10px;vertical-align:middle;}
+td.num{color:var(--text2);font-size:0.69rem;}
+
+/* Assignee */
+.assignee-badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:0.7rem;font-weight:600;white-space:nowrap;}
+.a-aashel{background:#1a2a4a;color:#60aaff;border:1px solid #2a4a8a;}
+.a-majen{background:#2a1a3a;color:#c080ff;border:1px solid #5a2a8a;}
+.a-none{background:var(--surface2);color:var(--text2);border:1px solid var(--border);}
+.assignee-select{background:transparent;border:none;color:inherit;font-size:0.7rem;font-weight:600;cursor:pointer;outline:none;width:100%;}
 
 /* City pills */
-.city-pill { display:inline-block; padding:1px 7px; border-radius:10px; font-size:0.65rem; font-weight:600; white-space:nowrap; }
-.city-auh { background:#152440; color:#6aacff; border:1px solid #1e3a6a; }
-.city-dxb { background:#261540; color:#c080ff; border:1px solid #4a1a80; }
-.city-shj { background:#2a2a10; color:#d4d440; border:1px solid #5a5a10; }
+.city-pill{display:inline-block;padding:1px 7px;border-radius:10px;font-size:0.64rem;font-weight:600;white-space:nowrap;}
+.city-auh{background:#152440;color:#6aacff;border:1px solid #1e3a6a;}
+.city-dxb{background:#261540;color:#c080ff;border:1px solid #4a1a80;}
+.city-shj{background:#2a2a10;color:#d4d440;border:1px solid #5a5a10;}
 
 /* Category badges */
-.badge { display:inline-block; padding:2px 7px; border-radius:20px; font-size:0.68rem; font-weight:600; white-space:nowrap; }
-.b-interior  { background:#1e3a5f; color:#60aeff; }
-.b-design    { background:#1e3a30; color:#34d399; }
-.b-consult   { background:#3a2e1e; color:#fbbf24; }
-.b-hotel     { background:#3a1e2e; color:#f472b6; }
-.b-holding   { background:#2e1e3a; color:#a78bfa; }
-.b-royal     { background:#3a2a1a; color:#fb923c; }
-.b-ffe       { background:#1e3a3a; color:#2dd4bf; }
-.b-joinery   { background:#2e2e1e; color:#d4d44c; }
+.badge{display:inline-block;padding:2px 7px;border-radius:20px;font-size:0.67rem;font-weight:600;white-space:nowrap;}
+.b-interior{background:#1e3a5f;color:#60aeff;}
+.b-design{background:#1e3a30;color:#34d399;}
+.b-consult{background:#3a2e1e;color:#fbbf24;}
+.b-hotel{background:#3a1e2e;color:#f472b6;}
+.b-holding{background:#2e1e3a;color:#a78bfa;}
+.b-royal{background:#3a2a1a;color:#fb923c;}
+.b-ffe{background:#1e3a3a;color:#2dd4bf;}
+.b-joinery{background:#2e2e1e;color:#d4d44c;}
 
 /* Links */
-.link-col { display:flex; flex-direction:column; gap:3px; }
-a.site-lnk { font-size:0.73rem; color:var(--accent); text-decoration:none; }
-a.site-lnk:hover { text-decoration:underline; }
-a.map-lnk { font-size:0.73rem; color:#34d399; text-decoration:none; }
-a.map-lnk:hover { text-decoration:underline; }
+.link-col{display:flex;flex-direction:column;gap:3px;}
+a.sl{font-size:0.72rem;color:var(--accent);text-decoration:none;}
+a.sl:hover{text-decoration:underline;}
+a.ml{font-size:0.72rem;color:#34d399;text-decoration:none;}
+a.ml:hover{text-decoration:underline;}
 
-/* Editable cells */
-td[contenteditable] { outline:none; cursor:text; }
-td[contenteditable]:focus { background:rgba(79,110,247,0.07); box-shadow:0 0 0 1px var(--accent) inset; border-radius:3px; }
+/* Editable */
+td[contenteditable]{outline:none;cursor:text;}
+td[contenteditable]:focus{background:rgba(79,110,247,0.07);box-shadow:0 0 0 1px var(--accent) inset;border-radius:3px;}
 
 /* Checkboxes */
-.cb { display:flex; justify-content:center; }
-input[type=checkbox] { width:15px; height:15px; accent-color:var(--accent); cursor:pointer; }
+.cb{display:flex;justify-content:center;}
+input[type=checkbox]{width:15px;height:15px;accent-color:var(--accent);cursor:pointer;}
 
 /* Delete */
-.del-btn { background:none; border:none; color:var(--text2); cursor:pointer; padding:3px 6px; border-radius:5px; font-size:0.8rem; }
-.del-btn:hover { color:var(--danger); background:rgba(239,68,68,0.1); }
+.del-btn{background:none;border:none;color:var(--text2);cursor:pointer;padding:3px 6px;border-radius:5px;font-size:0.79rem;}
+.del-btn:hover{color:var(--danger);background:rgba(239,68,68,0.1);}
 
-/* ── MOBILE CARDS ── */
-.cards { display:none; padding:10px; }
-.card { background:var(--surface); border:1px solid var(--border); border-radius:11px; margin-bottom:9px; overflow:hidden; }
-.card.new-row { border-color:#2a4a6a; background:var(--new-row); }
-.card-head { padding:11px 13px; display:flex; align-items:flex-start; gap:9px; cursor:pointer; }
-.card-info { flex:1; }
-.card-name { font-size:0.88rem; font-weight:600; line-height:1.3; margin-bottom:5px; }
-.card-tags { display:flex; gap:5px; flex-wrap:wrap; align-items:center; }
-.card-chevron { color:var(--text2); font-size:0.7rem; padding-top:3px; transition:transform 0.2s; }
-.card.open .card-chevron { transform:rotate(180deg); }
-.card-body { display:none; padding:0 13px 13px; }
-.card.open .card-body { display:block; }
-.card-links { display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
-.card-field { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--border); font-size:0.78rem; }
-.card-field:last-of-type { border-bottom:none; }
-.cf-label { color:var(--text2); }
-.cf-val { text-align:right; max-width:58%; }
-.card-checks { display:grid; grid-template-columns:repeat(5,1fr); gap:5px; margin-top:10px; text-align:center; }
-.cc-label { font-size:0.6rem; color:var(--text2); margin-bottom:3px; }
+/* MOBILE CARDS */
+.cards{display:none;padding:10px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:11px;margin-bottom:9px;overflow:hidden;}
+.card.new-row{border-color:#2a4a6a;background:var(--new-row);}
+.card-head{padding:11px 13px;display:flex;align-items:flex-start;gap:9px;cursor:pointer;}
+.card-info{flex:1;}
+.card-name{font-size:0.87rem;font-weight:600;line-height:1.3;margin-bottom:5px;}
+.card-tags{display:flex;gap:5px;flex-wrap:wrap;align-items:center;}
+.card-chevron{color:var(--text2);font-size:0.7rem;padding-top:3px;transition:transform 0.2s;}
+.card.open .card-chevron{transform:rotate(180deg);}
+.card-body{display:none;padding:0 13px 13px;}
+.card.open .card-body{display:block;}
+.card-links{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+.card-field{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:0.78rem;}
+.card-field:last-of-type{border-bottom:none;}
+.cf-label{color:var(--text2);}
+.cf-val{text-align:right;max-width:60%;}
+.card-checks{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:10px;text-align:center;}
+.cc-label{font-size:0.59rem;color:var(--text2);margin-bottom:3px;}
 
-/* ── EMPTY ── */
-.empty { text-align:center; padding:60px 20px; color:var(--text2); }
-.empty h3 { font-size:1rem; margin-bottom:6px; }
+/* EMPTY */
+.empty{text-align:center;padding:60px 20px;color:var(--text2);}
+.empty h3{font-size:1rem;margin-bottom:6px;}
 
-/* ── RESPONSIVE ── */
-@media(max-width:767px) {
-  .header { padding:9px 12px; gap:9px; }
-  .header h1 { font-size:0.9rem; }
-  .search-wrap input { width:150px; }
-  .tbl-wrap { display:none; }
-  .cards { display:block; }
-  .filter-row { padding:6px 12px; }
-  .stats-bar { padding:6px 12px; }
+/* SETTINGS PANEL */
+.settings-wrap{max-width:680px;margin:24px auto;padding:0 18px;}
+.settings-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px;}
+.settings-card h3{font-size:0.88rem;font-weight:700;margin-bottom:14px;color:var(--text);}
+.settings-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.settings-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;}
+.settings-item span{font-size:0.84rem;}
+.settings-item button{background:none;border:none;color:var(--danger);cursor:pointer;font-size:0.8rem;padding:2px 6px;border-radius:5px;}
+.settings-item button:hover{background:rgba(239,68,68,0.1);}
+.add-item-row{display:flex;gap:8px;margin-top:10px;}
+.add-item-row input{flex:1;padding:8px 10px;border:1px solid var(--border);border-radius:7px;background:var(--bg);color:var(--text);font-size:0.82rem;outline:none;}
+.add-item-row input:focus{border-color:var(--accent);}
+
+/* RESPONSIVE */
+@media(max-width:767px){
+  .header{padding:9px 12px;gap:8px;}
+  .header h1{font-size:0.88rem;}
+  .search-wrap input{width:140px;}
+  .tbl-wrap{display:none;}
+  .cards{display:block;}
+  .filter-row,.stats-bar{padding:6px 12px;}
 }
-@media(min-width:768px) {
-  .tbl-wrap { display:block; }
-  .cards { display:none; }
+@media(min-width:768px){
+  .tbl-wrap{display:block;}
+  .cards{display:none;}
 }
 </style>
 </head>
@@ -199,7 +214,7 @@ input[type=checkbox] { width:15px; height:15px; accent-color:var(--accent); curs
   <div class="header">
     <h1>🏙️ UAE Client Tracker</h1>
     <div class="search-wrap">
-      <span class="search-icon">🔍</span>
+      <span class="si">🔍</span>
       <input type="text" id="q" placeholder="Search…" oninput="render()">
     </div>
     <div class="spacer"></div>
@@ -209,111 +224,179 @@ input[type=checkbox] { width:15px; height:15px; accent-color:var(--accent); curs
     <button class="btn btn-ghost" onclick="doLogout()">Sign out</button>
   </div>
 
-  <!-- ADD FORM -->
-  <div class="add-form" id="addForm">
-    <div class="add-grid">
-      <div><label>Company Name *</label><input id="af-name" placeholder="Company name"></div>
-      <div><label>Emirate *</label>
-        <select id="af-city">
-          <option value="Abu Dhabi">Abu Dhabi</option>
-          <option value="Dubai">Dubai</option>
-          <option value="Sharjah">Sharjah</option>
-          <option value="RAK">Ras Al Khaimah</option>
-          <option value="Ajman">Ajman</option>
-        </select>
+  <!-- NAV TABS -->
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="showTab('tracker',this)">📋 Tracker</div>
+    <div class="nav-tab" onclick="showTab('settings',this)">⚙️ Settings</div>
+  </div>
+
+  <!-- TRACKER TAB -->
+  <div class="tab-panel active" id="tab-tracker">
+
+    <!-- ADD FORM -->
+    <div class="add-form" id="addForm">
+      <div class="add-grid">
+        <div><label>Company Name *</label><input id="af-name" placeholder="Company name"></div>
+        <div><label>Emirate *</label><select id="af-city"></select></div>
+        <div><label>Category *</label><select id="af-cat"></select></div>
+        <div><label>Assignee</label><select id="af-assignee"><option value="">Unassigned</option></select></div>
+        <div><label>Website</label><input id="af-web" placeholder="https://"></div>
+        <div><label>Address</label><input id="af-addr" placeholder="Location"></div>
+        <div><label>Procurement Email</label><input id="af-email" type="email" placeholder="email@co.com"></div>
+        <div><label>Office Phone</label><input id="af-phone" placeholder="+971 x xxx xxxx"></div>
+        <div><label>Procurement Officer</label><input id="af-officer" placeholder="Name"></div>
+        <div><label>Notes</label><input id="af-notes" placeholder="Notes"></div>
       </div>
-      <div><label>Category *</label>
-        <select id="af-cat">
-          <option>Interior Companies</option>
-          <option>Design Companies</option>
-          <option>Consultants</option>
-          <option>Hotels</option>
-          <option>Holding Companies</option>
-          <option>Royal HH Offices</option>
-          <option>FF&amp;E Buying Companies</option>
-          <option>Joinery Companies</option>
-        </select>
+      <div class="add-actions">
+        <button class="btn btn-primary" onclick="addCo()">Add Company</button>
+        <button class="btn btn-ghost" onclick="toggleAdd()">Cancel</button>
       </div>
-      <div><label>Website</label><input id="af-web" placeholder="https://"></div>
-      <div><label>Address</label><input id="af-addr" placeholder="Location"></div>
-      <div><label>Procurement Email</label><input id="af-email" type="email" placeholder="email@company.com"></div>
-      <div><label>Office Phone</label><input id="af-phone" placeholder="+971 2 xxx xxxx"></div>
-      <div><label>Procurement Officer</label><input id="af-officer" placeholder="Name"></div>
-      <div><label>Notes</label><input id="af-notes" placeholder="Notes"></div>
     </div>
-    <div class="add-actions">
-      <button class="btn btn-primary" onclick="addCo()">Add Company</button>
-      <button class="btn btn-ghost" onclick="toggleAdd()">Cancel</button>
+
+    <!-- FILTERS -->
+    <div class="filter-section">
+      <div class="filter-row">
+        <span class="filter-label">Emirate</span>
+        <button class="chip active" id="fc-all" onclick="setCity('All',this)">All</button>
+        <button class="chip auh" id="fc-auh" onclick="setCity('Abu Dhabi',this)">🏛 Abu Dhabi</button>
+        <button class="chip dxb" id="fc-dxb" onclick="setCity('Dubai',this)">🌆 Dubai</button>
+        <button class="chip shj" id="fc-shj" onclick="setCity('Sharjah',this)">Sharjah</button>
+      </div>
+      <div class="filter-row" id="cat-row">
+        <span class="filter-label">Type</span>
+        <button class="chip active" onclick="setCat('All',this)">All</button>
+        <button class="chip" onclick="setCat('Interior Companies',this)">Interiors</button>
+        <button class="chip" onclick="setCat('Design Companies',this)">Design</button>
+        <button class="chip" onclick="setCat('Consultants',this)">Consultants</button>
+        <button class="chip" onclick="setCat('Hotels',this)">Hotels</button>
+        <button class="chip" onclick="setCat('Holding Companies',this)">Holding</button>
+        <button class="chip" onclick="setCat('Royal HH Offices',this)">Royal HH</button>
+        <button class="chip" onclick="setCat('FF&E Buying Companies',this)">FF&amp;E</button>
+        <button class="chip" onclick="setCat('Joinery Companies',this)">Joinery</button>
+      </div>
+      <div class="filter-row" id="assignee-row">
+        <span class="filter-label">Assignee</span>
+        <button class="chip active" id="fa-all" onclick="setAssignee('All',this)">All</button>
+        <button class="chip" id="fa-none" onclick="setAssignee('',this)">Unassigned</button>
+      </div>
     </div>
-  </div>
 
-  <!-- FILTERS -->
-  <div class="filter-section">
-    <div class="filter-row">
-      <span class="filter-label">Emirate</span>
-      <button class="chip active" id="fc-all" onclick="setCity('All',this)">All</button>
-      <button class="chip auh" id="fc-auh" onclick="setCity('Abu Dhabi',this)">🏛 Abu Dhabi</button>
-      <button class="chip dxb" id="fc-dxb" onclick="setCity('Dubai',this)">🌆 Dubai</button>
-      <button class="chip shj" id="fc-shj" onclick="setCity('Sharjah',this)">Sharjah</button>
+    <!-- STATS -->
+    <div class="stats-bar" id="statsBar"></div>
+
+    <!-- TABLE -->
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th onclick="sortBy('_idx')">#</th>
+            <th onclick="sortBy('name')">Company</th>
+            <th onclick="sortBy('city')">Emirate</th>
+            <th onclick="sortBy('category')">Type</th>
+            <th onclick="sortBy('assignee')">Assignee</th>
+            <th class="no-sort">Links</th>
+            <th onclick="sortBy('procurement_email')">Email</th>
+            <th onclick="sortBy('office_phone')">Phone</th>
+            <th onclick="sortBy('procurement_officer')">Officer</th>
+            <th class="no-sort">Notes</th>
+            <th class="no-sort" title="Physical Meeting 1">PM1</th>
+            <th class="no-sort" title="Call 1">C1</th>
+            <th class="no-sort" title="Call 2">C2</th>
+            <th class="no-sort" title="Call 3">C3</th>
+            <th class="no-sort" title="Physical Meeting 2">PM2</th>
+            <th class="no-sort"></th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
     </div>
-    <div class="filter-row" id="cat-row">
-      <span class="filter-label">Type</span>
-      <button class="chip active" onclick="setCat('All',this)">All</button>
-      <button class="chip" onclick="setCat('Interior Companies',this)">Interiors</button>
-      <button class="chip" onclick="setCat('Design Companies',this)">Design</button>
-      <button class="chip" onclick="setCat('Consultants',this)">Consultants</button>
-      <button class="chip" onclick="setCat('Hotels',this)">Hotels</button>
-      <button class="chip" onclick="setCat('Holding Companies',this)">Holding</button>
-      <button class="chip" onclick="setCat('Royal HH Offices',this)">Royal HH</button>
-      <button class="chip" onclick="setCat('FF&E Buying Companies',this)">FF&amp;E</button>
-      <button class="chip" onclick="setCat('Joinery Companies',this)">Joinery</button>
+
+    <!-- CARDS (mobile) -->
+    <div class="cards" id="cards"></div>
+
+    <div class="empty" id="empty" style="display:none">
+      <h3>No results</h3><p>Try a different search or filter.</p>
     </div>
-  </div>
 
-  <!-- STATS -->
-  <div class="stats-bar" id="statsBar"></div>
+  </div><!-- /tab-tracker -->
 
-  <!-- TABLE -->
-  <div class="tbl-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th onclick="sortBy('_idx')">#<span class="sort-icon"></span></th>
-          <th onclick="sortBy('name')">Company<span class="sort-icon"></span></th>
-          <th onclick="sortBy('city')">Emirate<span class="sort-icon"></span></th>
-          <th onclick="sortBy('category')">Type<span class="sort-icon"></span></th>
-          <th>Links</th>
-          <th onclick="sortBy('procurement_email')">Email<span class="sort-icon"></span></th>
-          <th onclick="sortBy('office_phone')">Phone<span class="sort-icon"></span></th>
-          <th onclick="sortBy('procurement_officer')">Officer<span class="sort-icon"></span></th>
-          <th>Notes</th>
-          <th title="Physical Meeting 1">PM1</th>
-          <th title="Call 1">C1</th>
-          <th title="Call 2">C2</th>
-          <th title="Call 3">C3</th>
-          <th title="Physical Meeting 2">PM2</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody id="tbody"></tbody>
-    </table>
-  </div>
+  <!-- SETTINGS TAB -->
+  <div class="tab-panel" id="tab-settings">
+    <div class="settings-wrap">
 
-  <!-- CARDS (mobile) -->
-  <div class="cards" id="cards"></div>
+      <div class="settings-card">
+        <h3>👤 Assignees</h3>
+        <ul class="settings-list" id="assignee-list"></ul>
+        <div class="add-item-row">
+          <input type="text" id="new-assignee" placeholder="New assignee name…">
+          <button class="btn btn-primary" onclick="addAssignee()">Add</button>
+        </div>
+      </div>
 
-  <div class="empty" id="empty" style="display:none">
-    <h3>No results</h3><p>Try a different search or filter.</p>
-  </div>
-</div>
+      <div class="settings-card">
+        <h3>🏷️ Company Categories</h3>
+        <ul class="settings-list" id="cat-list"></ul>
+        <div class="add-item-row">
+          <input type="text" id="new-cat" placeholder="New category…">
+          <button class="btn btn-primary" onclick="addCategory()">Add</button>
+        </div>
+      </div>
+
+      <div class="settings-card">
+        <h3>🏙️ Emirates / Cities</h3>
+        <ul class="settings-list" id="city-list"></ul>
+        <div class="add-item-row">
+          <input type="text" id="new-city" placeholder="New emirate / city…">
+          <button class="btn btn-primary" onclick="addCity()">Add</button>
+        </div>
+      </div>
+
+      <div class="settings-card" style="border-color:#3a2020;">
+        <h3 style="color:var(--danger);">⚠️ Data</h3>
+        <p style="font-size:0.82rem;color:var(--text2);margin-bottom:12px;">Raw JSON files live in your GitHub repo: <code style="background:var(--bg);padding:2px 6px;border-radius:4px;font-size:0.78rem;">omg9401/ad-tracker</code></p>
+        <p style="font-size:0.82rem;color:var(--text2);">📄 <a href="https://github.com/omg9401/ad-tracker/blob/main/companies.json" target="_blank" style="color:var(--accent);">companies.json</a> &nbsp;|&nbsp; <a href="https://github.com/omg9401/ad-tracker/blob/main/settings.json" target="_blank" style="color:var(--accent);">settings.json</a></p>
+      </div>
+
+    </div>
+  </div><!-- /tab-settings -->
+
+</div><!-- /app -->
 
 <script>
-const OWNER='omg9401', REPO='ad-tracker', FILE='companies.json';
+const OWNER='omg9401',REPO='ad-tracker',F_DATA='companies.json',F_SET='settings.json';
 const PW_HASH='am9teWtvY2hlcnkxQA==';
 
-let data=[], sha=null, activeCity='All', activeCat='All', sortCol='_idx', sortDir=1;
+let data=[], settings={assignees:['Aashel','Majen'],categories:[],cities:[]};
+let shaData=null, shaSet=null;
+let activeCity='All', activeCat='All', activeAssignee='All';
+let sortCol='_idx', sortDir=1;
 let saveTimer=null;
 const today=new Date().toISOString().slice(0,10);
+
+/* ── CRYPTO (AES-GCM, key derived from password) ── */
+async function deriveKey(password){
+  const enc=new TextEncoder();
+  const keyMat=await crypto.subtle.importKey('raw',enc.encode(password),{name:'PBKDF2'},false,['deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2',salt:enc.encode('uae-tracker-salt'),iterations:100000,hash:'SHA-256'},keyMat,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
+}
+async function encryptJSON(obj,pw){
+  const key=await deriveKey(pw);
+  const iv=crypto.getRandomValues(new Uint8Array(12));
+  const enc=new TextEncoder();
+  const cipher=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,enc.encode(JSON.stringify(obj,null,2)));
+  const buf=new Uint8Array(iv.byteLength+cipher.byteLength);
+  buf.set(iv,0);buf.set(new Uint8Array(cipher),iv.byteLength);
+  return btoa(String.fromCharCode(...buf));
+}
+async function decryptJSON(b64,pw){
+  try{
+    const key=await deriveKey(pw);
+    const buf=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));
+    const iv=buf.slice(0,12),data=buf.slice(12);
+    const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv},key,data);
+    return JSON.parse(new TextDecoder().decode(plain));
+  }catch(e){return null;}
+}
 
 /* ── AUTH ── */
 function doLogin(){
@@ -321,71 +404,132 @@ function doLogin(){
   const tok=document.getElementById('tok').value.trim();
   if(btoa(pw)!==PW_HASH){document.getElementById('lerr').textContent='Incorrect password.';return;}
   sessionStorage.setItem('auth','1');
+  sessionStorage.setItem('pw',pw);
   if(tok) sessionStorage.setItem('ght',tok);
   document.getElementById('login-screen').style.display='none';
   document.getElementById('app').style.display='block';
-  load();
+  loadAll();
 }
 ['pw','tok'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();}));
 function doLogout(){sessionStorage.clear();location.reload();}
 if(sessionStorage.getItem('auth')==='1'){
   document.getElementById('login-screen').style.display='none';
   document.getElementById('app').style.display='block';
-  load();
+  loadAll();
+}
+
+/* ── TABS ── */
+function showTab(id,el){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  el.classList.add('active');
+  if(id==='settings') renderSettings();
 }
 
 /* ── LOAD ── */
-async function load(){
+async function loadAll(){
   setSave('saving','Loading…');
   const tok=sessionStorage.getItem('ght');
+  const pw=sessionStorage.getItem('pw');
+  const h={'Accept':'application/vnd.github+json'};
+  if(tok) h['Authorization']='token '+tok;
   try{
-    const h={'Accept':'application/vnd.github+json'};
-    if(tok) h['Authorization']='token '+tok;
-    const r=await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE}`,{headers:h});
-    if(r.ok){const m=await r.json();sha=m.sha;data=JSON.parse(atob(m.content.replace(/\n/g,'')));setSave('saved','Loaded');render();return;}
-  }catch(e){}
-  try{const r=await fetch('./'+FILE+'?_='+Date.now());if(r.ok){data=await r.json();setSave('saved','Read-only');render();return;}}catch(e){}
-  setSave('error','Load failed');
+    const [rd,rs]=await Promise.all([
+      fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${F_DATA}`,{headers:h}),
+      fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${F_SET}`,{headers:h})
+    ]);
+    if(rd.ok){
+      const m=await rd.json();shaData=m.sha;
+      const raw=atob(m.content.replace(/\n/g,''));
+      // Try decrypt first, fall back to plain JSON (migration)
+      try{
+        const dec=await decryptJSON(raw,pw);
+        data=dec||JSON.parse(raw);
+      }catch(e){data=JSON.parse(raw);}
+    }
+    if(rs.ok){
+      const m=await rs.json();shaSet=m.sha;
+      const raw=atob(m.content.replace(/\n/g,''));
+      try{
+        const dec=await decryptJSON(raw,pw);
+        settings=dec||JSON.parse(raw);
+      }catch(e){settings=JSON.parse(raw);}
+    }
+    setSave('saved','Loaded');
+  }catch(e){
+    try{data=await(await fetch('./'+F_DATA+'?_='+Date.now())).json();}catch(e2){}
+    setSave('saved','Read-only');
+  }
+  buildDynamicUI();
+  render();
 }
 
-/* ── SAVE ── */
-function scheduleSave(msg){clearTimeout(saveTimer);setSave('saving','Saving…');saveTimer=setTimeout(()=>save(msg),1200);}
-async function save(msg){
+/* ── SAVE DATA ── */
+function scheduleSave(msg){clearTimeout(saveTimer);setSave('saving','Saving…');saveTimer=setTimeout(()=>saveData(msg),1200);}
+async function saveData(msg){
   const tok=sessionStorage.getItem('ght');
+  const pw=sessionStorage.getItem('pw');
   if(!tok){setSave('error','No token');return;}
   try{
-    const rg=await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE}`,{headers:{'Authorization':'token '+tok,'Accept':'application/vnd.github+json'}});
-    if(rg.ok){const m=await rg.json();sha=m.sha;}
-    const body={message:msg||'Update',content:btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2)))),sha};
-    const rp=await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE}`,{method:'PUT',headers:{'Authorization':'token '+tok,'Content-Type':'application/json','Accept':'application/vnd.github+json'},body:JSON.stringify(body)});
-    if(rp.ok){const d=await rp.json();sha=d.content.sha;setSave('saved','Saved ✓');}
+    const rg=await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${F_DATA}`,{headers:{'Authorization':'token '+tok,'Accept':'application/vnd.github+json'}});
+    if(rg.ok){const m=await rg.json();shaData=m.sha;}
+    const encrypted=await encryptJSON(data,pw);
+    const rp=await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${F_DATA}`,{method:'PUT',headers:{'Authorization':'token '+tok,'Content-Type':'application/json','Accept':'application/vnd.github+json'},body:JSON.stringify({message:msg||'Update',content:btoa(encrypted),sha:shaData})});
+    if(rp.ok){const d=await rp.json();shaData=d.content.sha;setSave('saved','Saved ✓');}
     else setSave('error','Save failed');
   }catch(e){setSave('error','Error');}
+}
+async function saveSettings(){
+  const tok=sessionStorage.getItem('ght');
+  const pw=sessionStorage.getItem('pw');
+  if(!tok) return;
+  try{
+    const rg=await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${F_SET}`,{headers:{'Authorization':'token '+tok,'Accept':'application/vnd.github+json'}});
+    if(rg.ok){const m=await rg.json();shaSet=m.sha;}
+    const encrypted=await encryptJSON(settings,pw);
+    const rp=await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${F_SET}`,{method:'PUT',headers:{'Authorization':'token '+tok,'Content-Type':'application/json','Accept':'application/vnd.github+json'},body:JSON.stringify({message:'Update settings',content:btoa(encrypted),sha:shaSet})});
+    if(rp.ok){const d=await rp.json();shaSet=d.content.sha;}
+  }catch(e){}
 }
 function setSave(state,txt){
   document.getElementById('stxt').textContent=txt;
   document.getElementById('sdot').className='save-dot'+(state!=='ready'?' '+state:'');
 }
 
+/* ── DYNAMIC UI (assignees/cities/cats from settings) ── */
+function buildDynamicUI(){
+  // Assignee filter chips
+  const ar=document.getElementById('assignee-row');
+  // Remove old dynamic chips
+  ar.querySelectorAll('.dyn').forEach(e=>e.remove());
+  settings.assignees.forEach(a=>{
+    const b=document.createElement('button');
+    b.className='chip dyn';b.textContent=a;
+    b.onclick=()=>{setAssignee(a,b);};
+    ar.appendChild(b);
+  });
+  // Add form dropdowns
+  const afCity=document.getElementById('af-city');
+  afCity.innerHTML=settings.cities.map(c=>`<option>${c}</option>`).join('');
+  const afCat=document.getElementById('af-cat');
+  afCat.innerHTML=settings.categories.map(c=>`<option>${c}</option>`).join('');
+  const afAs=document.getElementById('af-assignee');
+  afAs.innerHTML='<option value="">Unassigned</option>'+settings.assignees.map(a=>`<option>${a}</option>`).join('');
+}
+
 /* ── FILTERS ── */
-function setCity(v,el){
-  activeCity=v;
-  document.querySelectorAll('#fc-all,#fc-auh,#fc-dxb,#fc-shj').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');render();
-}
-function setCat(v,el){
-  activeCat=v;
-  document.querySelectorAll('#cat-row .chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');render();
-}
+function setCity(v,el){activeCity=v;document.querySelectorAll('#fc-all,#fc-auh,#fc-dxb,#fc-shj').forEach(c=>c.classList.remove('active'));el.classList.add('active');render();}
+function setCat(v,el){activeCat=v;document.querySelectorAll('#cat-row .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');render();}
+function setAssignee(v,el){activeAssignee=v;document.querySelectorAll('#assignee-row .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');render();}
 
 /* ── SORT ── */
 function sortBy(col){
-  if(sortCol===col) sortDir*=-1; else{sortCol=col;sortDir=1;}
+  if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}
   document.querySelectorAll('thead th').forEach(th=>{th.classList.remove('sort-asc','sort-desc');});
+  const map={'_idx':0,'name':1,'city':2,'category':3,'assignee':4,'procurement_email':6,'office_phone':7,'procurement_officer':8};
   const ths=document.querySelectorAll('thead th');
-  const cols=['_idx','name','city','category',null,'procurement_email','office_phone','procurement_officer',null,'physical_meeting_1','call_1','call_2','call_3','physical_meeting_2',null];
-  cols.forEach((c,i)=>{if(c===col&&ths[i]) ths[i].classList.add(sortDir===1?'sort-asc':'sort-desc');});
+  if(map[col]!==undefined) ths[map[col]].classList.add(sortDir===1?'sort-asc':'sort-desc');
   render();
 }
 
@@ -393,15 +537,16 @@ function sortBy(col){
 function filtered(){
   const q=(document.getElementById('q').value||'').toLowerCase();
   let list=data.filter(c=>{
-    const matchCity=activeCity==='All'||(c.city||'Abu Dhabi')===activeCity;
-    const matchCat=activeCat==='All'||c.category===activeCat;
-    const matchQ=!q||[c.name,c.category,c.city,c.procurement_email,c.office_phone,c.procurement_officer,c.notes].join(' ').toLowerCase().includes(q);
-    return matchCity&&matchCat&&matchQ;
+    const mc=activeCity==='All'||(c.city||'Abu Dhabi')===activeCity;
+    const mcat=activeCat==='All'||c.category===activeCat;
+    const ma=activeAssignee==='All'||(c.assignee||'')===activeAssignee;
+    const mq=!q||[c.name,c.category,c.city,c.assignee,c.procurement_email,c.office_phone,c.procurement_officer,c.notes].join(' ').toLowerCase().includes(q);
+    return mc&&mcat&&ma&&mq;
   });
   if(sortCol!=='_idx'){
     list=[...list].sort((a,b)=>{
-      let av=a[sortCol]||'', bv=b[sortCol]||'';
-      if(typeof av==='boolean') av=av?1:0, bv=bv?1:0;
+      let av=a[sortCol]||'',bv=b[sortCol]||'';
+      if(typeof av==='boolean')av=av?1:0,bv=bv?1:0;
       return av>bv?sortDir:av<bv?-sortDir:0;
     });
   }
@@ -411,9 +556,7 @@ function filtered(){
 /* ── RENDER ── */
 function render(){
   const list=filtered();
-  renderStats(list);
-  renderTable(list);
-  renderCards(list);
+  renderStats(list);renderTable(list);renderCards(list);
   document.getElementById('empty').style.display=list.length?'none':'block';
 }
 
@@ -429,14 +572,19 @@ function renderStats(list){
     `<div class="stat">Abu Dhabi <b>${auh}</b></div>`+
     `<div class="stat">Dubai <b>${dxb}</b></div>`+
     (other?`<div class="stat">Other <b>${other}</b></div>`:'')+
-    `<div class="stat">PM1 done <b>${pm1}</b></div>`+
+    `<div class="stat">PM1 <b>${pm1}</b></div>`+
     `<div class="stat">Called <b>${called}</b></div>`+
-    `<div class="stat">PM2 done <b>${pm2}</b></div>`;
+    `<div class="stat">PM2 <b>${pm2}</b></div>`;
 }
 
+function assigneeBadge(id,current){
+  const opts='<option value="">—</option>'+settings.assignees.map(a=>`<option${a===current?' selected':''}>${a}</option>`).join('');
+  const cls=current==='Aashel'?'a-aashel':current==='Majen'?'a-majen':'a-none';
+  return `<div class="assignee-badge ${cls}"><select class="assignee-select" onchange="setField(${id},'assignee',this.value);this.closest('.assignee-badge').className='assignee-badge '+(this.value==='Aashel'?'a-aashel':this.value==='Majen'?'a-majen':'a-none')">${opts}</select></div>`;
+}
 function cityPill(city){
-  const cls=city==='Dubai'?'city-dxb':city==='Sharjah'?'city-shj':'city-auh';
-  return `<span class="city-pill ${cls}">${esc(city||'Abu Dhabi')}</span>`;
+  const cl=city==='Dubai'?'city-dxb':city==='Sharjah'?'city-shj':'city-auh';
+  return `<span class="city-pill ${cl}">${esc(city||'Abu Dhabi')}</span>`;
 }
 function badgeClass(cat){
   const m={'Interior Companies':'interior','Design Companies':'design','Consultants':'consult','Hotels':'hotel','Holding Companies':'holding','Royal HH Offices':'royal','FF&E Buying Companies':'ffe','Joinery Companies':'joinery'};
@@ -448,7 +596,7 @@ function shortCat(cat){
 }
 function linksHTML(c){
   const maps=c.maps||`https://maps.google.com/?q=${encodeURIComponent((c.name||'')+' '+(c.city||'Abu Dhabi'))}`;
-  return `<div class="link-col">${c.website?`<a class="site-lnk" href="${esc(c.website)}" target="_blank">🌐 Website</a>`:''}<a class="map-lnk" href="${esc(maps)}" target="_blank">📍 Maps</a></div>`;
+  return `<div class="link-col">${c.website?`<a class="sl" href="${esc(c.website)}" target="_blank">🌐 Website</a>`:''}<a class="ml" href="${esc(maps)}" target="_blank">📍 Maps</a></div>`;
 }
 
 function renderTable(list){
@@ -460,11 +608,12 @@ function renderTable(list){
       <td style="font-weight:600;min-width:150px">${esc(c.name)}</td>
       <td>${cityPill(c.city)}</td>
       <td><span class="${badgeClass(c.category)}">${shortCat(c.category)}</span></td>
+      <td style="min-width:110px">${assigneeBadge(c.id,c.assignee||'')}</td>
       <td>${linksHTML(c)}</td>
-      <td contenteditable data-f="procurement_email" style="min-width:130px;font-size:0.76rem">${esc(c.procurement_email||'')}</td>
-      <td contenteditable data-f="office_phone" style="min-width:110px;font-size:0.76rem">${esc(c.office_phone||'')}</td>
+      <td contenteditable data-f="procurement_email" style="min-width:130px;font-size:0.74rem">${esc(c.procurement_email||'')}</td>
+      <td contenteditable data-f="office_phone" style="min-width:110px;font-size:0.74rem">${esc(c.office_phone||'')}</td>
       <td contenteditable data-f="procurement_officer" style="min-width:110px">${esc(c.procurement_officer||'')}</td>
-      <td contenteditable data-f="notes" style="min-width:170px;max-width:220px;font-size:0.75rem;color:var(--text2)">${esc(c.notes||'')}</td>
+      <td contenteditable data-f="notes" style="min-width:170px;max-width:210px;font-size:0.73rem;color:var(--text2)">${esc(c.notes||'')}</td>
       <td class="cb"><input type="checkbox" ${c.physical_meeting_1?'checked':''} onchange="toggle(${c.id},'physical_meeting_1',this.checked)"></td>
       <td class="cb"><input type="checkbox" ${c.call_1?'checked':''} onchange="toggle(${c.id},'call_1',this.checked)"></td>
       <td class="cb"><input type="checkbox" ${c.call_2?'checked':''} onchange="toggle(${c.id},'call_2',this.checked)"></td>
@@ -475,9 +624,8 @@ function renderTable(list){
   tb.querySelectorAll('td[contenteditable]').forEach(td=>{
     td.addEventListener('blur',()=>{
       const id=parseInt(td.closest('tr').dataset.id);
-      const f=td.dataset.f;
       const co=data.find(c=>c.id===id);
-      if(co&&co[f]!==td.textContent.trim()){co[f]=td.textContent.trim();scheduleSave('Edit '+f);}
+      if(co&&co[td.dataset.f]!==td.textContent.trim()){co[td.dataset.f]=td.textContent.trim();scheduleSave('Edit');}
     });
   });
 }
@@ -487,6 +635,7 @@ function renderCards(list){
   if(!list.length){wrap.innerHTML='';return;}
   wrap.innerHTML=list.map((c,i)=>{
     const maps=c.maps||`https://maps.google.com/?q=${encodeURIComponent((c.name||'')+' '+(c.city||'Abu Dhabi'))}`;
+    const acls=c.assignee==='Aashel'?'a-aashel':c.assignee==='Majen'?'a-majen':'a-none';
     return `<div class="card ${c.added_date===today?'new-row':''}" id="cd${c.id}">
       <div class="card-head" onclick="toggleCard(${c.id})">
         <div class="card-info">
@@ -494,24 +643,26 @@ function renderCards(list){
           <div class="card-tags">
             <span class="${badgeClass(c.category)}">${shortCat(c.category)}</span>
             ${cityPill(c.city)}
+            ${c.assignee?`<span class="assignee-badge ${acls}" style="padding:2px 8px">${esc(c.assignee)}</span>`:''}
           </div>
         </div>
         <div class="card-chevron">▼</div>
       </div>
       <div class="card-body">
         <div class="card-links">
-          ${c.website?`<a class="site-lnk" href="${esc(c.website)}" target="_blank">🌐 Website</a>`:''}
-          <a class="map-lnk" href="${esc(maps)}" target="_blank">📍 Google Maps</a>
+          ${c.website?`<a class="sl" href="${esc(c.website)}" target="_blank">🌐 Website</a>`:''}
+          <a class="ml" href="${esc(maps)}" target="_blank">📍 Google Maps</a>
         </div>
+        <div class="card-field"><span class="cf-label">Assignee</span><span class="cf-val">${assigneeBadge(c.id,c.assignee||'')}</span></div>
         ${c.procurement_email?`<div class="card-field"><span class="cf-label">Email</span><span class="cf-val"><a href="mailto:${esc(c.procurement_email)}" style="color:var(--accent)">${esc(c.procurement_email)}</a></span></div>`:''}
         ${c.office_phone?`<div class="card-field"><span class="cf-label">Phone</span><span class="cf-val"><a href="tel:${esc(c.office_phone)}" style="color:var(--accent)">${esc(c.office_phone)}</a></span></div>`:''}
         ${c.procurement_officer?`<div class="card-field"><span class="cf-label">Officer</span><span class="cf-val">${esc(c.procurement_officer)}</span></div>`:''}
-        ${c.notes?`<div class="card-field"><span class="cf-label">Notes</span><span class="cf-val" style="color:var(--text2);font-size:0.73rem">${esc(c.notes)}</span></div>`:''}
+        ${c.notes?`<div class="card-field"><span class="cf-label">Notes</span><span class="cf-val" style="color:var(--text2);font-size:0.72rem">${esc(c.notes)}</span></div>`:''}
         <div class="card-checks">
           ${[['physical_meeting_1','PM 1'],['call_1','Call 1'],['call_2','Call 2'],['call_3','Call 3'],['physical_meeting_2','PM 2']].map(([f,l])=>`
             <div><div class="cc-label">${l}</div><input type="checkbox" ${c[f]?'checked':''} onchange="toggle(${c.id},'${f}',this.checked)"></div>`).join('')}
         </div>
-        <div style="margin-top:10px"><button class="del-btn" onclick="del(${c.id})" style="font-size:0.75rem">✕ Delete</button></div>
+        <div style="margin-top:10px"><button class="del-btn" onclick="del(${c.id})">✕ Delete</button></div>
       </div>
     </div>`;
   }).join('');
@@ -519,6 +670,10 @@ function renderCards(list){
 function toggleCard(id){document.getElementById('cd'+id).classList.toggle('open');}
 
 /* ── MUTATIONS ── */
+function setField(id,field,val){
+  const co=data.find(c=>c.id===id);
+  if(co){co[field]=val;scheduleSave('Update '+field);renderStats(filtered());}
+}
 function toggle(id,field,val){
   const co=data.find(c=>c.id===id);
   if(co){co[field]=val;scheduleSave('Toggle '+field);renderStats(filtered());}
@@ -537,8 +692,9 @@ function addCo(){
   const city=document.getElementById('af-city').value;
   const maxId=data.reduce((m,c)=>Math.max(m,c.id),0);
   data.push({
-    id:maxId+1, name, city,
+    id:maxId+1,name,city,
     category:document.getElementById('af-cat').value,
+    assignee:document.getElementById('af-assignee').value,
     website:document.getElementById('af-web').value.trim(),
     address:document.getElementById('af-addr').value.trim()||city,
     maps:`https://maps.google.com/?q=${encodeURIComponent(name+' '+city)}`,
@@ -554,12 +710,48 @@ function addCo(){
   render();scheduleSave('Add '+name);
 }
 
+/* ── SETTINGS ── */
+function renderSettings(){
+  // Assignees
+  document.getElementById('assignee-list').innerHTML=settings.assignees.map((a,i)=>`
+    <li class="settings-item"><span>${esc(a)}</span><button onclick="removeAssignee(${i})">✕ Remove</button></li>`).join('');
+  // Categories
+  document.getElementById('cat-list').innerHTML=settings.categories.map((c,i)=>`
+    <li class="settings-item"><span>${esc(c)}</span><button onclick="removeCat(${i})">✕ Remove</button></li>`).join('');
+  // Cities
+  document.getElementById('city-list').innerHTML=settings.cities.map((c,i)=>`
+    <li class="settings-item"><span>${esc(c)}</span><button onclick="removeCity(${i})">✕ Remove</button></li>`).join('');
+}
+function addAssignee(){
+  const v=document.getElementById('new-assignee').value.trim();
+  if(!v||settings.assignees.includes(v))return;
+  settings.assignees.push(v);document.getElementById('new-assignee').value='';
+  buildDynamicUI();renderSettings();saveSettings();
+}
+function removeAssignee(i){
+  settings.assignees.splice(i,1);buildDynamicUI();renderSettings();saveSettings();
+}
+function addCategory(){
+  const v=document.getElementById('new-cat').value.trim();
+  if(!v||settings.categories.includes(v))return;
+  settings.categories.push(v);document.getElementById('new-cat').value='';
+  buildDynamicUI();renderSettings();saveSettings();
+}
+function removeCat(i){settings.categories.splice(i,1);buildDynamicUI();renderSettings();saveSettings();}
+function addCity(){
+  const v=document.getElementById('new-city').value.trim();
+  if(!v||settings.cities.includes(v))return;
+  settings.cities.push(v);document.getElementById('new-city').value='';
+  buildDynamicUI();renderSettings();saveSettings();
+}
+function removeCity(i){settings.cities.splice(i,1);buildDynamicUI();renderSettings();saveSettings();}
+
 /* ── EXPORT ── */
 function doExport(){
-  const headers=['#','Name','Emirate','Category','Website','Maps','Email','Phone','Officer','Notes','PM1','C1','C2','C3','PM2'];
-  const rows=data.map((c,i)=>[i+1,c.name,c.city||'Abu Dhabi',c.category,c.website||'',c.maps||'',c.procurement_email||'',c.office_phone||'',c.procurement_officer||'',c.notes||'',c.physical_meeting_1?'Yes':'',c.call_1?'Yes':'',c.call_2?'Yes':'',c.call_3?'Yes':'',c.physical_meeting_2?'Yes':''].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','));
+  const h=['#','Name','Emirate','Category','Assignee','Website','Maps','Email','Phone','Officer','Notes','PM1','C1','C2','C3','PM2'];
+  const rows=data.map((c,i)=>[i+1,c.name,c.city||'Abu Dhabi',c.category,c.assignee||'',c.website||'',c.maps||'',c.procurement_email||'',c.office_phone||'',c.procurement_officer||'',c.notes||'',c.physical_meeting_1?'Yes':'',c.call_1?'Yes':'',c.call_2?'Yes':'',c.call_3?'Yes':'',c.physical_meeting_2?'Yes':''].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','));
   const a=document.createElement('a');
-  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent([headers.join(','),...rows].join('\n'));
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent([h.join(','),...rows].join('\n'));
   a.download='uae-tracker.csv';a.click();
 }
 
