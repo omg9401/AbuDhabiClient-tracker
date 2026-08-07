@@ -178,6 +178,25 @@ input[type=checkbox]{width:15px;height:15px;accent-color:var(--accent);cursor:po
 .add-item-row input{flex:1;padding:8px 10px;border:1px solid var(--border);border-radius:7px;background:var(--bg);color:var(--text);font-size:0.82rem;outline:none;}
 .add-item-row input:focus{border-color:var(--accent);}
 
+/* STATUS DOTS */
+.status-dot{width:12px;height:12px;border-radius:50%;cursor:pointer;flex-shrink:0;border:1.5px solid rgba(255,255,255,0.12);transition:all 0.18s;display:inline-block;}
+.status-dot:hover{transform:scale(1.35);}
+.s-none{background:#2e3248;border-color:#4e5268;}
+.s-green{background:#10b981;border-color:#34d399;box-shadow:0 0 5px rgba(16,185,129,0.5);}
+.s-red{background:#ef4444;border-color:#f87171;box-shadow:0 0 5px rgba(239,68,68,0.5);}
+.s-black{background:#374151;border-color:#6b7280;}
+td.status-cell{width:28px;text-align:center;padding:8px 4px;}
+.chip.st-green.active{background:#064e3b;border-color:#10b981;color:#34d399;}
+.chip.st-red.active{background:#450a0a;border-color:#ef4444;color:#fca5a5;}
+.chip.st-black.active{background:#1f2937;border-color:#6b7280;color:#9ca3af;}
+.chip.st-none.active{background:#1a1d27;border-color:#4e5268;color:#8892a4;}
+/* STATUS LEGEND */
+.status-legend{display:flex;flex-direction:column;gap:10px;}
+.sl-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;}
+.sl-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;}
+.sl-label{font-size:0.84rem;font-weight:600;}
+.sl-desc{font-size:0.76rem;color:var(--text2);margin-left:auto;}
+
 /* RESPONSIVE */
 @media(max-width:767px){
   .header{padding:9px 12px;gap:8px;}
@@ -279,6 +298,14 @@ input[type=checkbox]{width:15px;height:15px;accent-color:var(--accent);cursor:po
         <button class="chip active" id="fa-all" onclick="setAssignee('All',this)">All</button>
         <button class="chip" id="fa-none" onclick="setAssignee('',this)">Unassigned</button>
       </div>
+      <div class="filter-row" id="status-row">
+        <span class="filter-label">Status</span>
+        <button class="chip active" id="fst-all" onclick="setStatusFilter('All',this)">All</button>
+        <button class="chip st-green" onclick="setStatusFilter('green',this)">🟢 Good Prospect</button>
+        <button class="chip st-red" onclick="setStatusFilter('red',this)">🔴 Difficult</button>
+        <button class="chip st-black" onclick="setStatusFilter('black',this)">⬛ No Fit</button>
+        <button class="chip st-none" onclick="setStatusFilter('',this)">○ Unset</button>
+      </div>
     </div>
 
     <!-- STATS -->
@@ -290,6 +317,7 @@ input[type=checkbox]{width:15px;height:15px;accent-color:var(--accent);cursor:po
         <thead>
           <tr>
             <th onclick="sortBy('_idx')">#</th>
+            <th onclick="sortBy('status')" class="no-sort" title="Click dot on row to cycle status" style="width:32px"></th>
             <th onclick="sortBy('name')">Company</th>
             <th onclick="sortBy('city')">Emirate</th>
             <th onclick="sortBy('category')">Type</th>
@@ -351,6 +379,17 @@ input[type=checkbox]{width:15px;height:15px;accent-color:var(--accent);cursor:po
         </div>
       </div>
 
+      <div class="settings-card">
+        <h3>🚦 Prospect Status</h3>
+        <p style="font-size:0.78rem;color:var(--text2);margin-bottom:14px;">Click the dot on any row in the tracker to cycle through statuses.</p>
+        <div class="status-legend">
+          <div class="sl-item"><div class="sl-dot" style="background:#10b981;border:1.5px solid #34d399;box-shadow:0 0 5px rgba(16,185,129,0.5)"></div><span class="sl-label" style="color:#34d399">Good Prospect</span><span class="sl-desc">Strong fit, actively follow up</span></div>
+          <div class="sl-item"><div class="sl-dot" style="background:#ef4444;border:1.5px solid #f87171;box-shadow:0 0 5px rgba(239,68,68,0.5)"></div><span class="sl-label" style="color:#fca5a5">Difficult</span><span class="sl-desc">Active but challenging client</span></div>
+          <div class="sl-item"><div class="sl-dot" style="background:#374151;border:1.5px solid #6b7280"></div><span class="sl-label" style="color:#9ca3af">No Fit</span><span class="sl-desc">Don't follow up</span></div>
+          <div class="sl-item"><div class="sl-dot" style="background:#2e3248;border:1.5px solid #4e5268"></div><span class="sl-label" style="color:var(--text2)">Unset</span><span class="sl-desc">Not yet evaluated</span></div>
+        </div>
+      </div>
+
       <div class="settings-card" style="border-color:#3a2020;">
         <h3 style="color:var(--danger);">⚠️ Data</h3>
         <p style="font-size:0.82rem;color:var(--text2);margin-bottom:12px;">Raw JSON files live in your GitHub repo: <code style="background:var(--bg);padding:2px 6px;border-radius:4px;font-size:0.78rem;">omg9401/AbuDhabiClient-tracker</code></p>
@@ -399,8 +438,9 @@ async function smartParse(fileContent,pw){
 
 let data=[], settings={assignees:['Aashel','Majen'],categories:[],cities:[]};
 let shaData=null, shaSet=null;
-let activeCity='All', activeCat='All', activeAssignee='All';
+let activeCity='All', activeCat='All', activeAssignee='All', activeStatusFilter='All';
 let sortCol='_idx', sortDir=1;
+const STATUS_CYCLE=['','green','red','black'];
 let saveTimer=null;
 const today=new Date().toISOString().slice(0,10);
 
@@ -531,12 +571,28 @@ function buildDynamicUI(){
 function setCity(v,el){activeCity=v;document.querySelectorAll('#fc-all,#fc-auh,#fc-dxb,#fc-shj').forEach(c=>c.classList.remove('active'));el.classList.add('active');render();}
 function setCat(v,el){activeCat=v;document.querySelectorAll('#cat-row .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');render();}
 function setAssignee(v,el){activeAssignee=v;document.querySelectorAll('#assignee-row .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');render();}
+function setStatusFilter(v,el){activeStatusFilter=v;document.querySelectorAll('#status-row .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');render();}
+
+function statusDot(id,current){
+  const s=current||'';
+  const label=s==='green'?'Good Prospect':s==='red'?'Difficult':s==='black'?'No Fit':'Click to set status';
+  return `<div class="status-dot s-${s||'none'}" onclick="cycleStatus(${id})" title="${label}"></div>`;
+}
+function cycleStatus(id){
+  const co=data.find(c=>c.id===id);
+  if(!co)return;
+  const idx=STATUS_CYCLE.indexOf(co.status||'');
+  co.status=STATUS_CYCLE[(idx+1)%STATUS_CYCLE.length];
+  scheduleSave('Status update');
+  render();
+}
 
 /* ── SORT ── */
 function sortBy(col){
   if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}
   document.querySelectorAll('thead th').forEach(th=>{th.classList.remove('sort-asc','sort-desc');});
-  const map={'_idx':0,'name':1,'city':2,'category':3,'assignee':4,'procurement_email':6,'office_phone':7,'procurement_officer':8};
+  // Column index map (status col added at index 1)
+  const map={'_idx':0,'name':2,'city':3,'category':4,'assignee':5,'procurement_email':7,'office_phone':8,'procurement_officer':9};
   const ths=document.querySelectorAll('thead th');
   if(map[col]!==undefined) ths[map[col]].classList.add(sortDir===1?'sort-asc':'sort-desc');
   render();
@@ -549,8 +605,9 @@ function filtered(){
     const mc=activeCity==='All'||(c.city||'Abu Dhabi')===activeCity;
     const mcat=activeCat==='All'||c.category===activeCat;
     const ma=activeAssignee==='All'||(c.assignee||'')===activeAssignee;
+    const mst=activeStatusFilter==='All'||(c.status||'')===activeStatusFilter;
     const mq=!q||[c.name,c.category,c.city,c.assignee,c.procurement_email,c.office_phone,c.procurement_officer,c.notes].join(' ').toLowerCase().includes(q);
-    return mc&&mcat&&ma&&mq;
+    return mc&&mcat&&ma&&mst&&mq;
   });
   if(sortCol!=='_idx'){
     list=[...list].sort((a,b)=>{
@@ -576,11 +633,17 @@ function renderStats(list){
   const pm1=list.filter(c=>c.physical_meeting_1).length;
   const called=list.filter(c=>c.call_1||c.call_2||c.call_3).length;
   const pm2=list.filter(c=>c.physical_meeting_2).length;
+  const stGreen=list.filter(c=>c.status==='green').length;
+  const stRed=list.filter(c=>c.status==='red').length;
+  const stBlack=list.filter(c=>c.status==='black').length;
   document.getElementById('statsBar').innerHTML=
     `<div class="stat">Showing <b>${list.length}</b></div>`+
     `<div class="stat">Abu Dhabi <b>${auh}</b></div>`+
     `<div class="stat">Dubai <b>${dxb}</b></div>`+
     (other?`<div class="stat">Other <b>${other}</b></div>`:'')+
+    (stGreen?`<div class="stat">🟢 <b>${stGreen}</b></div>`:'')+
+    (stRed?`<div class="stat">🔴 <b>${stRed}</b></div>`:'')+
+    (stBlack?`<div class="stat">⬛ <b>${stBlack}</b></div>`:'')+
     `<div class="stat">PM1 <b>${pm1}</b></div>`+
     `<div class="stat">Called <b>${called}</b></div>`+
     `<div class="stat">PM2 <b>${pm2}</b></div>`;
@@ -614,6 +677,7 @@ function renderTable(list){
   tb.innerHTML=list.map((c,i)=>`
     <tr class="${c.added_date===today?'new-row':''}" data-id="${c.id}">
       <td class="num">${i+1}</td>
+      <td class="status-cell">${statusDot(c.id,c.status)}</td>
       <td style="font-weight:600;min-width:150px">${esc(c.name)}</td>
       <td>${cityPill(c.city)}</td>
       <td><span class="${badgeClass(c.category)}">${shortCat(c.category)}</span></td>
@@ -647,6 +711,7 @@ function renderCards(list){
     const acls=c.assignee==='Aashel'?'a-aashel':c.assignee==='Majen'?'a-majen':'a-none';
     return `<div class="card ${c.added_date===today?'new-row':''}" id="cd${c.id}">
       <div class="card-head" onclick="toggleCard(${c.id})">
+        <div style="padding-top:2px;margin-right:2px" onclick="event.stopPropagation()">${statusDot(c.id,c.status)}</div>
         <div class="card-info">
           <div class="card-name">${esc(c.name)}</div>
           <div class="card-tags">
@@ -712,7 +777,7 @@ function addCo(){
     procurement_officer:document.getElementById('af-officer').value.trim(),
     notes:document.getElementById('af-notes').value.trim(),
     physical_meeting_1:false,call_1:false,call_2:false,call_3:false,physical_meeting_2:false,
-    added_date:today
+    status:'',added_date:today
   });
   ['af-name','af-web','af-addr','af-email','af-phone','af-officer','af-notes'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('addForm').classList.remove('open');
@@ -757,8 +822,9 @@ function removeCity(i){settings.cities.splice(i,1);buildDynamicUI();renderSettin
 
 /* ── EXPORT ── */
 function doExport(){
-  const h=['#','Name','Emirate','Category','Assignee','Website','Maps','Email','Phone','Officer','Notes','PM1','C1','C2','C3','PM2'];
-  const rows=data.map((c,i)=>[i+1,c.name,c.city||'Abu Dhabi',c.category,c.assignee||'',c.website||'',c.maps||'',c.procurement_email||'',c.office_phone||'',c.procurement_officer||'',c.notes||'',c.physical_meeting_1?'Yes':'',c.call_1?'Yes':'',c.call_2?'Yes':'',c.call_3?'Yes':'',c.physical_meeting_2?'Yes':''].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','));
+  const h=['#','Status','Name','Emirate','Category','Assignee','Website','Maps','Email','Phone','Officer','Notes','PM1','C1','C2','C3','PM2'];
+  const statusLabel=s=>s==='green'?'Good Prospect':s==='red'?'Difficult':s==='black'?'No Fit':'';
+  const rows=data.map((c,i)=>[i+1,statusLabel(c.status||''),c.name,c.city||'Abu Dhabi',c.category,c.assignee||'',c.website||'',c.maps||'',c.procurement_email||'',c.office_phone||'',c.procurement_officer||'',c.notes||'',c.physical_meeting_1?'Yes':'',c.call_1?'Yes':'',c.call_2?'Yes':'',c.call_3?'Yes':'',c.physical_meeting_2?'Yes':''].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','));
   const a=document.createElement('a');
   a.href='data:text/csv;charset=utf-8,'+encodeURIComponent([h.join(','),...rows].join('\n'));
   a.download='uae-tracker.csv';a.click();
