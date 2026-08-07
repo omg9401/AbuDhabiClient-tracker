@@ -190,6 +190,20 @@ td.status-cell{width:28px;text-align:center;padding:8px 4px;}
 .chip.st-red.active{background:#450a0a;border-color:#ef4444;color:#fca5a5;}
 .chip.st-black.active{background:#1f2937;border-color:#6b7280;color:#9ca3af;}
 .chip.st-none.active{background:#1a1d27;border-color:#4e5268;color:#8892a4;}
+/* PENDING BADGE */
+.pending-badge{background:#ef4444;color:#fff;border-radius:10px;font-size:0.65rem;font-weight:700;padding:1px 6px;margin-left:5px;display:none;}
+.pending-badge.show{display:inline-block;}
+/* PENDING CARDS */
+.pending-wrap{max-width:760px;margin:20px auto;padding:0 18px;}
+.pending-card{background:var(--surface);border:1px solid var(--border);border-radius:11px;margin-bottom:10px;padding:16px;}
+.pending-card-name{font-size:0.95rem;font-weight:700;margin-bottom:6px;}
+.pending-card-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.pending-card-fields{font-size:0.78rem;color:var(--text2);display:flex;flex-direction:column;gap:3px;margin-bottom:12px;}
+.pending-actions{display:flex;gap:8px;}
+.btn-approve{background:#064e3b;color:#34d399;border:1px solid #10b981;padding:6px 14px;border-radius:7px;cursor:pointer;font-size:0.8rem;font-weight:600;}
+.btn-approve:hover{background:#065f46;}
+.btn-dismiss{background:transparent;color:var(--danger);border:1px solid var(--danger);padding:6px 14px;border-radius:7px;cursor:pointer;font-size:0.8rem;font-weight:600;}
+.btn-dismiss:hover{background:rgba(239,68,68,0.1);}
 /* STATUS LEGEND */
 .status-legend{display:flex;flex-direction:column;gap:10px;}
 .sl-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;}
@@ -246,6 +260,7 @@ td.status-cell{width:28px;text-align:center;padding:8px 4px;}
   <!-- NAV TABS -->
   <div class="nav-tabs">
     <div class="nav-tab active" onclick="showTab('tracker',this)">📋 Tracker</div>
+    <div class="nav-tab" onclick="showTab('pending',this)">📥 Pending<span class="pending-badge" id="pending-badge">0</span></div>
     <div class="nav-tab" onclick="showTab('settings',this)">⚙️ Settings</div>
   </div>
 
@@ -348,6 +363,18 @@ td.status-cell{width:28px;text-align:center;padding:8px 4px;}
 
   </div><!-- /tab-tracker -->
 
+  <!-- PENDING TAB -->
+  <div class="tab-panel" id="tab-pending">
+    <div class="pending-wrap">
+      <div id="pending-empty" style="text-align:center;padding:50px 20px;color:var(--text2);">
+        <div style="font-size:2rem;margin-bottom:10px;">✅</div>
+        <h3 style="font-size:1rem;margin-bottom:6px;">No pending companies</h3>
+        <p style="font-size:0.82rem;">The research task will add new companies here every 3 hours.</p>
+      </div>
+      <div id="pending-list"></div>
+    </div>
+  </div>
+
   <!-- SETTINGS TAB -->
   <div class="tab-panel" id="tab-settings">
     <div class="settings-wrap">
@@ -437,6 +464,7 @@ async function smartParse(fileContent,pw){
 }
 
 let data=[], settings={assignees:['Aashel','Majen'],categories:[],cities:[]};
+let pendingData=[], shaPending=null;
 let shaData=null, shaSet=null;
 let activeCity='All', activeCat='All', activeAssignee='All', activeStatusFilter='All';
 let sortCol='_idx', sortDir=1;
@@ -472,6 +500,7 @@ function showTab(id,el){
   document.getElementById('tab-'+id).classList.add('active');
   el.classList.add('active');
   if(id==='settings') renderSettings();
+  if(id==='pending') renderPending();
 }
 
 /* ── LOAD ── */
@@ -482,13 +511,13 @@ async function loadAll(){
   const h={'Accept':'application/vnd.github+json'};
   if(tok) h['Authorization']='token '+tok;
   try{
-    const [rd,rs]=await Promise.all([
+    const [rd,rs,rp]=await Promise.all([
       fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${F_DATA}`,{headers:h}),
-      fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${F_SET}`,{headers:h})
+      fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${F_SET}`,{headers:h}),
+      fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/pending_companies.json`,{headers:h})
     ]);
     if(rd.ok){
       const m=await rd.json();shaData=m.sha;
-      // fileContent = the raw file bytes decoded from GitHub's base64 wrapper
       const fileContent=atob(m.content.replace(/\n/g,''));
       data=await smartParse(fileContent,pw)||[];
     }
@@ -497,6 +526,11 @@ async function loadAll(){
       const fileContent=atob(m.content.replace(/\n/g,''));
       settings=await smartParse(fileContent,pw)||settings;
     }
+    if(rp.ok){
+      const m=await rp.json();shaPending=m.sha;
+      try{pendingData=JSON.parse(atob(m.content.replace(/\n/g,'')));}catch(e){pendingData=[];}
+    }else{pendingData=[];}
+    updatePendingBadge();
     setSave('saved','Loaded');
   }catch(e){
     try{data=await(await fetch('./'+F_DATA+'?_='+Date.now())).json();}catch(e2){}
@@ -819,6 +853,97 @@ function addCity(){
   buildDynamicUI();renderSettings();saveSettings();
 }
 function removeCity(i){settings.cities.splice(i,1);buildDynamicUI();renderSettings();saveSettings();}
+
+/* ── PENDING COMPANIES ── */
+function updatePendingBadge(){
+  const badge=document.getElementById('pending-badge');
+  if(!badge)return;
+  if(pendingData.length){badge.textContent=pendingData.length;badge.classList.add('show');}
+  else{badge.classList.remove('show');}
+}
+
+function renderPending(){
+  const list=document.getElementById('pending-list');
+  const empty=document.getElementById('pending-empty');
+  if(!pendingData.length){list.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  list.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div style="font-size:0.85rem;color:var(--text2)"><b style="color:var(--text)">${pendingData.length}</b> companies researched and waiting for your review</div>
+      <button class="btn btn-primary" onclick="approveAll()">✓ Approve All</button>
+    </div>`+
+  pendingData.map((c,i)=>`
+    <div class="pending-card">
+      <div class="pending-card-name">${esc(c.name)}</div>
+      <div class="pending-card-meta">
+        <span class="${badgeClass(c.category)}">${shortCat(c.category)}</span>
+        ${cityPill(c.city||'Abu Dhabi')}
+        ${c.added_date?`<span style="font-size:0.7rem;color:var(--text2)">${c.added_date}</span>`:''}
+      </div>
+      <div class="pending-card-fields">
+        ${c.website?`<div>🌐 <a href="${esc(c.website)}" target="_blank" style="color:var(--accent)">${esc(c.website)}</a></div>`:''}
+        ${c.maps?`<div>📍 <a href="${esc(c.maps)}" target="_blank" style="color:#34d399">Google Maps</a></div>`:''}
+        ${c.procurement_email?`<div>✉️ ${esc(c.procurement_email)}</div>`:''}
+        ${c.office_phone?`<div>📞 ${esc(c.office_phone)}</div>`:''}
+        ${c.procurement_officer?`<div>👤 ${esc(c.procurement_officer)}</div>`:''}
+        ${c.address?`<div>📌 ${esc(c.address)}</div>`:''}
+        ${c.notes?`<div>📝 ${esc(c.notes)}</div>`:''}
+      </div>
+      <div class="pending-actions">
+        <button class="btn-approve" onclick="approvePending(${i})">✓ Approve — Add to Tracker</button>
+        <button class="btn-dismiss" onclick="dismissPending(${i})">✕ Dismiss</button>
+      </div>
+    </div>`).join('');
+}
+
+function approvePending(i){
+  const co=pendingData[i];
+  if(!co)return;
+  const maxId=data.reduce((m,c)=>Math.max(m,c.id),0);
+  co.id=maxId+1;
+  if(!co.status)co.status='';
+  data.push(co);
+  pendingData.splice(i,1);
+  scheduleSave('Approve: '+co.name);
+  savePending();
+  updatePendingBadge();
+  renderPending();
+  render();
+}
+
+function approveAll(){
+  if(!pendingData.length)return;
+  if(!confirm(`Approve all ${pendingData.length} pending companies?`))return;
+  let maxId=data.reduce((m,c)=>Math.max(m,c.id),0);
+  pendingData.forEach(co=>{co.id=++maxId;if(!co.status)co.status='';data.push(co);});
+  pendingData=[];
+  scheduleSave('Approve all pending');
+  savePending();
+  updatePendingBadge();
+  renderPending();
+  render();
+}
+
+function dismissPending(i){
+  pendingData.splice(i,1);
+  savePending();
+  updatePendingBadge();
+  renderPending();
+}
+
+async function savePending(){
+  const tok=sessionStorage.getItem('ght');
+  if(!tok)return;
+  const content=btoa(JSON.stringify(pendingData,null,2));
+  const rg=await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/pending_companies.json`,{headers:{'Authorization':'token '+tok,'Accept':'application/vnd.github+json'}});
+  if(rg.ok){const m=await rg.json();shaPending=m.sha;}
+  const body={message:'Update pending companies',content,...(shaPending?{sha:shaPending}:{})};
+  const rp=await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/pending_companies.json`,{
+    method:'PUT',headers:{'Authorization':'token '+tok,'Content-Type':'application/json','Accept':'application/vnd.github+json'},
+    body:JSON.stringify(body)
+  });
+  if(rp.ok){const d=await rp.json();shaPending=d.content.sha;}
+}
 
 /* ── EXPORT ── */
 function doExport(){
