@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UAE Client Tracker</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
 :root {
   --bg:#0f1117; --surface:#1a1d27; --surface2:#222535; --border:#2e3248;
@@ -205,6 +206,68 @@ td.status-cell{width:28px;text-align:center;padding:8px 4px;}
 .visit-history:hover .visit-tooltip{display:block;}
 .vt-entry{font-size:0.74rem;color:var(--text2);padding:2px 0;border-bottom:1px solid #1e2235;}
 .vt-entry:last-child{border-bottom:none;color:var(--text);}
+/* ══ MAP TAB ══ */
+#map-wrap{display:flex;flex-direction:column;height:calc(100vh - 96px);position:relative;overflow:hidden;}
+#leaflet-map{flex:1;width:100%;z-index:1;}
+/* Map top controls */
+.map-topbar{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:400;display:flex;gap:8px;pointer-events:none;}
+.map-topbar button{pointer-events:all;padding:9px 16px;border-radius:22px;border:none;font-size:0.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.5);transition:all 0.18s;}
+#btn-locate{background:#4f6ef7;color:#fff;}
+#btn-locate:hover{background:#3a5ae0;}
+#btn-locate.locating{background:#f59e0b;animation:pulse 1s infinite;}
+#btn-locate.located{background:#10b981;}
+#btn-plan{background:#1a1d27;color:#e8eaf0;border:1px solid #2e3248;display:none;}
+#btn-plan:hover{background:#2e3248;}
+#btn-plan.active{background:#7c3aed;color:#fff;border-color:#7c3aed;}
+/* Nearby count pill */
+#nearby-pill{position:absolute;top:10px;right:12px;z-index:400;background:#1a1d27;border:1px solid #2e3248;border-radius:20px;padding:6px 12px;font-size:0.78rem;font-weight:700;display:none;box-shadow:0 2px 8px rgba(0,0,0,0.5);}
+#nearby-pill span{color:#4f6ef7;}
+/* Geocode progress */
+#geo-progress{position:absolute;bottom:0;left:0;right:0;z-index:400;background:#1a1d27;border-top:1px solid #2e3248;padding:8px 14px;font-size:0.75rem;color:var(--text2);display:none;}
+#geo-bar{height:3px;background:#4f6ef7;border-radius:2px;margin-top:5px;transition:width 0.3s;}
+/* Bottom drawer (mobile) */
+#map-drawer{position:absolute;bottom:0;left:0;right:0;z-index:300;background:#1a1d27;border-top:2px solid #2e3248;border-radius:18px 18px 0 0;max-height:55%;overflow-y:auto;transform:translateY(100%);transition:transform 0.35s cubic-bezier(.4,0,.2,1);box-shadow:0 -4px 20px rgba(0,0,0,0.6);}
+#map-drawer.open{transform:translateY(0);}
+.drawer-handle{width:36px;height:4px;border-radius:2px;background:#2e3248;margin:10px auto 0;cursor:pointer;}
+#drawer-title{padding:8px 16px 4px;font-size:0.78rem;font-weight:700;color:var(--text2);}
+.nearby-item{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid #1e2235;cursor:pointer;transition:background 0.1s;}
+.nearby-item:hover,.nearby-item:active{background:#222535;}
+.ni-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.ni-info{flex:1;}
+.ni-name{font-size:0.84rem;font-weight:600;line-height:1.2;}
+.ni-meta{font-size:0.7rem;color:var(--text2);margin-top:2px;}
+.ni-dist{text-align:right;font-size:0.74rem;font-weight:700;color:#4f6ef7;white-space:nowrap;}
+.ni-time{font-size:0.65rem;color:var(--text2);}
+.ni-fresh{color:#f59e0b;font-size:0.65rem;font-weight:700;}
+/* Route info bar */
+#route-bar{position:absolute;top:56px;left:50%;transform:translateX(-50%);z-index:400;background:#7c3aed;color:#fff;border-radius:20px;padding:7px 16px;font-size:0.8rem;font-weight:700;display:none;box-shadow:0 2px 12px rgba(124,58,237,0.5);white-space:nowrap;}
+/* Toast */
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#10b981;color:#fff;padding:10px 20px;border-radius:22px;font-size:0.85rem;font-weight:700;z-index:9999;opacity:0;transition:all 0.35s;pointer-events:none;white-space:nowrap;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+/* Map popup custom */
+.map-popup .leaflet-popup-content-wrapper{background:#1a1d27;border:1px solid #2e3248;color:#e8eaf0;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.7);}
+.map-popup .leaflet-popup-tip{background:#1a1d27;}
+.pop-name{font-size:0.9rem;font-weight:700;margin-bottom:4px;}
+.pop-row{font-size:0.74rem;color:#8892a4;margin-bottom:2px;}
+.pop-row b{color:#e8eaf0;}
+.pop-actions{display:flex;gap:6px;margin-top:10px;}
+.pop-btn{flex:1;padding:7px;border-radius:8px;border:none;font-size:0.75rem;font-weight:700;cursor:pointer;}
+.pop-visit{background:#10b981;color:#fff;}
+.pop-visit:hover{background:#059669;}
+.pop-nav{background:#4f6ef7;color:#fff;}
+.pop-nav:hover{background:#3a5ae0;}
+/* Route stop marker */
+.stop-num{background:#7c3aed;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.5);}
+/* Geocode dot on marker */
+.no-geo{opacity:0.4;}
+/* Desktop: drawer as sidebar */
+@media(min-width:768px){
+  #map-wrap{flex-direction:row;}
+  #map-drawer{position:relative;transform:none!important;width:320px;max-height:none;border-top:none;border-left:1px solid #2e3248;border-radius:0;flex-shrink:0;overflow-y:auto;display:none;}
+  #map-drawer.open{display:block;}
+  .map-topbar{left:auto;right:340px;transform:none;}
+  #nearby-pill{right:340px;}
+}
 /* PENDING BADGE */
 .pending-badge{background:#ef4444;color:#fff;border-radius:10px;font-size:0.65rem;font-weight:700;padding:1px 6px;margin-left:5px;display:none;}
 .pending-badge.show{display:inline-block;}
@@ -275,6 +338,7 @@ td.status-cell{width:28px;text-align:center;padding:8px 4px;}
   <!-- NAV TABS -->
   <div class="nav-tabs">
     <div class="nav-tab active" onclick="showTab('tracker',this)">📋 Tracker</div>
+    <div class="nav-tab" onclick="showTab('map',this)">🗺️ Map</div>
     <div class="nav-tab" onclick="showTab('pending',this)">📥 Pending<span class="pending-badge" id="pending-badge">0</span></div>
     <div class="nav-tab" onclick="showTab('settings',this)">⚙️ Settings</div>
   </div>
@@ -295,6 +359,12 @@ td.status-cell{width:28px;text-align:center;padding:8px 4px;}
         <div><label>Office Phone</label><input id="af-phone" placeholder="+971 x xxx xxxx"></div>
         <div><label>Procurement Officer</label><input id="af-officer" placeholder="Name"></div>
         <div><label>Notes</label><input id="af-notes" placeholder="Notes"></div>
+        <div><label>Founded Year</label><input id="af-founded" placeholder="e.g. 2005" type="number"></div>
+        <div><label>Headcount</label><input id="af-employees" placeholder="e.g. 50-200 staff"></div>
+        <div><label>Net Worth / Revenue</label><input id="af-networth" placeholder="e.g. AED 50M"></div>
+        <div><label>Ongoing Projects</label><input id="af-ongoing" placeholder="Brief description"></div>
+        <div><label>Past Projects</label><input id="af-past" placeholder="Notable past work"></div>
+        <div><label>Active Tenders</label><input id="af-tenders" placeholder="Known tenders or bids"></div>
       </div>
       <div class="add-actions">
         <button class="btn btn-primary" onclick="addCo()">Add Company</button>
@@ -378,6 +448,31 @@ td.status-cell{width:28px;text-align:center;padding:8px 4px;}
     </div>
 
   </div><!-- /tab-tracker -->
+
+  <!-- MAP TAB -->
+  <div class="tab-panel" id="tab-map">
+    <div id="map-wrap">
+      <div id="leaflet-map"></div>
+      <div class="map-topbar">
+        <button id="btn-locate" onclick="locateMe()">📍 Find Me</button>
+        <button id="btn-plan" onclick="planRoute()">🗺️ Plan Route</button>
+      </div>
+      <div id="nearby-pill">📍 <span id="nearby-count">0</span> nearby</div>
+      <div id="route-bar">⏱️ <span id="route-info"></span></div>
+      <div id="geo-progress">
+        <span id="geo-msg">Locating companies…</span>
+        <div style="background:#2e3248;border-radius:2px;margin-top:5px;overflow:hidden"><div id="geo-bar" style="width:0%;height:3px;background:#4f6ef7;border-radius:2px;transition:width 0.3s"></div></div>
+      </div>
+      <!-- Bottom drawer / sidebar -->
+      <div id="map-drawer">
+        <div class="drawer-handle" onclick="toggleDrawer()"></div>
+        <div id="drawer-title">Nearby companies</div>
+        <div id="nearby-list"></div>
+      </div>
+    </div>
+  </div>
+  <!-- TOAST -->
+  <div id="toast"></div>
 
   <!-- PENDING TAB -->
   <div class="tab-panel" id="tab-pending">
@@ -518,8 +613,9 @@ function showTab(id,el){
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
   el.classList.add('active');
-  if(id==='settings') renderSettings();
-  if(id==='pending') renderPending();
+  if(id==='settings')renderSettings();
+  if(id==='pending')renderPending();
+  if(id==='map')loadLeaflet(()=>{initMap();setTimeout(()=>geocodeAll(),500);});
 }
 
 /* ── LOAD ── */
@@ -862,9 +958,15 @@ function addCo(){
     procurement_officer:document.getElementById('af-officer').value.trim(),
     notes:document.getElementById('af-notes').value.trim(),
     call_1:false,call_2:false,call_3:false,
-    visits:[],status:'',added_date:today
+    visits:[],status:'',added_date:today,
+    founded_year:parseInt(document.getElementById('af-founded').value)||null,
+    employees:document.getElementById('af-employees').value.trim(),
+    net_worth:document.getElementById('af-networth').value.trim(),
+    ongoing_projects:document.getElementById('af-ongoing').value.trim(),
+    past_projects:document.getElementById('af-past').value.trim(),
+    active_tenders:document.getElementById('af-tenders').value.trim()
   });
-  ['af-name','af-web','af-addr','af-email','af-phone','af-officer','af-notes'].forEach(id=>document.getElementById(id).value='');
+  ['af-name','af-web','af-addr','af-email','af-phone','af-officer','af-notes','af-founded','af-employees','af-networth','af-ongoing','af-past','af-tenders'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('addForm').classList.remove('open');
   render();scheduleSave('Add '+name);
 }
@@ -1009,6 +1111,236 @@ function doExport(){
 }
 
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+/* ══════════════════════════════════════════════
+   MAP MODULE
+══════════════════════════════════════════════ */
+let leafletMap=null,userLatLng=null,radiusCircle=null,userMarker=null;
+let mapMarkers=[],routeLayer=null,mapInitialized=false;
+const RADIUS_KM=10;
+const STATUS_COLORS={'green':'#10b981','blue':'#3b82f6','orange':'#f59e0b','red':'#ef4444','black':'#6b7280','':'#4e5268'};
+const ABU_DHABI=[24.4539,54.3773];
+
+function loadLeaflet(cb){
+  if(window.L){cb();return;}
+  const s=document.createElement('script');
+  s.src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
+  s.onload=cb;document.head.appendChild(s);
+}
+
+function initMap(){
+  if(mapInitialized)return;mapInitialized=true;
+  leafletMap=L.map('leaflet-map',{zoomControl:true,attributionControl:false}).setView(ABU_DHABI,12);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19}).addTo(leafletMap);
+  plotAllCompanies();
+  leafletMap.on('click',()=>{if(window.innerWidth<768)closeDrawer();});
+}
+
+async function geocodeAll(){
+  const needed=data.filter(c=>!c.lat||!c.lng);
+  if(!needed.length)return;
+  const prog=document.getElementById('geo-progress');
+  prog.style.display='block';
+  for(let i=0;i<needed.length;i++){
+    document.getElementById('geo-msg').textContent=`Locating ${i+1}/${needed.length}: ${needed[i].name}`;
+    document.getElementById('geo-bar').style.width=`${Math.round((i/needed.length)*100)}%`;
+    const co=needed[i];
+    const q=encodeURIComponent((co.name||'')+' '+(co.city||'Abu Dhabi')+' UAE');
+    try{
+      const r=await fetch(`https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1&countrycodes=ae`,{headers:{'Accept-Language':'en'}});
+      const d=await r.json();
+      if(d&&d[0]){co.lat=parseFloat(d[0].lat);co.lng=parseFloat(d[0].lon);}
+      else{co.lat=ABU_DHABI[0]+(Math.random()-0.5)*0.04;co.lng=ABU_DHABI[1]+(Math.random()-0.5)*0.04;co._geoFallback=true;}
+    }catch(e){co.lat=ABU_DHABI[0]+(Math.random()-0.5)*0.04;co.lng=ABU_DHABI[1]+(Math.random()-0.5)*0.04;co._geoFallback=true;}
+    if(i<needed.length-1)await new Promise(r=>setTimeout(r,1150));
+  }
+  document.getElementById('geo-bar').style.width='100%';
+  document.getElementById('geo-msg').textContent='All companies located ✓';
+  setTimeout(()=>{prog.style.display='none';},1800);
+  scheduleSave('Geocode companies');
+  plotAllCompanies();
+}
+
+/* Rush-hour aware drive time (no API needed) */
+function smartDriveMin(distKm){
+  const h=new Date().getHours(),m=new Date().getMinutes(),t=h+m/60;
+  let mult=1.15; // base: parking + walking buffer
+  if((t>=7&&t<9.5)||(t>=16.5&&t<19.5))mult=1.7;  // morning/evening rush
+  else if(t>=12&&t<13.5)mult=1.3;                  // lunch congestion
+  return Math.round((distKm/30*60)*mult);           // 30km/h avg urban Abu Dhabi
+}
+function haversine([lat1,lon1],[lat2,lon2]){
+  const R=6371,dLat=(lat2-lat1)*Math.PI/180,dLon=(lon2-lon1)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+function makeIcon(co,dimmed){
+  const color=STATUS_COLORS[co.status||''];
+  const op=dimmed?0.22:1;const sz=dimmed?8:13;
+  const ring=!dimmed&&!(co.visits&&co.visits.length)?`<circle cx="${(sz+10)/2}" cy="${(sz+10)/2}" r="${sz/2+3}" fill="none" stroke="${color}" stroke-width="1" stroke-dasharray="3,2" stroke-opacity="0.7"/>`:'' ;
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${sz+10}" height="${sz+10}">${ring}<circle cx="${(sz+10)/2}" cy="${(sz+10)/2}" r="${sz/2}" fill="${color}" fill-opacity="${op}" stroke="white" stroke-width="${dimmed?1:2}" stroke-opacity="${op}"/></svg>`;
+  return L.divIcon({html:svg,className:'',iconSize:[sz+10,sz+10],iconAnchor:[(sz+10)/2,(sz+10)/2]});
+}
+function makeStopIcon(n){
+  return L.divIcon({html:`<div class="stop-num">${n}</div>`,className:'',iconSize:[24,24],iconAnchor:[12,12]});
+}
+
+function popupHTML(co,dist){
+  const visits=co.visits||[];
+  const lastV=visits.length?`Last: ${fmtDate(visits[visits.length-1])}`:'Never visited ✨';
+  const driveMin=dist?smartDriveMin(dist):null;
+  return `<div style="min-width:210px;max-width:270px">
+    <div class="pop-name">${esc(co.name)}</div>
+    ${co.status?`<div class="pop-row">● <b style="color:${STATUS_COLORS[co.status]}">${STATUS_LABELS[co.status]}</b></div>`:''}
+    ${dist!=null?`<div class="pop-row">📍 <b>${dist.toFixed(1)}km</b>${driveMin?` · ~${driveMin} min`:''}</div>`:''}
+    <div class="pop-row">🗂 ${esc(co.category||'')} · ${esc(co.city||'Abu Dhabi')}</div>
+    <div class="pop-row">📅 ${lastV} (${visits.length} visits)</div>
+    ${co.founded_year?`<div class="pop-row">🏛 Founded <b>${co.founded_year}</b></div>`:''}
+    ${co.employees?`<div class="pop-row">👥 <b>${esc(co.employees)}</b></div>`:''}
+    ${co.net_worth?`<div class="pop-row">💰 ${esc(co.net_worth)}</div>`:''}
+    ${co.active_tenders?`<div class="pop-row" style="color:#f59e0b">📋 Tenders: ${esc(co.active_tenders)}</div>`:''}
+    ${co.ongoing_projects?`<div class="pop-row">🔨 ${esc(co.ongoing_projects)}</div>`:''}
+    <div class="pop-actions">
+      <button class="pop-btn pop-visit" onclick="mapLogVisit(${co.id})">🏃 Log Visit</button>
+      <button class="pop-btn pop-nav" onclick="openNav(${co.id})">🧭 Navigate</button>
+    </div>
+  </div>`;
+}
+
+function plotAllCompanies(){
+  if(!leafletMap)return;
+  mapMarkers.forEach(m=>leafletMap.removeLayer(m));mapMarkers=[];
+  data.forEach(co=>{
+    if(!co.lat||!co.lng)return;
+    const dist=userLatLng?haversine(userLatLng,[co.lat,co.lng]):null;
+    const dimmed=userLatLng&&dist>RADIUS_KM;
+    const m=L.marker([co.lat,co.lng],{icon:makeIcon(co,dimmed)}).addTo(leafletMap)
+      .bindPopup(popupHTML(co,dist),{className:'map-popup',maxWidth:290});
+    m._coId=co.id;mapMarkers.push(m);
+  });
+}
+
+function locateMe(){
+  const btn=document.getElementById('btn-locate');
+  btn.textContent='…locating';btn.className='locating';
+  if(!navigator.geolocation){showToast('📍 Enable GPS first');return;}
+  navigator.geolocation.getCurrentPosition(pos=>{
+    userLatLng=[pos.coords.latitude,pos.coords.longitude];
+    btn.textContent='📍 Located ✓';btn.className='located';
+    document.getElementById('btn-plan').style.display='block';
+    if(userMarker)leafletMap.removeLayer(userMarker);
+    if(radiusCircle)leafletMap.removeLayer(radiusCircle);
+    const pulseHtml=`<div style="width:14px;height:14px;border-radius:50%;background:#4f6ef7;border:2px solid #fff;box-shadow:0 0 0 5px rgba(79,110,247,0.3),0 0 0 10px rgba(79,110,247,0.1)"></div>`;
+    userMarker=L.marker(userLatLng,{icon:L.divIcon({html:pulseHtml,className:'',iconSize:[14,14],iconAnchor:[7,7]}),zIndexOffset:1000}).addTo(leafletMap).bindPopup('📍 You are here');
+    radiusCircle=L.circle(userLatLng,{radius:RADIUS_KM*1000,color:'#4f6ef7',fillColor:'#4f6ef7',fillOpacity:0.05,weight:1.5,dashArray:'6,4'}).addTo(leafletMap);
+    leafletMap.flyTo(userLatLng,13,{duration:1.2});
+    plotAllCompanies();
+    showNearbyCompanies();
+  },()=>{btn.textContent='📍 Find Me';btn.className='';showToast('📍 Location denied — enable GPS');},{enableHighAccuracy:true,timeout:10000});
+}
+
+function showNearbyCompanies(){
+  if(!userLatLng)return;
+  const near=data.filter(c=>c.lat&&c.lng&&haversine(userLatLng,[c.lat,c.lng])<=RADIUS_KM)
+    .map(c=>({...c,_dist:haversine(userLatLng,[c.lat,c.lng])}))
+    .sort((a,b)=>a._dist-b._dist);
+  document.getElementById('nearby-pill').style.display='block';
+  document.getElementById('nearby-count').textContent=near.length;
+  document.getElementById('drawer-title').textContent=`${near.length} companies within ${RADIUS_KM}km`;
+  const list=document.getElementById('nearby-list');
+  if(!near.length){list.innerHTML='<div style="padding:20px;text-align:center;color:var(--text2);font-size:0.82rem">No companies in this area</div>';openDrawer();return;}
+  list.innerHTML=near.map(c=>{
+    const color=STATUS_COLORS[c.status||''];
+    const fresh=!(c.visits&&c.visits.length);
+    const lastV=fresh?'<span class="ni-fresh">✨ First visit!</span>':fmtDate(c.visits[c.visits.length-1]);
+    const driveMin=smartDriveMin(c._dist);
+    return `<div class="nearby-item" onclick="focusCompany(${c.id})">
+      <div class="ni-dot" style="background:${color}"></div>
+      <div class="ni-info"><div class="ni-name">${esc(c.name)}</div><div class="ni-meta">${esc(c.category||'')} · ${lastV}</div></div>
+      <div style="text-align:right"><div class="ni-dist">${c._dist.toFixed(1)}km</div><div class="ni-time">~${driveMin}min</div></div>
+    </div>`;
+  }).join('');
+  openDrawer();
+}
+
+function focusCompany(id){
+  const co=data.find(c=>c.id===id);
+  if(!co||!co.lat)return;
+  leafletMap.flyTo([co.lat,co.lng],15,{duration:0.9});
+  const m=mapMarkers.find(m=>m._coId===id);
+  if(m)setTimeout(()=>m.openPopup(),950);
+  if(window.innerWidth<768)closeDrawer();
+}
+
+async function planRoute(){
+  if(!userLatLng){showToast('📍 Find your location first');return;}
+  const near=data.filter(c=>c.lat&&c.lng&&haversine(userLatLng,[c.lat,c.lng])<=RADIUS_KM);
+  if(!near.length){showToast('No companies within 10km');return;}
+  const btn=document.getElementById('btn-plan');
+  btn.textContent='⏳ Routing…';btn.classList.add('active');
+  if(routeLayer){leafletMap.removeLayer(routeLayer);routeLayer=null;}
+  const coords=[userLatLng,...near.map(c=>[c.lat,c.lng])];
+  const coordStr=coords.map(([lat,lng])=>`${lng},${lat}`).join(';');
+  try{
+    const res=await fetch(`https://router.project-osrm.org/trip/v1/driving/${coordStr}?roundtrip=false&source=first&overview=full&geometries=geojson`);
+    const d=await res.json();
+    if(d.code!=='Ok')throw new Error();
+    const trip=d.trips[0];
+    routeLayer=L.geoJSON(trip.geometry,{style:{color:'#7c3aed',weight:4,opacity:0.85,dashArray:'8,5'}}).addTo(leafletMap);
+    const hrs=Math.floor(trip.duration/3600),mins=Math.round((trip.duration%3600)/60);
+    const km=(trip.distance/1000).toFixed(1);
+    const h=new Date().getHours(),t=h+new Date().getMinutes()/60;
+    const isRush=(t>=7&&t<9.5)||(t>=16.5&&t<19.5);
+    const rushNote=isRush?' 🚦 Rush hr':''
+    document.getElementById('route-info').textContent=`${near.length} stops · ${km}km · ~${hrs?hrs+'h ':''}${mins}min${rushNote}`;
+    document.getElementById('route-bar').style.display='block';
+    // Re-number markers by OSRM stop order
+    const order=d.waypoints.slice(1).map(w=>w.waypoint_index-1);
+    mapMarkers.forEach(m=>leafletMap.removeLayer(m));mapMarkers=[];
+    order.forEach((origIdx,stopNum)=>{
+      const co=near[origIdx];
+      const m=L.marker([co.lat,co.lng],{icon:makeStopIcon(stopNum+1)})
+        .addTo(leafletMap).bindPopup(popupHTML(co,haversine(userLatLng,[co.lat,co.lng])),{className:'map-popup',maxWidth:290});
+      m._coId=co.id;mapMarkers.push(m);
+    });
+    // Update drawer with ordered list
+    const dTitle=document.getElementById('drawer-title');
+    dTitle.textContent=`Optimized: ${near.length} stops`;
+    document.getElementById('nearby-list').innerHTML=order.map((oi,sn)=>{
+      const c=near[oi];const color=STATUS_COLORS[c.status||''];
+      const fresh=!(c.visits&&c.visits.length);
+      return `<div class="nearby-item" onclick="focusCompany(${c.id})">
+        <div style="width:22px;height:22px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;flex-shrink:0">${sn+1}</div>
+        <div class="ni-info"><div class="ni-name">${esc(c.name)}</div><div class="ni-meta">${esc(c.category||'')}${fresh?' · <span class="ni-fresh">✨ First visit!</span>':''}</div></div>
+        <div class="ni-dot" style="background:${color};width:8px;height:8px;flex-shrink:0;border-radius:50%"></div>
+      </div>`;
+    }).join('');
+    openDrawer();
+    leafletMap.fitBounds(routeLayer.getBounds(),{padding:[40,40]});
+    btn.textContent='✕ Clear Route';
+    btn.onclick=()=>{if(routeLayer){leafletMap.removeLayer(routeLayer);routeLayer=null;}document.getElementById('route-bar').style.display='none';btn.textContent='🗺️ Plan Route';btn.classList.remove('active');btn.onclick=planRoute;plotAllCompanies();showNearbyCompanies();};
+  }catch(e){showToast('Route failed — try again');btn.textContent='🗺️ Plan Route';btn.classList.remove('active');}
+}
+
+function mapLogVisit(id){
+  const co=data.find(c=>c.id===id);if(!co)return;
+  if(!co.visits)co.visits=[];
+  co.visits.push(new Date().toISOString().slice(0,10));
+  scheduleSave('Visit: '+co.name);
+  showToast('🏃 Visit logged — '+co.name);
+  const m=mapMarkers.find(m=>m._coId===id);
+  if(m)m.setPopupContent(popupHTML(co,userLatLng&&co.lat?haversine(userLatLng,[co.lat,co.lng]):null));
+  renderStats(filtered());
+}
+function openNav(id){
+  const co=data.find(c=>c.id===id);
+  if(co&&co.lat)window.open(`https://maps.google.com/?daddr=${co.lat},${co.lng}&travelmode=driving`,'_blank');
+}
+function openDrawer(){document.getElementById('map-drawer').classList.add('open');}
+function closeDrawer(){document.getElementById('map-drawer').classList.remove('open');}
+function toggleDrawer(){document.getElementById('map-drawer').classList.toggle('open');}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
 </script>
 </body>
 </html>
