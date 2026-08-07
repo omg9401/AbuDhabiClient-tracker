@@ -270,6 +270,13 @@ td[contenteditable=true]:focus { background: rgba(79,110,247,0.08); outline: 1px
         <input type="text" id="af-name" placeholder="Company name">
       </div>
       <div>
+        <div class="form-label">City *</div>
+        <select id="af-city">
+          <option value="Abu Dhabi">Abu Dhabi</option>
+          <option value="Dubai">Dubai</option>
+        </select>
+      </div>
+      <div>
         <div class="form-label">Category *</div>
         <select id="af-cat">
           <option value="Interior Companies">Interior Companies</option>
@@ -311,6 +318,14 @@ td[contenteditable=true]:focus { background: rgba(79,110,247,0.08); outline: 1px
       <button class="btn btn-primary" onclick="addCompany()">Add Company</button>
       <button class="btn btn-ghost" onclick="toggleAddForm()">Cancel</button>
     </div>
+  </div>
+
+  <!-- CITY FILTER -->
+  <div class="filter-bar" style="background:#12151f;border-bottom:1px solid #1e2235;padding:8px 20px;gap:8px">
+    <span style="font-size:0.72rem;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:0.06em">City</span>
+    <button class="filter-chip active" id="city-all" onclick="setCity('All',this)">All</button>
+    <button class="filter-chip" id="city-auh" onclick="setCity('Abu Dhabi',this)">🏙 Abu Dhabi</button>
+    <button class="filter-chip" id="city-dxb" onclick="setCity('Dubai',this)">Dubai</button>
   </div>
 
   <!-- FILTER BAR -->
@@ -372,6 +387,7 @@ const PW_HASH = 'am9teWtvY2hlcnkxQA=='; // jomykochery1@
 let companies = [];
 let fileSha = null;
 let activeFilter = 'All';
+let activeCity = 'All';
 let saveTimer = null;
 let todayStr = new Date().toISOString().slice(0, 10);
 
@@ -477,9 +493,17 @@ function shortCat(cat) {
 }
 
 // ─── FILTER ──────────────────────────────────────────────────────────
+function setCity(city, el) {
+  activeCity = city;
+  document.querySelectorAll('#city-all,#city-auh,#city-dxb').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderAll();
+}
+
 function setFilter(cat, el) {
   activeFilter = cat;
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  // Only reset category chips, not city chips
+  document.querySelectorAll('#filter-bar .filter-chip').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
   renderAll();
 }
@@ -487,9 +511,10 @@ function setFilter(cat, el) {
 function filteredCompanies() {
   const q = (document.getElementById('search-input').value || '').toLowerCase();
   return companies.filter(c => {
+    const matchCity = activeCity === 'All' || (c.city || 'Abu Dhabi') === activeCity;
     const matchCat = activeFilter === 'All' || c.category === activeFilter;
     const matchQ = !q || [c.name, c.category, c.procurement_email, c.office_phone, c.procurement_officer, c.notes].join(' ').toLowerCase().includes(q);
-    return matchCat && matchQ;
+    return matchCity && matchCat && matchQ;
   });
 }
 
@@ -504,11 +529,15 @@ function renderAll() {
 
 function renderStats(list) {
   const total = list.length;
+  const auh = list.filter(c => (c.city||'Abu Dhabi') === 'Abu Dhabi').length;
+  const dxb = list.filter(c => c.city === 'Dubai').length;
   const pm1 = list.filter(c => c.physical_meeting_1).length;
   const anyCall = list.filter(c => c.call_1 || c.call_2 || c.call_3).length;
   const pm2 = list.filter(c => c.physical_meeting_2).length;
   document.getElementById('stats-bar').innerHTML =
     `<div class="stat">Showing <span>${total}</span></div>` +
+    `<div class="stat">Abu Dhabi <span>${auh}</span></div>` +
+    `<div class="stat">Dubai <span>${dxb}</span></div>` +
     `<div class="stat">PM1 <span>${pm1}</span></div>` +
     `<div class="stat">Called <span>${anyCall}</span></div>` +
     `<div class="stat">PM2 <span>${pm2}</span></div>`;
@@ -530,7 +559,10 @@ function renderTable(list) {
     const isNew = c.added_date === todayStr;
     return `<tr class="${isNew ? 'new-entry' : ''}" data-id="${c.id}">
       <td class="num">${i + 1}</td>
-      <td style="font-weight:600;min-width:160px">${esc(c.name)}</td>
+      <td style="font-weight:600;min-width:160px">
+        ${esc(c.name)}
+        <div style="font-size:0.68rem;color:var(--text2);margin-top:2px">${esc(c.city||'Abu Dhabi')}</div>
+      </td>
       <td><span class="${badgeClass(c.category)}">${shortCat(c.category)}</span></td>
       <td>${linksCell(c)}</td>
       <td contenteditable="true" data-field="procurement_email" style="min-width:140px;font-size:0.78rem">${esc(c.procurement_email||'')}</td>
@@ -581,7 +613,10 @@ function renderCards(list) {
         <div class="card-num">${i+1}</div>
         <div style="flex:1">
           <div class="card-title">${esc(c.name)}</div>
-          <div class="card-badge"><span class="${badgeClass(c.category)}">${shortCat(c.category)}</span></div>
+          <div style="display:flex;gap:6px;align-items:center;margin-top:4px;flex-wrap:wrap">
+            <span class="${badgeClass(c.category)}">${shortCat(c.category)}</span>
+            <span style="font-size:0.65rem;color:var(--text2);background:var(--bg);padding:1px 7px;border-radius:10px;border:1px solid var(--border)">${esc(c.city||'Abu Dhabi')}</span>
+          </div>
         </div>
         <div class="card-chevron">▼</div>
       </div>
@@ -630,10 +665,11 @@ function addCompany() {
   const co = {
     id: maxId + 1,
     name,
+    city: document.getElementById('af-city').value || 'Abu Dhabi',
     category: document.getElementById('af-cat').value,
     website: document.getElementById('af-web').value.trim(),
     address: addr,
-    maps: `https://maps.google.com/?q=${encodeURIComponent(name + ' Abu Dhabi')}`,
+    maps: `https://maps.google.com/?q=${encodeURIComponent(name + ' ' + (document.getElementById('af-city').value || 'Abu Dhabi'))}`,
     procurement_email: document.getElementById('af-email').value.trim(),
     office_phone: document.getElementById('af-phone').value.trim(),
     procurement_officer: document.getElementById('af-officer').value.trim(),
