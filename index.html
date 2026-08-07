@@ -183,13 +183,28 @@ input[type=checkbox]{width:15px;height:15px;accent-color:var(--accent);cursor:po
 .status-dot:hover{transform:scale(1.35);}
 .s-none{background:#2e3248;border-color:#4e5268;}
 .s-green{background:#10b981;border-color:#34d399;box-shadow:0 0 5px rgba(16,185,129,0.5);}
+.s-blue{background:#3b82f6;border-color:#60a5fa;box-shadow:0 0 5px rgba(59,130,246,0.5);}
+.s-orange{background:#f59e0b;border-color:#fbbf24;box-shadow:0 0 5px rgba(245,158,11,0.5);}
 .s-red{background:#ef4444;border-color:#f87171;box-shadow:0 0 5px rgba(239,68,68,0.5);}
 .s-black{background:#374151;border-color:#6b7280;}
 td.status-cell{width:28px;text-align:center;padding:8px 4px;}
 .chip.st-green.active{background:#064e3b;border-color:#10b981;color:#34d399;}
+.chip.st-blue.active{background:#1e3a5f;border-color:#3b82f6;color:#93c5fd;}
+.chip.st-orange.active{background:#451a03;border-color:#f59e0b;color:#fcd34d;}
 .chip.st-red.active{background:#450a0a;border-color:#ef4444;color:#fca5a5;}
 .chip.st-black.active{background:#1f2937;border-color:#6b7280;color:#9ca3af;}
 .chip.st-none.active{background:#1a1d27;border-color:#4e5268;color:#8892a4;}
+/* VISIT LOG */
+.visit-cell{display:flex;align-items:center;gap:5px;white-space:nowrap;}
+.visit-count{font-size:0.78rem;font-weight:700;color:var(--text);}
+.visit-last{font-size:0.67rem;color:var(--text2);}
+.visit-add{width:20px;height:20px;border-radius:5px;border:1px solid var(--border);background:var(--bg);color:var(--text2);cursor:pointer;font-size:0.8rem;line-height:1;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.visit-add:hover{border-color:var(--accent);color:var(--accent);}
+.visit-history{position:relative;}
+.visit-tooltip{display:none;position:absolute;right:0;top:24px;background:#1a1d27;border:1px solid var(--border);border-radius:8px;padding:8px 10px;z-index:100;min-width:160px;box-shadow:0 4px 12px rgba(0,0,0,0.5);}
+.visit-history:hover .visit-tooltip{display:block;}
+.vt-entry{font-size:0.74rem;color:var(--text2);padding:2px 0;border-bottom:1px solid #1e2235;}
+.vt-entry:last-child{border-bottom:none;color:var(--text);}
 /* PENDING BADGE */
 .pending-badge{background:#ef4444;color:#fff;border-radius:10px;font-size:0.65rem;font-weight:700;padding:1px 6px;margin-left:5px;display:none;}
 .pending-badge.show{display:inline-block;}
@@ -317,6 +332,8 @@ td.status-cell{width:28px;text-align:center;padding:8px 4px;}
         <span class="filter-label">Status</span>
         <button class="chip active" id="fst-all" onclick="setStatusFilter('All',this)">All</button>
         <button class="chip st-green" onclick="setStatusFilter('green',this)">🟢 Good Prospect</button>
+        <button class="chip st-blue" onclick="setStatusFilter('blue',this)">🔵 Onboarded</button>
+        <button class="chip st-orange" onclick="setStatusFilter('orange',this)">🟠 Follow-up</button>
         <button class="chip st-red" onclick="setStatusFilter('red',this)">🔴 Difficult</button>
         <button class="chip st-black" onclick="setStatusFilter('black',this)">⬛ No Fit</button>
         <button class="chip st-none" onclick="setStatusFilter('',this)">○ Unset</button>
@@ -342,11 +359,10 @@ td.status-cell{width:28px;text-align:center;padding:8px 4px;}
             <th onclick="sortBy('office_phone')">Phone</th>
             <th onclick="sortBy('procurement_officer')">Officer</th>
             <th class="no-sort">Notes</th>
-            <th class="no-sort" title="Physical Meeting 1">PM1</th>
+            <th onclick="sortBy('_visits')" title="Physical Visits — click to sort">Visits</th>
             <th class="no-sort" title="Call 1">C1</th>
             <th class="no-sort" title="Call 2">C2</th>
             <th class="no-sort" title="Call 3">C3</th>
-            <th class="no-sort" title="Physical Meeting 2">PM2</th>
             <th class="no-sort"></th>
           </tr>
         </thead>
@@ -410,8 +426,10 @@ td.status-cell{width:28px;text-align:center;padding:8px 4px;}
         <h3>🚦 Prospect Status</h3>
         <p style="font-size:0.78rem;color:var(--text2);margin-bottom:14px;">Click the dot on any row in the tracker to cycle through statuses.</p>
         <div class="status-legend">
-          <div class="sl-item"><div class="sl-dot" style="background:#10b981;border:1.5px solid #34d399;box-shadow:0 0 5px rgba(16,185,129,0.5)"></div><span class="sl-label" style="color:#34d399">Good Prospect</span><span class="sl-desc">Strong fit, actively follow up</span></div>
-          <div class="sl-item"><div class="sl-dot" style="background:#ef4444;border:1.5px solid #f87171;box-shadow:0 0 5px rgba(239,68,68,0.5)"></div><span class="sl-label" style="color:#fca5a5">Difficult</span><span class="sl-desc">Active but challenging client</span></div>
+          <div class="sl-item"><div class="sl-dot" style="background:#10b981;border:1.5px solid #34d399;box-shadow:0 0 5px rgba(16,185,129,0.5)"></div><span class="sl-label" style="color:#34d399">Good Prospect</span><span class="sl-desc">Strong fit — actively follow up</span></div>
+          <div class="sl-item"><div class="sl-dot" style="background:#3b82f6;border:1.5px solid #60a5fa;box-shadow:0 0 5px rgba(59,130,246,0.5)"></div><span class="sl-label" style="color:#93c5fd">Onboarded</span><span class="sl-desc">Already a client / project won</span></div>
+          <div class="sl-item"><div class="sl-dot" style="background:#f59e0b;border:1.5px solid #fbbf24;box-shadow:0 0 5px rgba(245,158,11,0.5)"></div><span class="sl-label" style="color:#fcd34d">Needs Follow-up</span><span class="sl-desc">Warm — schedule next touch</span></div>
+          <div class="sl-item"><div class="sl-dot" style="background:#ef4444;border:1.5px solid #f87171;box-shadow:0 0 5px rgba(239,68,68,0.5)"></div><span class="sl-label" style="color:#fca5a5">Difficult</span><span class="sl-desc">Active but challenging</span></div>
           <div class="sl-item"><div class="sl-dot" style="background:#374151;border:1.5px solid #6b7280"></div><span class="sl-label" style="color:#9ca3af">No Fit</span><span class="sl-desc">Don't follow up</span></div>
           <div class="sl-item"><div class="sl-dot" style="background:#2e3248;border:1.5px solid #4e5268"></div><span class="sl-label" style="color:var(--text2)">Unset</span><span class="sl-desc">Not yet evaluated</span></div>
         </div>
@@ -468,7 +486,8 @@ let pendingData=[], shaPending=null;
 let shaData=null, shaSet=null;
 let activeCity='All', activeCat='All', activeAssignee='All', activeStatusFilter='All';
 let sortCol='_idx', sortDir=1;
-const STATUS_CYCLE=['','green','red','black'];
+const STATUS_CYCLE=['','green','blue','orange','red','black'];
+const STATUS_LABELS={'green':'Good Prospect','blue':'Onboarded','orange':'Needs Follow-up','red':'Difficult','black':'No Fit','':'Unset'};
 let saveTimer=null;
 const today=new Date().toISOString().slice(0,10);
 
@@ -609,8 +628,30 @@ function setStatusFilter(v,el){activeStatusFilter=v;document.querySelectorAll('#
 
 function statusDot(id,current){
   const s=current||'';
-  const label=s==='green'?'Good Prospect':s==='red'?'Difficult':s==='black'?'No Fit':'Click to set status';
-  return `<div class="status-dot s-${s||'none'}" onclick="cycleStatus(${id})" title="${label}"></div>`;
+  const label=STATUS_LABELS[s]||'Click to set status';
+  return `<div class="status-dot s-${s||'none'}" onclick="cycleStatus(${id})" title="${label} (click to change)"></div>`;
+}
+function fmtDate(iso){
+  if(!iso)return'';
+  const d=new Date(iso+'T00:00:00');
+  return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'});
+}
+function visitsCell(id,visits){
+  const v=visits||[];
+  const last=v.length?v[v.length-1]:null;
+  const tooltip=v.length?v.slice().reverse().map((d,i)=>`<div class="vt-entry">${i===0?'↳ ':''} ${fmtDate(d)}</div>`).join(''):'';
+  return `<div class="visit-cell">
+    ${v.length?`<div class="visit-history"><span class="visit-count">${v.length}×</span> <span class="visit-last">${fmtDate(last)}</span><div class="visit-tooltip">${tooltip}</div></div>`:''}
+    <button class="visit-add" onclick="addVisit(${id})" title="Log visit today">+</button>
+  </div>`;
+}
+function addVisit(id){
+  const co=data.find(c=>c.id===id);
+  if(!co)return;
+  if(!co.visits)co.visits=[];
+  co.visits.push(new Date().toISOString().slice(0,10));
+  scheduleSave('Log visit: '+co.name);
+  render();
 }
 function cycleStatus(id){
   const co=data.find(c=>c.id===id);
@@ -625,8 +666,8 @@ function cycleStatus(id){
 function sortBy(col){
   if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}
   document.querySelectorAll('thead th').forEach(th=>{th.classList.remove('sort-asc','sort-desc');});
-  // Column index map (status col added at index 1)
-  const map={'_idx':0,'name':2,'city':3,'category':4,'assignee':5,'procurement_email':7,'office_phone':8,'procurement_officer':9};
+  // Column index map (status col at 1, visits col replaces PM1 at index 10)
+  const map={'_idx':0,'name':2,'city':3,'category':4,'assignee':5,'procurement_email':7,'office_phone':8,'procurement_officer':9,'_visits':10};
   const ths=document.querySelectorAll('thead th');
   if(map[col]!==undefined) ths[map[col]].classList.add(sortDir===1?'sort-asc':'sort-desc');
   render();
@@ -645,7 +686,9 @@ function filtered(){
   });
   if(sortCol!=='_idx'){
     list=[...list].sort((a,b)=>{
-      let av=a[sortCol]||'',bv=b[sortCol]||'';
+      let av,bv;
+      if(sortCol==='_visits'){av=(a.visits||[]).length;bv=(b.visits||[]).length;}
+      else{av=a[sortCol]||'';bv=b[sortCol]||'';}
       if(typeof av==='boolean')av=av?1:0,bv=bv?1:0;
       return av>bv?sortDir:av<bv?-sortDir:0;
     });
@@ -668,19 +711,23 @@ function renderStats(list){
   const called=list.filter(c=>c.call_1||c.call_2||c.call_3).length;
   const pm2=list.filter(c=>c.physical_meeting_2).length;
   const stGreen=list.filter(c=>c.status==='green').length;
+  const stBlue=list.filter(c=>c.status==='blue').length;
+  const stOrange=list.filter(c=>c.status==='orange').length;
   const stRed=list.filter(c=>c.status==='red').length;
   const stBlack=list.filter(c=>c.status==='black').length;
+  const totalVisits=list.reduce((s,c)=>s+(c.visits||[]).length,0);
   document.getElementById('statsBar').innerHTML=
     `<div class="stat">Showing <b>${list.length}</b></div>`+
     `<div class="stat">Abu Dhabi <b>${auh}</b></div>`+
     `<div class="stat">Dubai <b>${dxb}</b></div>`+
     (other?`<div class="stat">Other <b>${other}</b></div>`:'')+
     (stGreen?`<div class="stat">🟢 <b>${stGreen}</b></div>`:'')+
+    (stBlue?`<div class="stat">🔵 <b>${stBlue}</b></div>`:'')+
+    (stOrange?`<div class="stat">🟠 <b>${stOrange}</b></div>`:'')+
     (stRed?`<div class="stat">🔴 <b>${stRed}</b></div>`:'')+
     (stBlack?`<div class="stat">⬛ <b>${stBlack}</b></div>`:'')+
-    `<div class="stat">PM1 <b>${pm1}</b></div>`+
-    `<div class="stat">Called <b>${called}</b></div>`+
-    `<div class="stat">PM2 <b>${pm2}</b></div>`;
+    (totalVisits?`<div class="stat">📍 Visits <b>${totalVisits}</b></div>`:'')+
+    `<div class="stat">Called <b>${called}</b></div>`;
 }
 
 function assigneeBadge(id,current){
@@ -721,11 +768,10 @@ function renderTable(list){
       <td contenteditable data-f="office_phone" style="min-width:110px;font-size:0.74rem">${esc(c.office_phone||'')}</td>
       <td contenteditable data-f="procurement_officer" style="min-width:110px">${esc(c.procurement_officer||'')}</td>
       <td contenteditable data-f="notes" style="min-width:170px;max-width:210px;font-size:0.73rem;color:var(--text2)">${esc(c.notes||'')}</td>
-      <td class="cb"><input type="checkbox" ${c.physical_meeting_1?'checked':''} onchange="toggle(${c.id},'physical_meeting_1',this.checked)"></td>
+      <td>${visitsCell(c.id,c.visits)}</td>
       <td class="cb"><input type="checkbox" ${c.call_1?'checked':''} onchange="toggle(${c.id},'call_1',this.checked)"></td>
       <td class="cb"><input type="checkbox" ${c.call_2?'checked':''} onchange="toggle(${c.id},'call_2',this.checked)"></td>
       <td class="cb"><input type="checkbox" ${c.call_3?'checked':''} onchange="toggle(${c.id},'call_3',this.checked)"></td>
-      <td class="cb"><input type="checkbox" ${c.physical_meeting_2?'checked':''} onchange="toggle(${c.id},'physical_meeting_2',this.checked)"></td>
       <td><button class="del-btn" onclick="del(${c.id})">✕</button></td>
     </tr>`).join('');
   tb.querySelectorAll('td[contenteditable]').forEach(td=>{
@@ -766,10 +812,15 @@ function renderCards(list){
         ${c.office_phone?`<div class="card-field"><span class="cf-label">Phone</span><span class="cf-val"><a href="tel:${esc(c.office_phone)}" style="color:var(--accent)">${esc(c.office_phone)}</a></span></div>`:''}
         ${c.procurement_officer?`<div class="card-field"><span class="cf-label">Officer</span><span class="cf-val">${esc(c.procurement_officer)}</span></div>`:''}
         ${c.notes?`<div class="card-field"><span class="cf-label">Notes</span><span class="cf-val" style="color:var(--text2);font-size:0.72rem">${esc(c.notes)}</span></div>`:''}
-        <div class="card-checks">
-          ${[['physical_meeting_1','PM 1'],['call_1','Call 1'],['call_2','Call 2'],['call_3','Call 3'],['physical_meeting_2','PM 2']].map(([f,l])=>`
+        <div class="card-field">
+          <span class="cf-label">📍 Visits</span>
+          <span class="cf-val">${visitsCell(c.id,c.visits)}</span>
+        </div>
+        <div class="card-checks" style="grid-template-columns:repeat(3,1fr)">
+          ${[['call_1','Call 1'],['call_2','Call 2'],['call_3','Call 3']].map(([f,l])=>`
             <div><div class="cc-label">${l}</div><input type="checkbox" ${c[f]?'checked':''} onchange="toggle(${c.id},'${f}',this.checked)"></div>`).join('')}
         </div>
+        ${(c.visits||[]).length?`<div style="margin-top:8px;font-size:0.72rem;color:var(--text2)">Visit history: ${(c.visits||[]).slice().reverse().map(fmtDate).join(' · ')}</div>`:''}
         <div style="margin-top:10px"><button class="del-btn" onclick="del(${c.id})">✕ Delete</button></div>
       </div>
     </div>`;
@@ -810,8 +861,8 @@ function addCo(){
     office_phone:document.getElementById('af-phone').value.trim(),
     procurement_officer:document.getElementById('af-officer').value.trim(),
     notes:document.getElementById('af-notes').value.trim(),
-    physical_meeting_1:false,call_1:false,call_2:false,call_3:false,physical_meeting_2:false,
-    status:'',added_date:today
+    call_1:false,call_2:false,call_3:false,
+    visits:[],status:'',added_date:today
   });
   ['af-name','af-web','af-addr','af-email','af-phone','af-officer','af-notes'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('addForm').classList.remove('open');
@@ -947,9 +998,11 @@ async function savePending(){
 
 /* ── EXPORT ── */
 function doExport(){
-  const h=['#','Status','Name','Emirate','Category','Assignee','Website','Maps','Email','Phone','Officer','Notes','PM1','C1','C2','C3','PM2'];
-  const statusLabel=s=>s==='green'?'Good Prospect':s==='red'?'Difficult':s==='black'?'No Fit':'';
-  const rows=data.map((c,i)=>[i+1,statusLabel(c.status||''),c.name,c.city||'Abu Dhabi',c.category,c.assignee||'',c.website||'',c.maps||'',c.procurement_email||'',c.office_phone||'',c.procurement_officer||'',c.notes||'',c.physical_meeting_1?'Yes':'',c.call_1?'Yes':'',c.call_2?'Yes':'',c.call_3?'Yes':'',c.physical_meeting_2?'Yes':''].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','));
+  const h=['#','Status','Name','Emirate','Category','Assignee','Website','Maps','Email','Phone','Officer','Notes','Visits','Last Visit','C1','C2','C3'];
+  const rows=data.map((c,i)=>{
+    const v=c.visits||[];
+    return [i+1,STATUS_LABELS[c.status||'']||'',c.name,c.city||'Abu Dhabi',c.category,c.assignee||'',c.website||'',c.maps||'',c.procurement_email||'',c.office_phone||'',c.procurement_officer||'',c.notes||'',v.length,v[v.length-1]||'',c.call_1?'Yes':'',c.call_2?'Yes':'',c.call_3?'Yes':''].map(val=>`"${String(val).replace(/"/g,'""')}"`).join(',');
+  });
   const a=document.createElement('a');
   a.href='data:text/csv;charset=utf-8,'+encodeURIComponent([h.join(','),...rows].join('\n'));
   a.download='uae-tracker.csv';a.click();
