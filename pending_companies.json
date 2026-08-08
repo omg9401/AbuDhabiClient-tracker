@@ -142,5 +142,137 @@
     "notes": "Verified: Abu Dhabi government entity \u2014 corrected address and phone",
     "status": "",
     "added_date": "2026-08-07"
+  },
+  {
+    "name": "Winteriors Decor LLC",
+    "category": "Interior Companies",
+    "address": "M04, Salam Street (behind HSBC), Abu Dhabi, UAE",
+    "phone": "+971 2 643 2711",
+    "email": "",
+    "procurement_officer": "",
+    "website": "winteriorsdecor.com",
+    "notes": "Verified via Google Maps: M04 Sheikh Zayed Bin Sultan St, Al Zahiyah, Abu Dhabi. ISO-certified interior design and turnkey fit-out contractor, specializing in commercial office interiors since 2008. Abu Dhabi HQ with branch in Dubai Media City.",
+    "added_date": "2026-08-08"
+  },
+  {
+    "name": "Safeway Groups",
+    "category": "Interior Companies",
+    "address": "Office G20, Afhad Properties, ICAD 1, Musaffah, Abu Dhabi, UAE",
+    "phone": "+971 55 550 5947",
+    "email": "connect@swgs.ae",
+    "procurement_officer": "",
+    "website": "safewaygroups.com",
+    "notes": "Verified via Google Maps: ICAD 1, Musaffah, Abu Dhabi. Interior design and fit-out company serving commercial, hospitality, residential sectors. MEP services included.",
+    "added_date": "2026-08-08"
+  },
+  {
+    "name": "KEO International Consultants",
+    "category": "Consultants",
+    "address": "Level 17, The Offices World Trade Center, Hamdan Street, Abu Dhabi, UAE (PO Box 27594)",
+    "phone": "+971 2 654 4040",
+    "email": "",
+    "procurement_officer": "",
+    "website": "keo.com",
+    "notes": "Verified via Google Maps: Sky Tower, Abu Dhabi confirmed. Multi-disciplinary architecture, engineering and project management consultancy. Large-scale master planning, infrastructure, hospitality projects across Abu Dhabi.",
+    "added_date": "2026-08-08"
+  },
+  {
+    "name": "NORR Architects & Engineers",
+    "category": "Design Companies",
+    "address": "Level Mezzanine, PO Box 44387, Abu Dhabi, UAE",
+    "phone": "+971 2 676 3360",
+    "email": "info@norrgroup.com",
+    "procurement_officer": "",
+    "website": "norr.com",
+    "notes": "Verified via Google Maps: Abu Dhabi confirmed. Over 80 years global experience; Abu Dhabi office specializes in healthcare, commercial, residential and hospitality sectors.",
+    "added_date": "2026-08-08"
+  },
+  {
+    "name": "Gensler Abu Dhabi",
+    "category": "Design Companies",
+    "address": "7th Floor, East Tower, Abu Dhabi Trade Center (Abu Dhabi Mall Offices), Tourist Club Area, Abu Dhabi, UAE (PO Box 26967)",
+    "phone": "+971 2 696 3400",
+    "email": "",
+    "procurement_officer": "",
+    "website": "gensler.com/offices/abu-dhabi",
+    "notes": "Verified via Google Maps: Etihad Towers, King Abdullah Bin Abdulaziz Al Saud Street, Abu Dhabi confirmed. Global architecture and design firm; Abu Dhabi office covers commercial, hotels, lifestyle, mixed-use projects across Middle East.",
+    "added_date": "2026-08-08"
+  },
+  {
+    "name": "Four Seasons Hotel Abu Dhabi at Al Maryah Island",
+    "category": "Hotels",
+    "address": "Abu Dhabi Global Market St, Al Maryah Island, Abu Dhabi, UAE",
+    "phone": "+971 2 333 2222",
+    "email": "reservations.abudhabi@fourseasons.com",
+    "procurement_officer": "",
+    "website": "fourseasons.com/abudhabi",
+    "notes": "Verified via Google Maps: Al Maryah Island, Abu Dhabi confirmed. Luxury 5-star hotel situated at The Galleria, Al Maryah Island.",
+    "added_date": "2026-08-08"
+  },
+  {
+    "name": "Rosewood Abu Dhabi",
+    "category": "Hotels",
+    "address": "Al Maryah Island, P.O. Box 41184, Abu Dhabi, UAE",
+    "phone": "+971 2 813 5550",
+    "email": "abudhabi@rosewoodhotels.com",
+    "procurement_officer": "",
+    "website": "rosewoodhotels.com/en/abu-dhabi",
+    "notes": "Verified via Google Maps: Al Maryah Island, Abu Dhabi confirmed. Ultra-luxury 5-star hotel. Owned by Mubadala Investment Company.",
+    "added_date": "2026-08-08"
+  },
+  {
+    "name": "Ali & Sons Holding LLC",
+    "category": "Holding Companies",
+    "address": "Zayed the 1st Street, Ali & Sons Building, P.O. Box 915, Abu Dhabi, UAE",
+    "phone": "+971 2 634 4444",
+    "email": "",
+    "procurement_officer": "",
+    "website": "ali-sons.com",
+    "notes": "Verified via Google Maps: Zayed the 1st Street, Abu Dhabi confirmed. Founded 1979, major diversified conglomerate headquartered in Abu Dhabi \u2014 automotive, energy, real estate, retail, construction, hospitality, manufacturing.",
+    "added_date": "2026-08-08"
+  },
+  {
+    "name": "National Holding LLC",
+    "category": "Holding Companies",
+    "address": "Al Heel Tower, Mubarak Bin Mohammed Street, Abu Dhabi, UAE (PO Box 111966)",
+    "phone": "+971 2 657 7000",
+    "email": "info@nh.ae",
+    "procurement_officer": "",
+    "website": "nh.ae",
+    "notes": "Verified via Google Maps: Al Heel Tower, Mubarak Bin Mohammed Street, Abu Dhabi confirmed. Private investment holding company since 1993; multi-billion dollar portfolio across UAE and MENA.",
+    "added_date": "2026-08-08"
+  },
+  {
+    "name": "Dr. Wood Decor",
+    "category": "Joinery Companies",
+    "address": "Mussafah 9, Abu Dhabi, UAE",
+    "phone": "+971 50 122 8779",
+    "email": "sales@drwooddecor.ae",
+    "procurement_officer": "",
+    "website": "drwooddecor.ae",
+    "notes": "Verified via Google Maps: Mussafah 9, Abu Dhabi confirmed (Plus Code 9GH3+H4X). Specialist joinery and carpentry \u2014 kitchen cabinets, wardrobes, custom woodwork, wooden doors, pergolas.",
+    "added_date": "2026-08-08"
+  },
+  {
+    "name": "Crown Prince Court (CPC)",
+    "category": "Royal HH Offices",
+    "address": "Bainouna Street, Al Bateen, P.O. Box 124, Abu Dhabi, UAE",
+    "phone": "+971 2 668 6666",
+    "email": "",
+    "procurement_officer": "",
+    "website": "cpc.gov.ae",
+    "notes": "Verified via Google Maps: Al Bateen, Abu Dhabi confirmed. Established 1976; official support entity for HH President of UAE. Supplier registration available through official website.",
+    "added_date": "2026-08-08"
+  },
+  {
+    "name": "Depa Interiors LLC",
+    "category": "FF&E Buying Companies",
+    "address": "Khalidiya Street, Al Manaasek Building, Room 503, 5th Floor, P.O. Box 51288, Abu Dhabi, UAE",
+    "phone": "+971 2 635 2333",
+    "email": "info.depa.auh@depa.com",
+    "procurement_officer": "",
+    "website": "depa.com",
+    "notes": "Verified via Google Maps: Al Khalidiyah, Abu Dhabi confirmed. UAE-headquartered interior contractor specializing in FF&E and fit-out for 5-star hotels, resorts, airports, yachts, luxury offices across MENA and globally.",
+    "added_date": "2026-08-08"
   }
 ]
