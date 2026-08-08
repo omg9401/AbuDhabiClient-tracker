@@ -274,5 +274,115 @@
     "website": "depa.com",
     "notes": "Verified via Google Maps: Al Khalidiyah, Abu Dhabi confirmed. UAE-headquartered interior contractor specializing in FF&E and fit-out for 5-star hotels, resorts, airports, yachts, luxury offices across MENA and globally.",
     "added_date": "2026-08-08"
+  },
+  {
+    "name": "Havelock One Interiors",
+    "category": "Interior Companies",
+    "phone": "+971 2 204 1000",
+    "email": "",
+    "address": "Office 2402, 24th Floor, Sky Tower, Al Reem Island, Abu Dhabi, UAE",
+    "website": "https://www.havelockone.com",
+    "notes": "Verified: Al Reem Island, Abu Dhabi \u2014 confirmed via web search (02 prefix, Abu Dhabi district)",
+    "added_date": "2026-08-08"
+  },
+  {
+    "name": "Group Three Interiors",
+    "category": "Interior Companies",
+    "phone": "+971 2 546 9819",
+    "email": "info@groupthree.ae",
+    "address": "Musaffah, Abu Dhabi, UAE",
+    "website": "https://groupthree.ae",
+    "notes": "Verified: Musaffah Industrial Area, Abu Dhabi \u2014 confirmed via web search (02 prefix, Abu Dhabi district)",
+    "added_date": "2026-08-08"
+  },
+  {
+    "name": "Alpha Dhabi Holding",
+    "category": "Holding Companies",
+    "phone": "+971 2 494 0001",
+    "email": "info@alphadhabi.com",
+    "address": "The Landmark Tower, Al Markaziyah West, Corniche, 65th Floor, Abu Dhabi, UAE",
+    "website": "https://alphadhabi.com",
+    "notes": "Verified: Al Markaziyah West / Corniche, Abu Dhabi \u2014 confirmed via web search (02 prefix, Abu Dhabi district)",
+    "added_date": "2026-08-08"
+  },
+  {
+    "name": "Royal Group",
+    "category": "Holding Companies",
+    "phone": "+971 2 811 1111",
+    "email": "info@royalgroupuae.com",
+    "address": "Royal Group Building, Al Salam Street, Abu Dhabi, UAE",
+    "website": "https://royalgroupuae.com",
+    "notes": "Verified: Al Salam Street, Abu Dhabi \u2014 confirmed via web search (02 prefix, Abu Dhabi address)",
+    "added_date": "2026-08-08"
+  },
+  {
+    "name": "ADQ (Abu Dhabi Developmental Holding)",
+    "category": "Holding Companies",
+    "phone": "+971 2 204 0000",
+    "email": "",
+    "address": "P.O. Box 164, Abu Dhabi, UAE",
+    "website": "https://adq.ae",
+    "notes": "Verified: Abu Dhabi Island \u2014 confirmed via web search (02 prefix, Abu Dhabi)",
+    "added_date": "2026-08-08"
+  },
+  {
+    "name": "Al Khalidiya Joinery",
+    "category": "Joinery Companies",
+    "phone": "+971 2 555 9553",
+    "email": "info@alkhalidiya.com",
+    "address": "PO Box 72778, Mussafah M-37, Abu Dhabi, UAE",
+    "website": "https://alkhalidiya.com",
+    "notes": "Verified: Mussafah M-37, Abu Dhabi \u2014 confirmed via web search (02 prefix, Mussafah district)",
+    "added_date": "2026-08-08"
+  },
+  {
+    "name": "The St. Regis Abu Dhabi",
+    "category": "Hotels",
+    "phone": "+971 2 694 4444",
+    "email": "",
+    "address": "Nation Towers, Corniche Road, Abu Dhabi, UAE",
+    "website": "https://www.marriott.com/en-us/hotels/auhrx-the-st-regis-abu-dhabi",
+    "notes": "Verified: Nation Towers, Corniche, Abu Dhabi \u2014 confirmed via web search (02 prefix, Abu Dhabi Corniche)",
+    "added_date": "2026-08-08"
+  },
+  {
+    "name": "Four Seasons Hotel Abu Dhabi",
+    "category": "Hotels",
+    "phone": "+971 2 333 2222",
+    "email": "",
+    "address": "Abu Dhabi Global Market Street, Al Maryah Island, Abu Dhabi, UAE",
+    "website": "https://www.fourseasons.com/abudhabi",
+    "notes": "Verified: Al Maryah Island, Abu Dhabi \u2014 confirmed via web search (02 prefix, Abu Dhabi district)",
+    "added_date": "2026-08-08"
+  },
+  {
+    "name": "Grand Hyatt Abu Dhabi",
+    "category": "Hotels",
+    "phone": "+971 2 510 1234",
+    "email": "abudhabi.grand@hyatt.com",
+    "address": "West Corniche Road, PO Box 7309, Abu Dhabi, UAE",
+    "website": "https://www.hyatt.com/grand-hyatt/auhgh",
+    "notes": "Verified: West Corniche, Abu Dhabi \u2014 confirmed via web search (02 prefix, Abu Dhabi Corniche)",
+    "added_date": "2026-08-08"
+  },
+  {
+    "name": "Park Hyatt Abu Dhabi Hotel and Villas",
+    "category": "Hotels",
+    "phone": "+971 2 407 1234",
+    "email": "",
+    "address": "Saadiyat Island, PO Box 52007, Abu Dhabi, UAE",
+    "website": "https://www.hyatt.com/park-hyatt/abuph",
+    "notes": "Verified: Saadiyat Island, Abu Dhabi \u2014 confirmed via web search (02 prefix, Saadiyat Island)",
+    "added_date": "2026-08-08"
+  },
+  {
+    "name": "Sheraton Abu Dhabi Hotel & Resort",
+    "category": "Hotels",
+    "phone": "+971 2 677 3333",
+    "email": "",
+    "address": "Corniche Road, PO Box 640, Abu Dhabi, UAE",
+    "website": "https://www.marriott.com/en-us/hotels/auhsi-sheraton-abu-dhabi",
+    "notes": "Verified: Corniche Road, Abu Dhabi \u2014 confirmed via web search (02 prefix, Abu Dhabi Corniche)",
+    "added_date": "2026-08-08"
   }
 ]
