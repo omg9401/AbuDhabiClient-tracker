@@ -787,5 +787,105 @@
     "procurement_officer": "",
     "notes": "Verified: Sanaiya (Mussafah area), Abu Dhabi \u2014 confirmed via Google Maps",
     "added_date": "2026-08-09"
+  },
+  {
+    "name": "Aloft by Marriott Abu Dhabi",
+    "category": "Hotels",
+    "phone": "02 654 5000",
+    "email": "",
+    "address": "Al Khaleej Al Arabi St - Al Rawdah - W59 01 - Abu Dhabi",
+    "website": "marriott.com",
+    "notes": "Verified: Al Rawdah, Abu Dhabi (ADNEC Centre) \u2014 confirmed via Google Maps. 4-star hotel.",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Southern Sun Abu Dhabi",
+    "category": "Hotels",
+    "phone": "02 818 4888",
+    "email": "",
+    "address": "Al Mina Street, Al Zahiya, Tourist Club Area - Al Zahiyah - Abu Dhabi",
+    "website": "southernsun.com",
+    "notes": "Verified: Al Zahiyah, Abu Dhabi \u2014 confirmed via Google Maps. 4-star hotel.",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Millennium Downtown Abu Dhabi",
+    "category": "Hotels",
+    "phone": "02 616 6166",
+    "email": "",
+    "address": "Hamdan Bin Mohammed St - Al Danah - Zone 1 - Abu Dhabi",
+    "website": "millenniumhotels.com",
+    "notes": "Verified: Al Danah, Zone 1, Abu Dhabi \u2014 confirmed via Google Maps. 4-star hotel.",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Courtyard by Marriott World Trade Center Abu Dhabi",
+    "category": "Hotels",
+    "phone": "02 698 2222",
+    "email": "",
+    "address": "5th Street - Hamdan Bin Mohammed St - Al Danah - Zone 1 - Abu Dhabi",
+    "website": "marriott.com",
+    "notes": "Verified: Al Danah, Zone 1, Abu Dhabi (World Trade Center) \u2014 confirmed via Google Maps. 4-star hotel.",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Novotel Abu Dhabi Al Bustan",
+    "category": "Hotels",
+    "phone": "02 501 6444",
+    "email": "",
+    "address": "Shk. Rashid Bin Saeed - 29 Rabdan St - Abu Dhabi",
+    "website": "all.accor.com",
+    "notes": "Verified: Rabdan, Abu Dhabi \u2014 confirmed via Google Maps. 4-star hotel.",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Copthorne Downtown Abu Dhabi",
+    "category": "Hotels",
+    "phone": "02 615 6666",
+    "email": "",
+    "address": "Sheikh Zayed the 1st Rd Electra Street - Al Danah - Zone 1 - Abu Dhabi",
+    "website": "millenniumhotels.com",
+    "notes": "Verified: Al Danah, Zone 1, Abu Dhabi \u2014 confirmed via Google Maps. 4-star hotel.",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "City Seasons Al Hamra Hotel",
+    "category": "Hotels",
+    "phone": "02 417 6500",
+    "email": "",
+    "address": "Electra - Sheikh Zayed the First - Al Danah - Zone 1 - Abu Dhabi",
+    "website": "cityseasonshotels.com",
+    "notes": "Verified: Al Danah, Zone 1, Abu Dhabi \u2014 confirmed via Google Maps. 4-star hotel.",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Ramada by Wyndham Abu Dhabi Corniche",
+    "category": "Hotels",
+    "phone": "02 401 9000",
+    "email": "",
+    "address": "Al Meena St - Al Zahiyah - E14 - Abu Dhabi",
+    "website": "wyndhamhotels.com",
+    "notes": "Verified: Al Zahiyah, Abu Dhabi \u2014 confirmed via Google Maps. 4-star hotel.",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Bluehaus Group",
+    "category": "Interior Companies",
+    "phone": "02 245 6852",
+    "email": "",
+    "address": "Unit G2 Ground Floor, Executive Business Center, Bani Yas Najda Street, Al Markaziyah - Abu Dhabi",
+    "website": "bluehausgroup.com",
+    "notes": "Verified: Al Markaziyah, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Sheraton Khalidiya Hotel",
+    "category": "Hotels",
+    "phone": "02 692 8500",
+    "email": "",
+    "address": "Zayed The First St - opposite KM Trading - Al Hisn - W7 01 - Abu Dhabi",
+    "website": "sheratonalkhalidiya.com",
+    "notes": "Verified: Al Hisn (Khalidiyah area), Abu Dhabi \u2014 confirmed via Google Maps. 4-star hotel.",
+    "added_date": "2026-08-09"
   }
 ]
