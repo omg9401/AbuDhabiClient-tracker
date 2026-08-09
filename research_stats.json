@@ -1,10 +1,10 @@
 {
-  "cycles": 5,
-  "total_added_ever": 81,
+  "cycles": 6,
+  "total_added_ever": 91,
   "target": 500,
   "phase": "Abu Dhabi",
   "phase_complete": false,
   "last_run": "2026-08-09",
-  "current_pending": 75,
-  "progress_pct": 15.0
+  "current_pending": 85,
+  "progress_pct": 17.0
 }
