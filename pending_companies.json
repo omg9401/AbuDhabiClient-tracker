@@ -887,5 +887,95 @@
     "website": "sheratonalkhalidiya.com",
     "notes": "Verified: Al Hisn (Khalidiyah area), Abu Dhabi \u2014 confirmed via Google Maps. 4-star hotel.",
     "added_date": "2026-08-09"
+  },
+  {
+    "name": "Cristal Hotel Abu Dhabi",
+    "category": "Hotels",
+    "phone": "+971 2 652 0000",
+    "email": "",
+    "address": "Zayed The 1st Street, Adjacent to Madinat Zayed Shopping Centre, Abu Dhabi",
+    "website": "cristalhospitality.com",
+    "notes": "Verified: Madinat Zayed, Abu Dhabi \u2014 confirmed via web search (Tripadvisor, official site)",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Radisson Blu Hotel Abu Dhabi Yas Island",
+    "category": "Hotels",
+    "phone": "+971 2 656 2000",
+    "email": "info.abudhabi@radissonblu.com",
+    "address": "Yas Plaza, Yas Island, Abu Dhabi",
+    "website": "radissonhotels.com",
+    "notes": "Verified: Yas Island, Abu Dhabi \u2014 confirmed via web search (Radisson official contact page)",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Sheraton Khalidiya Hotel Abu Dhabi",
+    "category": "Hotels",
+    "phone": "+971 2 692 8500",
+    "email": "info@sheratonalkhalidiya.com",
+    "address": "Zayed 1st Street, Khalidiya, Abu Dhabi",
+    "website": "sheratonalkhalidiya.com",
+    "notes": "Verified: Khalidiya, Abu Dhabi \u2014 confirmed via web search (official hotel site)",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "TRYP by Wyndham Abu Dhabi City Center",
+    "category": "Hotels",
+    "phone": "+971 2 202 3555",
+    "email": "",
+    "address": "Khalifa Street, Abu Dhabi",
+    "website": "wyndhamhotels.com",
+    "notes": "Verified: Khalifa Street, Abu Dhabi \u2014 confirmed via web search (Wyndham official site)",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Foster + Partners Abu Dhabi",
+    "category": "Design Companies",
+    "phone": "+971 2 417 1700",
+    "email": "",
+    "address": "Office 302, Level 3, Al Saman Tower B, Hamdan Street, Abu Dhabi",
+    "website": "fosterandpartners.com",
+    "notes": "Verified: Hamdan Street, Abu Dhabi \u2014 confirmed via web search (official Foster+Partners page)",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "HKS Architects Abu Dhabi",
+    "category": "Consultants",
+    "phone": "+971 2 406 9844",
+    "email": "",
+    "address": "Al Bateen Tower 6, 1st Floor, King Abdullah bin Abdulaziz Al Saud Street, Abu Dhabi",
+    "website": "hksinc.com",
+    "notes": "Verified: Al Bateen, Abu Dhabi \u2014 confirmed via web search (HKS official Abu Dhabi office page)",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Anantara Eastern Mangroves Abu Dhabi Hotel",
+    "category": "Hotels",
+    "phone": "+971 2 656 1000",
+    "email": "easternmangroves@anantara.com",
+    "address": "Sheikh Zayed Street, Abu Dhabi",
+    "website": "anantara.com",
+    "notes": "Verified: Sheikh Zayed Street, Abu Dhabi \u2014 confirmed via web search (official Anantara contact page)",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Al Ain Palace Hotel Abu Dhabi",
+    "category": "Hotels",
+    "phone": "+971 2 599 6000",
+    "email": "reservations@alainpalacehotel.com",
+    "address": "Corniche Road, Abu Dhabi",
+    "website": "alainpalacehotel.com",
+    "notes": "Verified: Corniche, Abu Dhabi \u2014 confirmed via web search (official hotel contact page)",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Mustard & Linen Interior Design",
+    "category": "Interior Companies",
+    "phone": "+971 2 410 3539",
+    "email": "info@mustardandlinen.com",
+    "address": "Firenze Building, Al Khalidiyah, Abu Dhabi",
+    "website": "mustardandlinen.com",
+    "notes": "Verified: Al Khalidiyah, Abu Dhabi \u2014 confirmed via web search (Yellow Pages AE, Love That Design)",
+    "added_date": "2026-08-09"
   }
 ]
