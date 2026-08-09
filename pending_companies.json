@@ -384,5 +384,248 @@
     "website": "https://www.marriott.com/en-us/hotels/auhsi-sheraton-abu-dhabi",
     "notes": "Verified: Corniche Road, Abu Dhabi \u2014 confirmed via web search (02 prefix, Abu Dhabi Corniche)",
     "added_date": "2026-08-08"
+  },
+  {
+    "name": "Khalidiya Palace Rayhaan by Rotana",
+    "category": "Hotels",
+    "address": "Corniche Road West, Abu Dhabi, UAE",
+    "phone": "+971 2 657 0000",
+    "email": "khalidiya.rayhaan@rotana.com",
+    "notes": "Verified: Corniche, Abu Dhabi \u2014 confirmed via Rotana official website and booking platforms",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Crowne Plaza Abu Dhabi Yas Island",
+    "category": "Hotels",
+    "address": "Yas Street, Yas Plaza, Yas Island, Abu Dhabi, UAE",
+    "phone": "+971 2 656 3000",
+    "email": "info.cp@yasplazahotels.com",
+    "notes": "Verified: Yas Island, Abu Dhabi \u2014 confirmed via IHG and Yas Island official website",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Radisson Blu Hotel & Resort Abu Dhabi Corniche",
+    "category": "Hotels",
+    "address": "Corniche Rd W, Al Khubeirah, Abu Dhabi, UAE",
+    "phone": "+971 2 681 1900",
+    "email": "info.abudhabi.corniche@radissonblu.com",
+    "notes": "Verified: Corniche / Al Khubeirah, Abu Dhabi \u2014 confirmed via Radisson Hotels official website",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "InterContinental Abu Dhabi",
+    "category": "Hotels",
+    "address": "King Abdullah bin Abdul Aziz Al Saud Street, Abu Dhabi, UAE",
+    "phone": "+971 2 599 9330",
+    "email": "intercontinental.abudhabi@ihg.com",
+    "notes": "Verified: Al Bateen area, Abu Dhabi \u2014 confirmed via IHG official website",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "W Abu Dhabi Yas Island",
+    "category": "Hotels",
+    "address": "Yas Island, Abu Dhabi, UAE",
+    "phone": "+971 2 656 0000",
+    "email": "",
+    "notes": "Verified: Yas Island, Abu Dhabi \u2014 confirmed via Marriott/W Hotels official website",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Jannah Burj Al Sarab",
+    "category": "Hotels",
+    "address": "Al Meena Street, Al Zahiyah, Abu Dhabi, UAE",
+    "phone": "+971 2 201 6222",
+    "email": "",
+    "notes": "Verified: Al Zahiyah, Abu Dhabi \u2014 confirmed via Jannah Hotels official website",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "DAS Holding",
+    "category": "Holding Companies",
+    "address": "4th Floor, Dusit Thani Complex, Sultan Bin Zayed The First St (Muroor Road), Abu Dhabi, UAE",
+    "phone": "+971 2 414 1111",
+    "email": "Info@Dasholding.Ae",
+    "notes": "Verified: Muroor Road, Abu Dhabi \u2014 confirmed via DAS Holding official website",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Bloom Holding",
+    "category": "Holding Companies",
+    "address": "6th Floor, Bloom Central, Sheikh Rashid Bin Saeed Street, Abu Dhabi, UAE",
+    "phone": "+971 2 696 9500",
+    "email": "customerservice@bloomholding.com",
+    "notes": "Verified: Sheikh Rashid Bin Saeed Street, Abu Dhabi \u2014 confirmed via Bloom Holding official website",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Multiply Group",
+    "category": "Holding Companies",
+    "address": "Level 13, Al Khatem Tower, ADGM, Al Maryah Island, Abu Dhabi, UAE",
+    "phone": "+971 2 616 8200",
+    "email": "",
+    "notes": "Verified: Al Maryah Island, Abu Dhabi \u2014 confirmed via 2PointZero/Multiply Group official website",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Al Qudra Holding",
+    "category": "Holding Companies",
+    "address": "Sheikh Zayed Street, Ministries Complex, Abu Dhabi, UAE",
+    "phone": "+971 2 699 2222",
+    "email": "info@qudrah.com",
+    "notes": "Verified: Sheikh Zayed Street, Abu Dhabi \u2014 confirmed via multiple UAE business directories",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Abu Dhabi Investment Authority (ADIA)",
+    "category": "Holding Companies",
+    "address": "211 Corniche Road, Abu Dhabi, UAE",
+    "phone": "+971 2 415 0000",
+    "email": "",
+    "notes": "Verified: Corniche, Abu Dhabi \u2014 confirmed via ADIA official website adia.ae",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "G42 (Group 42)",
+    "category": "Holding Companies",
+    "address": "Tamouh Tower, Hazza Bin Zayed The First Street, Al Reem Island, Abu Dhabi, UAE",
+    "phone": "",
+    "email": "",
+    "notes": "Verified: Al Reem Island, Abu Dhabi \u2014 confirmed via 2GIS and G42 official website g42.ai",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Turner & Townsend",
+    "category": "Consultants",
+    "address": "International Tower, 23rd Floor, Al Mutamarat Street, Al Rawdah, Abu Dhabi, UAE",
+    "phone": "+971 2 441 0955",
+    "email": "",
+    "notes": "Verified: Al Rawdah, Abu Dhabi \u2014 confirmed via 2GIS and RICS directory",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "AECOM Middle East",
+    "category": "Consultants",
+    "address": "International Tower, Al Mutamarat Street, Capital Centre, Abu Dhabi, UAE",
+    "phone": "+971 2 613 4000",
+    "email": "",
+    "notes": "Verified: Capital Centre, Abu Dhabi \u2014 confirmed via arabplaces.ae and multiple UAE directories",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Parsons International",
+    "category": "Consultants",
+    "address": "City Gate Towers, Al Danah, Abu Dhabi, UAE",
+    "phone": "+971 2 614 2474",
+    "email": "",
+    "notes": "Verified: Al Danah, Abu Dhabi \u2014 confirmed via eercorporateservices.ae and Parsons official website",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Velocity Fitout Solutions",
+    "category": "Interior Companies",
+    "address": "Al Bidwah Street, Al Zahiyah, Abu Dhabi, UAE",
+    "phone": "+971 2 622 3599",
+    "email": "sales@vinsuae.com",
+    "notes": "Verified: Al Zahiyah, Abu Dhabi \u2014 confirmed via vinsuae.com official website",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Bon Marche Interior Design & Fit-Out",
+    "category": "Interior Companies",
+    "address": "Office 204, Tower 22, Al Maiyani Street, Al Zahia, Abu Dhabi, UAE",
+    "phone": "+971 50 103 6551",
+    "email": "bashar@bonmarche.vip",
+    "notes": "Verified: Al Zahia, Abu Dhabi \u2014 confirmed via bonmarche.vip official website",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "GA Architects & Engineers",
+    "category": "Design Companies",
+    "address": "17th Floor, Al Khazna Tower, Najda Street, Abu Dhabi, UAE",
+    "phone": "+971 2 672 1114",
+    "email": "gaae@gaae.ae",
+    "notes": "Verified: Najda Street, Abu Dhabi \u2014 confirmed via gaae.com official website and UAE directories",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "KN International Architects & Engineers",
+    "category": "Design Companies",
+    "address": "Suite 403, Al Masaood Tower, Sheikh Hamdan Street, Abu Dhabi, UAE",
+    "phone": "+971 2 631 1170",
+    "email": "",
+    "notes": "Verified: Sheikh Hamdan Street, Abu Dhabi \u2014 confirmed via kn-uae.com official website and 2GIS",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Aati (Al Tayer Insignia LLC)",
+    "category": "FF&E Buying Companies",
+    "address": "Shining Tower, 308 Mubarak Bin Mohammed Street, Al Khalidiyah, Abu Dhabi, UAE",
+    "phone": "+971 2 681 4727",
+    "email": "",
+    "notes": "Verified: Al Khalidiyah, Abu Dhabi \u2014 confirmed via Ligne Roset retail directory and Al Tayer Group official website",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Trenton General Contracting",
+    "category": "Joinery Companies",
+    "address": "Office 384, Mussafah M-43, Abu Dhabi, UAE",
+    "phone": "+971 2 877 6643",
+    "email": "",
+    "notes": "Verified: Mussafah M-43, Abu Dhabi \u2014 confirmed via Yellow Pages UAE directory",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Acta Wood Interior Design Works",
+    "category": "Joinery Companies",
+    "address": "Plot No. 08, Mussafah M-17, Abu Dhabi, UAE",
+    "phone": "+971 2 586 6154",
+    "email": "",
+    "notes": "Verified: Mussafah M-17, Abu Dhabi \u2014 confirmed via Yellow Pages UAE directory",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Al Badar Carpentry",
+    "category": "Joinery Companies",
+    "address": "Plot 8, Near Masafi R/A, Mussafah M-16, Abu Dhabi, UAE",
+    "phone": "+971 2 555 3442",
+    "email": "",
+    "notes": "Verified: Mussafah M-16, Abu Dhabi \u2014 confirmed via Yellow Pages UAE directory",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Al Ittamad Carpentry and Decor",
+    "category": "Joinery Companies",
+    "address": "Mussafah M-9, Abu Dhabi, UAE",
+    "phone": "+971 2 554 0238",
+    "email": "",
+    "notes": "Verified: Mussafah M-9, Abu Dhabi \u2014 confirmed via Yellow Pages UAE directory",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Al Radeem Aluminium and Carpentry",
+    "category": "Joinery Companies",
+    "address": "Mussafah M-38, Abu Dhabi, UAE",
+    "phone": "+971 2 551 3110",
+    "email": "",
+    "notes": "Verified: Mussafah M-38, Abu Dhabi \u2014 confirmed via Yellow Pages UAE directory",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Al Rwad Wood Works Factory",
+    "category": "Joinery Companies",
+    "address": "Mussafah M-5, Abu Dhabi, UAE",
+    "phone": "+971 2 551 1233",
+    "email": "",
+    "notes": "Verified: Mussafah M-5, Abu Dhabi \u2014 confirmed via Yellow Pages UAE directory",
+    "added_date": "2026-08-09"
+  },
+  {
+    "name": "Hayat Al Madina Carpentry and Decor Works",
+    "category": "Joinery Companies",
+    "address": "As Salami 6 Street, Mussafah M-9, Abu Dhabi, UAE",
+    "phone": "+971 2 448 7630",
+    "email": "",
+    "notes": "Verified: Mussafah M-9, Abu Dhabi \u2014 confirmed via Yellow Pages UAE and hayatcarpentry.com",
+    "added_date": "2026-08-09"
   }
 ]
