@@ -418,12 +418,12 @@ export default function App(){
               <td style={{...TD,minWidth:"130px"}}><Pill id={r.id} status={r.status} onChange={v=>setRows(x=>x.map(c=>c.id===r.id?{...c,status:v}:c))}/></td>
               <td style={{...TD,fontWeight:"600",minWidth:"180px"}}>{r.name}</td>
               <td style={{...TD,whiteSpace:"nowrap",textAlign:"center"}}>
-                {r.website
-                  ?<a href={r.website.startsWith("http")?r.website:"https://"+r.website} target="_blank" rel="noreferrer" title={r.website} style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"28px",height:"28px",borderRadius:"6px",background:"#EFF6FF",textDecoration:"none",fontSize:"15px",marginRight:"4px"}}>🌐</a>
+                {r.website&&r.website.trim()
+                  ?<a href={r.website.startsWith("http")?r.website.trim():"https://"+r.website.trim()} target="_blank" rel="noopener noreferrer" title={r.website} onClick={e=>e.stopPropagation()} style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"28px",height:"28px",borderRadius:"6px",background:"#EFF6FF",textDecoration:"none",fontSize:"15px",marginRight:"4px",cursor:"pointer",pointerEvents:"auto"}}>🌐</a>
                   :<span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"28px",height:"28px",borderRadius:"6px",background:"#F1F5F9",opacity:.35,fontSize:"15px",marginRight:"4px"}}>🌐</span>}
-                {r.maps
-                  ?<a href={r.maps} target="_blank" rel="noreferrer" title="Google Maps" style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"28px",height:"28px",borderRadius:"6px",background:"#F0FDF4",textDecoration:"none",fontSize:"15px"}}>📍</a>
-                  :<span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"28px",height:"28px",borderRadius:"6px",background:"#F1F5F9",opacity:.35,fontSize:"15px"}}>📍</span>}
+                {r.maps&&r.maps.trim()
+                  ?<a href={r.maps.trim()} target="_blank" rel="noopener noreferrer" title="Google Maps" onClick={e=>e.stopPropagation()} style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"28px",height:"28px",borderRadius:"6px",background:"#F0FDF4",textDecoration:"none",fontSize:"15px",cursor:"pointer",pointerEvents:"auto"}}>📍</a>
+                  :<span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"28px",height:"28px",borderRadius:"6px",background:"#F1F5F9",opacity:.35,fontSize:"15px"}}>📍</span>
               </td>
               <td style={{...TD,minWidth:"140px"}}><span style={{background:"#EFF6FF",color:"#1D4ED8",borderRadius:"20px",padding:"2px 10px",fontSize:"11px",fontWeight:"600"}}>{r.category}</span></td>
               <td style={{...TD,minWidth:"120px"}}><AssignPill id={r.id} value={r.assigned_to} assignees={sett.assignees} onSave={v=>setRows(x=>x.map(c=>c.id===r.id?{...c,assigned_to:v}:c))}/></td>
@@ -492,15 +492,15 @@ export default function App(){
                 <span style={{background:"#EFF6FF",color:"#1D4ED8",borderRadius:"20px",padding:"2px 10px",fontSize:"11px",fontWeight:"600"}}>{p.category}</span>
                 <span style={{background:"#F0FDF4",color:"#166534",borderRadius:"20px",padding:"2px 10px",fontSize:"11px"}}>{p.city||p.address||"Abu Dhabi"}</span>
               </div>
-              <div style={{fontSize:"13px",color:"#475569",display:"flex",gap:"12px",flexWrap:"wrap"}}>
+              <div style={{fontSize:"13px",color:"#475569",display:"flex",gap:"12px",flexWrap:"wrap",pointerEvents:"auto"}}>
                 {p.office_phone&&<a href={`tel:${p.office_phone}`} style={{color:"#2563EB"}}>📞 {p.office_phone}</a>}
                 {p.procurement_email&&<a href={`mailto:${p.procurement_email}`} style={{color:"#2563EB"}}>✉️ {p.procurement_email}</a>}
-                {(()=>{const u=href(p.website);return u
-                  ?<a href={u} target="_blank" rel="noopener noreferrer" title={u} style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"30px",height:"30px",borderRadius:"8px",background:"#EFF6FF",textDecoration:"none",fontSize:"16px",cursor:"pointer"}}>🌐</a>
-                  :<span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"30px",height:"30px",borderRadius:"8px",background:"#F1F5F9",fontSize:"16px",opacity:.3,cursor:"default"}}>🌐</span>})()}
-                {(()=>{const u=href(p.maps);return u
-                  ?<a href={u} target="_blank" rel="noopener noreferrer" title="Google Maps" style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"30px",height:"30px",borderRadius:"8px",background:"#F0FDF4",textDecoration:"none",fontSize:"16px",cursor:"pointer"}}>📍</a>
-                  :<span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"30px",height:"30px",borderRadius:"8px",background:"#F1F5F9",fontSize:"16px",opacity:.3,cursor:"default"}}>📍</span>})()}
+                {p.website&&p.website.trim()
+                  ?<a href={p.website.startsWith("http")?p.website.trim():"https://"+p.website.trim()} target="_blank" rel="noopener noreferrer" title={p.website} onClick={e=>e.stopPropagation()} style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"30px",height:"30px",borderRadius:"8px",background:"#EFF6FF",textDecoration:"none",fontSize:"16px",cursor:"pointer",pointerEvents:"auto"}}>🌐</a>
+                  :<span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"30px",height:"30px",borderRadius:"8px",background:"#F1F5F9",fontSize:"16px",opacity:.3}}>🌐</span>}
+                {p.maps&&p.maps.trim()
+                  ?<a href={p.maps.trim()} target="_blank" rel="noopener noreferrer" title="Google Maps" onClick={e=>e.stopPropagation()} style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"30px",height:"30px",borderRadius:"8px",background:"#F0FDF4",textDecoration:"none",fontSize:"16px",cursor:"pointer",pointerEvents:"auto"}}>📍</a>
+                  :<span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"30px",height:"30px",borderRadius:"8px",background:"#F1F5F9",fontSize:"16px",opacity:.3}}>📍</span>}
               </div>
               {p.notes&&<div style={{marginTop:"8px",fontSize:"12px",color:"#94A3B8"}}>{p.notes}</div>}
             </div>
