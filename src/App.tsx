@@ -110,8 +110,13 @@ function MapView({rows,mobile}:{rows:Co[];mobile:boolean}){
 
   // Use lat/lng from DB — no runtime geocoding
   const placed=[...new Map(rows.map(r=>[r.id,r])).values()]
-    .filter(r=>r.lat!=null&&r.lng!=null)
-    .map(r=>({...r,coords:[r.lat!,r.lng!] as [number,number]}))
+    .map(r=>{
+      const coords:([number,number]|null)=
+        r.lat!=null&&r.lng!=null?[r.lat,r.lng]:
+        extractCoords(r.maps)||distCoords(r.notes)||distCoords(r.address)||null
+      return coords?{...r,coords}:null
+    }).filter(Boolean) as (Co&{coords:[number,number]})[]
+  
   const allCoords=placed.map(r=>r.coords)
 
 
@@ -170,11 +175,11 @@ function MapView({rows,mobile}:{rows:Co[];mobile:boolean}){
                     {r.status&&SM[r.status]&&<span style={{background:SM[r.status].lc,color:SM[r.status].b,borderRadius:"20px",padding:"3px 10px",fontSize:"11px",fontWeight:"600"}}>{SM[r.status].l}</span>}
                   </div>
                   {r.procurement_officer&&<div style={{fontSize:"13px",color:"#475569",marginBottom:"4px"}}>👤 {r.procurement_officer}</div>}
-                  {r.office_phone&&<div style={{fontSize:"13px",marginBottom:"4px"}}><a href={`tel:${r.office_phone}`} style={{color:"#2563EB",textDecoration:"none"}}>📞 {r.office_phone}</a></div>}
-                  {r.procurement_email&&<div style={{fontSize:"13px",marginBottom:"8px"}}><a href={`mailto:${r.procurement_email}`} style={{color:"#2563EB",textDecoration:"none"}}>✉️ {r.procurement_email}</a></div>}
+                  {r.office_phone&&<div style={{fontSize:"13px",marginBottom:"4px"}}><a href={`tel:${r.office_phone}`} onClick={e=>e.stopPropagation()} style={{color:"#2563EB",textDecoration:"none",pointerEvents:"auto"}}>📞 {r.office_phone}</a></div>}
+                  {r.procurement_email&&<div style={{fontSize:"13px",marginBottom:"8px"}}><a href={`mailto:${r.procurement_email}`} onClick={e=>e.stopPropagation()} style={{color:"#2563EB",textDecoration:"none",pointerEvents:"auto"}}>✉️ {r.procurement_email}</a></div>}
                   <div style={{display:"flex",gap:"8px",marginTop:"6px"}}>
-                    {r.website&&<a href={r.website.startsWith("http")?r.website:"https://"+r.website} target="_blank" rel="noreferrer" style={{flex:1,background:"#1E293B",color:"#fff",borderRadius:"8px",padding:"9px 0",textAlign:"center",textDecoration:"none",fontSize:"13px",fontWeight:"600"}}>🌐 Website</a>}
-                    <a href={r.maps||("https://www.google.com/maps/search/"+encodeURIComponent(r.name+" Abu Dhabi"))} target="_blank" rel="noreferrer" style={{flex:1,background:"#16A34A",color:"#fff",borderRadius:"8px",padding:"9px 0",textAlign:"center",textDecoration:"none",fontSize:"13px",fontWeight:"600"}}>📍 Maps</a>
+                    {r.website&&<a href={r.website.startsWith("http")?r.website:"https://"+r.website} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()} style={{flex:1,background:"#1E293B",color:"#fff",borderRadius:"8px",padding:"9px 0",textAlign:"center",textDecoration:"none",fontSize:"13px",fontWeight:"600",pointerEvents:"auto"}}>🌐 Website</a>}
+                    <a href={r.maps||("https://www.google.com/maps/search/"+encodeURIComponent(r.name+" Abu Dhabi"))} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()} style={{flex:1,background:"#16A34A",color:"#fff",borderRadius:"8px",padding:"9px 0",textAlign:"center",textDecoration:"none",fontSize:"13px",fontWeight:"600",pointerEvents:"auto"}}>📍 Maps</a>
                   </div>
                 </div>
               </Popup>
@@ -448,8 +453,8 @@ export default function App(){
                 🤝 {r.meet_count||0}{r.last_met_at?<span style={{fontWeight:"400",fontSize:"11px",color:"#94A3B8",marginLeft:"4px"}}>Last: {new Date(r.last_met_at).toLocaleDateString("en-GB",{day:"2-digit",month:"short"})}</span>:null}
               </button>
               {(()=>{const mc=contacts.get(r.id)||[];const ec=mc.filter(c=>c.type==="email").length;const pc=mc.filter(c=>c.type==="phone").length;const tot=ec+pc;return<button onClick={()=>setContactModal(r)} style={{background:tot>0?"#EFF6FF":"#F8FAFC",color:tot>0?"#1D4ED8":"#94A3B8",borderRadius:"8px",padding:"6px 12px",border:"none",cursor:"pointer",fontSize:"13px",fontWeight:"600"}}>📇 Contacts{tot>0?` (${tot})`:""}</button>})()}
-              {r.website&&<a href={r.website.startsWith("http")?r.website:"https://"+r.website} target="_blank" rel="noreferrer" style={{background:"#1E293B",color:"#fff",borderRadius:"8px",padding:"6px 12px",textDecoration:"none",fontSize:"13px",fontWeight:"600"}}>🌐</a>}
-              {(r.maps||r.name)&&<a href={r.maps||`https://www.google.com/maps/search/${encodeURIComponent(r.name+' Abu Dhabi')}`} target="_blank" rel="noreferrer" style={{background:"#DCFCE7",color:"#16A34A",borderRadius:"8px",padding:"6px 12px",textDecoration:"none",fontSize:"13px",fontWeight:"600"}}>📍</a>}
+              {r.website&&<a href={r.website.startsWith("http")?r.website:"https://"+r.website} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()} style={{background:"#1E293B",color:"#fff",borderRadius:"8px",padding:"6px 12px",textDecoration:"none",fontSize:"13px",fontWeight:"600",pointerEvents:"auto"}}>🌐</a>}
+              {(r.maps||r.name)&&<a href={r.maps||`https://www.google.com/maps/search/${encodeURIComponent(r.name+' Abu Dhabi')}`} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()} style={{background:"#DCFCE7",color:"#16A34A",borderRadius:"8px",padding:"6px 12px",textDecoration:"none",fontSize:"13px",fontWeight:"600",pointerEvents:"auto"}}>📍</a>}
             </div>
             <div style={{display:"flex",gap:"6px",flexWrap:"wrap"}}>
               {CB.map((f,i)=><label key={f} style={{display:"flex",alignItems:"center",gap:"4px",fontSize:"12px",color:"#64748B",background:"#F8FAFC",borderRadius:"6px",padding:"4px 8px"}}>
@@ -472,8 +477,8 @@ export default function App(){
                 <span style={{background:"#F0FDF4",color:"#166534",borderRadius:"20px",padding:"2px 10px",fontSize:"11px"}}>{p.city||p.address||"Abu Dhabi"}</span>
               </div>
               <div style={{fontSize:"13px",color:"#475569",display:"flex",gap:"12px",flexWrap:"wrap",pointerEvents:"auto"}}>
-                {p.office_phone&&<a href={`tel:${p.office_phone}`} style={{color:"#2563EB"}}>📞 {p.office_phone}</a>}
-                {p.procurement_email&&<a href={`mailto:${p.procurement_email}`} style={{color:"#2563EB"}}>✉️ {p.procurement_email}</a>}
+                {p.office_phone&&<a href={`tel:${p.office_phone}`} onClick={e=>e.stopPropagation()} style={{color:"#2563EB",pointerEvents:"auto"}}>📞 {p.office_phone}</a>}
+                {p.procurement_email&&<a href={`mailto:${p.procurement_email}`} onClick={e=>e.stopPropagation()} style={{color:"#2563EB",pointerEvents:"auto"}}>✉️ {p.procurement_email}</a>}
                 {p.website&&p.website.trim()
                   ?<a href={p.website.startsWith("http")?p.website.trim():"https://"+p.website.trim()} target="_blank" rel="noopener noreferrer" title={p.website} onClick={e=>e.stopPropagation()} style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"30px",height:"30px",borderRadius:"8px",background:"#EFF6FF",textDecoration:"none",fontSize:"16px",cursor:"pointer",pointerEvents:"auto"}}>🌐</a>
                   :<span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"30px",height:"30px",borderRadius:"8px",background:"#F1F5F9",fontSize:"16px",opacity:.3}}>🌐</span>}
@@ -538,7 +543,7 @@ export default function App(){
               <div key={c.id} style={{display:"flex",gap:"8px",alignItems:"center",marginBottom:"8px",background:"#F8FAFC",borderRadius:"10px",padding:"10px 14px"}}>
                 <div style={{flex:1,minWidth:0}}>
                   <div style={{fontSize:"10px",color:"#94A3B8",fontWeight:"700",textTransform:"uppercase",letterSpacing:"0.5px",marginBottom:"2px"}}>{c.label||"Email"}</div>
-                  <a href={`mailto:${c.value}`} style={{color:"#2563EB",fontSize:"14px",fontWeight:"500",textDecoration:"none",wordBreak:"break-all"}}>{c.value}</a>
+                  <a href={`mailto:${c.value}`} onClick={e=>e.stopPropagation()} style={{color:"#2563EB",fontSize:"14px",fontWeight:"500",textDecoration:"none",wordBreak:"break-all",pointerEvents:"auto"}}>{c.value}</a>
                 </div>
                 <button onClick={()=>removeContact(contactModal.id,c.id)} style={{background:"#FEF2F2",color:"#DC2626",border:"none",borderRadius:"6px",width:"28px",height:"28px",cursor:"pointer",fontSize:"16px",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>×</button>
               </div>
@@ -558,7 +563,7 @@ export default function App(){
               <div key={c.id} style={{display:"flex",gap:"8px",alignItems:"center",marginBottom:"8px",background:"#F8FAFC",borderRadius:"10px",padding:"10px 14px"}}>
                 <div style={{flex:1,minWidth:0}}>
                   <div style={{fontSize:"10px",color:"#94A3B8",fontWeight:"700",textTransform:"uppercase",letterSpacing:"0.5px",marginBottom:"2px"}}>{c.label||"Phone"}</div>
-                  <a href={`tel:${c.value}`} style={{color:"#16A34A",fontSize:"14px",fontWeight:"500",textDecoration:"none"}}>{c.value}</a>
+                  <a href={`tel:${c.value}`} onClick={e=>e.stopPropagation()} style={{color:"#16A34A",fontSize:"14px",fontWeight:"500",textDecoration:"none",pointerEvents:"auto"}}>{c.value}</a>
                 </div>
                 <button onClick={()=>removeContact(contactModal.id,c.id)} style={{background:"#FEF2F2",color:"#DC2626",border:"none",borderRadius:"6px",width:"28px",height:"28px",cursor:"pointer",fontSize:"16px",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>×</button>
               </div>
