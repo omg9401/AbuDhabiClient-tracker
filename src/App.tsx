@@ -6,6 +6,7 @@ import"react-leaflet-cluster/lib/assets/MarkerCluster.css"
 import{useMap}from"react-leaflet"
 import L from"leaflet"
 import"leaflet/dist/leaflet.css"
+import*as XLSX from"xlsx"
 import{supabase}from"./lib/supabase"
 
 type Co={id:number;name:string;category:string;address:string;website:string;maps:string;procurement_email:string;office_phone:string;procurement_officer:string;notes:string;physical_meeting_1:boolean;call_1:boolean;call_2:boolean;call_3:boolean;physical_meeting_2:boolean;status:string|null;assigned_to:string|null;added_date:string}
@@ -174,6 +175,31 @@ export default function App(){
     if(sortBy==="status")return(a.status??"zzz").localeCompare(b.status??"zzz")
     return a.name.localeCompare(b.name)
   })
+  const exportXLSX=()=>{
+    const label=(v:string|null)=>v?(SM[v]?.l??v):""
+    const rows=display.map(r=>({
+      "Company":r.name,
+      "Category":r.category,
+      "Officer":r.procurement_officer||"",
+      "Phone":r.office_phone||"",
+      "Email":r.procurement_email||"",
+      "Website":r.website||"",
+      "Address":r.address||"",
+      "Notes":r.notes||"",
+      "Status":label(r.status),
+      "Assigned To":r.assigned_to||"",
+      "Meet 1":r.physical_meeting_1?"✓":"",
+      "Call 1":r.call_1?"✓":"",
+      "Call 2":r.call_2?"✓":"",
+      "Call 3":r.call_3?"✓":"",
+      "Meet 2":r.physical_meeting_2?"✓":""
+    }))
+    const ws=XLSX.utils.json_to_sheet(rows)
+    ws["!cols"]=[{wch:30},{wch:22},{wch:22},{wch:18},{wch:28},{wch:28},{wch:18},{wch:40},{wch:14},{wch:14},{wch:8},{wch:8},{wch:8},{wch:8},{wch:8}]
+    const wb=XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb,ws,"Companies")
+    XLSX.writeFile(wb,`abu-dhabi-companies-${new Date().toISOString().split("T")[0]}.xlsx`)
+  }
 
   if(!auth)return(
     <div style={{minHeight:"100vh",background:"#0F172A",display:"flex",alignItems:"center",justifyContent:"center",padding:"16px"}}>
@@ -213,6 +239,7 @@ export default function App(){
           <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="🔍 Search..." style={inp({width:"150px",marginBottom:"0",fontSize:"12px",padding:"7px 10px"})}/>
         </>}
         <button onClick={()=>setSettM(true)} style={{...btnS("#334155"),padding:"7px 12px"}}>⚙</button>
+        {tab==="main"&&<button onClick={exportXLSX} style={{...btnS("#059669"),padding:"7px 14px"}}>⬇ Export</button>}
         {tab==="main"&&<button onClick={()=>{setEditId(null);setForm({...E0,category:sett.categories[0]||DC[0],address:sett.emirates[0]||DE[0]});setModal(true)}} style={{...btnS("#3B82F6"),padding:"7px 14px"}}>+ Add</button>}
       </div>
 
