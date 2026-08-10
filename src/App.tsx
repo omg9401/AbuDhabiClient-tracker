@@ -56,46 +56,97 @@ function FitAll({coords}:{coords:[number,number][]}){
   return null
 }
 
-function MapView({rows}:{rows:Co[]}){
+function FlyTo({target}:{target:[number,number]|null}){
+  const map=useMap()
+  useEffect(()=>{if(target)map.flyTo(target,15,{duration:1.5})},[target])
+  return null
+}
+
+function MapView({rows,mobile}:{rows:Co[];mobile:boolean}){
+  const[userPos,setUserPos]=useState<[number,number]|null>(null)
+  const[flyTarget,setFlyTarget]=useState<[number,number]|null>(null)
+  const[locating,setLocating]=useState(false)
+  const[locErr,setLocErr]=useState<string|null>(null)
+
   const placed=rows.map(r=>({...r,coords:getCoords(r)}))
   const allCoords=placed.map(r=>r.coords) as [number,number][]
+
+  const locate=()=>{
+    if(!navigator.geolocation){setLocErr("GPS not supported");return}
+    setLocating(true);setLocErr(null)
+    navigator.geolocation.getCurrentPosition(
+      pos=>{
+        const c:[number,number]=[pos.coords.latitude,pos.coords.longitude]
+        setUserPos(c);setFlyTarget(c);setLocating(false)
+      },
+      err=>{
+        setLocating(false)
+        setLocErr(err.code===1?"Location access denied":"Could not get location")
+        setTimeout(()=>setLocErr(null),3500)
+      },
+      {timeout:10000,enableHighAccuracy:true}
+    )
+  }
+
+  const userIcon=L.divIcon({html:`<div style="width:20px;height:20px;border-radius:50%;background:#2563EB;border:3px solid white;box-shadow:0 0 0 4px rgba(37,99,235,.25),0 2px 8px rgba(0,0,0,.3)"></div>`,className:"",iconSize:[20,20],iconAnchor:[10,10],popupAnchor:[0,-12]})
+
+  const clusterIcon=(cluster:any)=>L.divIcon({
+    html:`<div style="width:38px;height:38px;border-radius:50%;background:#1E293B;color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;font-family:system-ui;box-shadow:0 2px 10px rgba(0,0,0,.35);border:2.5px solid white">${cluster.getChildCount()}</div>`,
+    className:"",iconSize:[38,38],iconAnchor:[19,19]
+  })
+
+  const mapH=mobile?"calc(100dvh - 130px)":"calc(100dvh - 58px)"
+
   return(
-    <div style={{flex:1,position:"relative"}}>
-      <div style={{position:"absolute",top:12,left:"50%",transform:"translateX(-50%)",zIndex:999,background:"rgba(255,255,255,.92)",borderRadius:"24px",padding:"6px 16px",fontSize:"12px",color:"#64748B",boxShadow:"0 2px 8px rgba(0,0,0,.12)",whiteSpace:"nowrap"}}>
-        {rows.length} companies · tap pin to open
+    <div style={{position:"relative",height:mapH,width:"100%"}}>
+      {/* Top pill */}
+      <div style={{position:"absolute",top:12,left:"50%",transform:"translateX(-50%)",zIndex:999,background:"rgba(255,255,255,.93)",borderRadius:"24px",padding:"6px 16px",fontSize:"12px",color:"#64748B",boxShadow:"0 2px 8px rgba(0,0,0,.12)",whiteSpace:"nowrap",pointerEvents:"none"}}>
+        {rows.length} companies · tap cluster to expand
       </div>
-      <div style={{position:"absolute",bottom:24,left:12,zIndex:999,background:"rgba(255,255,255,.92)",borderRadius:"12px",padding:"10px 14px",fontSize:"11px",boxShadow:"0 2px 8px rgba(0,0,0,.12)"}}>
+
+      {/* Locate Me button */}
+      <button onClick={locate} disabled={locating} style={{position:"absolute",top:12,right:12,zIndex:999,background:"#fff",border:"none",borderRadius:"12px",padding:"10px 14px",cursor:"pointer",boxShadow:"0 2px 10px rgba(0,0,0,.18)",fontSize:"13px",fontWeight:"700",color:locating?"#94A3B8":"#1E293B",display:"flex",alignItems:"center",gap:"6px",minWidth:"44px"}}>
+        {locating?"⏳":"📍"}{!mobile&&(locating?" Locating…":" Locate Me")}
+      </button>
+
+      {/* Error toast */}
+      {locErr&&<div style={{position:"absolute",top:60,right:12,zIndex:999,background:"#FEF2F2",color:"#DC2626",borderRadius:"10px",padding:"8px 14px",fontSize:"12px",fontWeight:"600",boxShadow:"0 2px 8px rgba(0,0,0,.12)"}}>{locErr}</div>}
+
+      {/* Category legend */}
+      <div style={{position:"absolute",bottom:mobile?32:24,left:12,zIndex:999,background:"rgba(255,255,255,.93)",borderRadius:"12px",padding:"10px 14px",fontSize:"11px",boxShadow:"0 2px 8px rgba(0,0,0,.12)",maxHeight:"40vh",overflowY:"auto"}}>
         {Object.entries(CAT_CLR).map(([k,v])=><div key={k} style={{display:"flex",alignItems:"center",gap:"6px",marginBottom:"3px"}}>
           <div style={{width:10,height:10,borderRadius:"50%",background:v,flexShrink:0}}/>
           <span style={{color:"#334155"}}>{k}</span>
         </div>)}
       </div>
-      <MapContainer center={[24.4539,54.3773]} zoom={12} style={{width:"100%",height:"100%"}} zoomControl={true}>
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; OpenStreetMap'/>
+
+      <MapContainer center={[24.4539,54.3773]} zoom={12} style={{width:"100%",height:"100%"}} zoomControl={!mobile}>
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap contributors"/>
         <FitAll coords={allCoords}/>
-        <MarkerClusterGroup chunkedLoading maxClusterRadius={60}>
-        {placed.map(r=>(
-          <Marker key={r.id} position={r.coords as any} icon={mkIcon(r.category)}>
-            <Popup maxWidth={280}>
-              <div style={{fontFamily:"system-ui,sans-serif",minWidth:"220px"}}>
-                <div style={{fontWeight:"700",fontSize:"15px",color:"#1E293B",marginBottom:"4px"}}>{r.name}</div>
-                <div style={{display:"flex",gap:"6px",marginBottom:"8px",flexWrap:"wrap"}}>
-                  <span style={{background:CAT_CLR[r.category]||"#64748B",color:"#fff",borderRadius:"20px",padding:"2px 8px",fontSize:"11px",fontWeight:"600"}}>{r.category}</span>
-                  {r.status&&<span style={{background:SM[r.status]?.lc,color:SM[r.status]?.b,borderRadius:"20px",padding:"2px 8px",fontSize:"11px",fontWeight:"600"}}>{SM[r.status]?.l}</span>}
+        <FlyTo target={flyTarget}/>
+        <MarkerClusterGroup iconCreateFunction={clusterIcon} chunkedLoading maxClusterRadius={60} showCoverageOnHover={false}>
+          {placed.map(r=>(
+            <Marker key={r.id} position={r.coords as any} icon={mkIcon(r.category)}>
+              <Popup maxWidth={290} autoPan={true}>
+                <div style={{fontFamily:"system-ui,sans-serif",minWidth:"230px"}}>
+                  <div style={{fontWeight:"700",fontSize:"15px",color:"#1E293B",marginBottom:"6px",lineHeight:"1.3"}}>{r.name}</div>
+                  <div style={{display:"flex",gap:"6px",marginBottom:"10px",flexWrap:"wrap"}}>
+                    <span style={{background:CAT_CLR[r.category]||"#64748B",color:"#fff",borderRadius:"20px",padding:"3px 10px",fontSize:"11px",fontWeight:"600"}}>{r.category}</span>
+                    {r.status&&SM[r.status]&&<span style={{background:SM[r.status].lc,color:SM[r.status].b,borderRadius:"20px",padding:"3px 10px",fontSize:"11px",fontWeight:"600"}}>{SM[r.status].l}</span>}
+                  </div>
+                  {r.procurement_officer&&<div style={{fontSize:"13px",color:"#475569",marginBottom:"4px"}}>👤 {r.procurement_officer}</div>}
+                  {r.office_phone&&<div style={{fontSize:"13px",marginBottom:"4px"}}><a href={`tel:${r.office_phone}`} style={{color:"#2563EB",textDecoration:"none"}}>📞 {r.office_phone}</a></div>}
+                  {r.procurement_email&&<div style={{fontSize:"13px",marginBottom:"8px"}}><a href={`mailto:${r.procurement_email}`} style={{color:"#2563EB",textDecoration:"none"}}>✉️ {r.procurement_email}</a></div>}
+                  <div style={{display:"flex",gap:"8px",marginTop:"6px"}}>
+                    {r.website&&<a href={r.website.startsWith("http")?r.website:"https://"+r.website} target="_blank" rel="noreferrer" style={{flex:1,background:"#1E293B",color:"#fff",borderRadius:"8px",padding:"9px 0",textAlign:"center",textDecoration:"none",fontSize:"13px",fontWeight:"600"}}>🌐 Website</a>}
+                    <a href={r.maps||("https://www.google.com/maps/search/"+encodeURIComponent(r.name+" Abu Dhabi"))} target="_blank" rel="noreferrer" style={{flex:1,background:"#16A34A",color:"#fff",borderRadius:"8px",padding:"9px 0",textAlign:"center",textDecoration:"none",fontSize:"13px",fontWeight:"600"}}>📍 Maps</a>
+                  </div>
                 </div>
-                {r.procurement_officer&&<div style={{fontSize:"13px",color:"#475569",marginBottom:"3px"}}>👤 {r.procurement_officer}</div>}
-                {r.office_phone&&<div style={{fontSize:"13px",marginBottom:"3px"}}><a href={`tel:${r.office_phone}`} style={{color:"#2563EB"}}>📞 {r.office_phone}</a></div>}
-                {r.procurement_email&&<div style={{fontSize:"13px",marginBottom:"3px"}}><a href={`mailto:${r.procurement_email}`} style={{color:"#2563EB"}}>✉️ {r.procurement_email}</a></div>}
-                <div style={{display:"flex",gap:"8px",marginTop:"10px"}}>
-                  {r.website&&<a href={r.website.startsWith("http")?r.website:"https://"+r.website} target="_blank" rel="noreferrer" style={{flex:1,background:"#1E293B",color:"#fff",borderRadius:"8px",padding:"8px 0",textAlign:"center",textDecoration:"none",fontSize:"13px",fontWeight:"600"}}>🌐 Website</a>}
-                  {r.maps&&<a href={r.maps} target="_blank" rel="noreferrer" style={{flex:1,background:"#16A34A",color:"#fff",borderRadius:"8px",padding:"8px 0",textAlign:"center",textDecoration:"none",fontSize:"13px",fontWeight:"600"}}>📍 Maps</a>}
-                  {!r.maps&&<a href={`https://www.google.com/maps/search/${encodeURIComponent(r.name+' Abu Dhabi')}`} target="_blank" rel="noreferrer" style={{flex:1,background:"#16A34A",color:"#fff",borderRadius:"8px",padding:"8px 0",textAlign:"center",textDecoration:"none",fontSize:"13px",fontWeight:"600"}}>📍 Maps</a>}
-                </div>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
-              </MarkerClusterGroup>
+              </Popup>
+            </Marker>
+          ))}
+        </MarkerClusterGroup>
+        {userPos&&<Marker position={userPos} icon={userIcon}><Popup><div style={{fontFamily:"system-ui",fontWeight:"700",color:"#2563EB",padding:"4px"}}>📍 You are here</div></Popup></Marker>}
       </MapContainer>
     </div>
   )
@@ -259,8 +310,8 @@ export default function App(){
       </div>}
 
       {/* Map Tab */}
-      {tab==="map"&&<div style={{flex:1,display:"flex",flexDirection:"column",height:mobile?"calc(100vh - 130px)":"calc(100vh - 60px)"}}>
-        <MapView rows={rows}/>
+      {tab==="map"&&<div>
+        <MapView rows={rows} mobile={mobile}/>
       </div>}
 
       {/* Main Tab - Desktop Table */}
