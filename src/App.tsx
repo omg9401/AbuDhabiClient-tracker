@@ -21,19 +21,57 @@ const SM:Record<string,typeof ST[0]>=Object.fromEntries(ST.map(s=>[s.v,s]))
 const CB=["physical_meeting_1","call_1","call_2","call_3","physical_meeting_2"]
 const CBL=["Meet1","Call1","Call2","Call3","Meet2"]
 const CAT_CLR:Record<string,string>={"Interior Companies":"#7C3AED","Design Companies":"#2563EB","Consultants":"#0891B2","Hotels":"#D97706","Holding Companies":"#16A34A","Royal HH Offices":"#DC2626","FF&E Buying Companies":"#9333EA","Joinery Companies":"#EA580C"}
-const DIST:Record<string,[number,number]>={"mussafah":[24.3419,54.5046],"al danah":[24.4672,54.3628],"al zahiyah":[24.4948,54.3744],"tourist club":[24.4948,54.3744],"corniche":[24.4613,54.3220],"al bateen":[24.4430,54.3201],"khalidiyah":[24.4547,54.3481],"al reem":[24.4987,54.4024],"reem island":[24.4987,54.4024],"khalifa city":[24.3992,54.5367],"yas island":[24.4671,54.6076],"saadiyat":[24.5420,54.4350],"al maryah":[24.4859,54.3848],"al ain":[24.2075,55.7447],"al karamah":[24.4680,54.3540],"al mushrif":[24.4367,54.3891],"al rawdah":[24.4690,54.3760],"al muntazah":[24.4530,54.3800],"hamdan":[24.4760,54.3660],"airport road":[24.4400,54.4000],"al marina":[24.4632,54.3170],"rabdan":[24.4200,54.3900],"madinat zayed":[24.4580,54.3380],"al manhal":[24.4700,54.3700]}
+const DIST:Record<string,[number,number]>={
+  // Mussafah industrial zones
+  "mussafah":[24.3419,54.5046],"musaffah":[24.3419,54.5046],"mussafah industrial":[24.3366,54.4945],
+  "mw5":[24.3390,54.5014],"mw6":[24.3375,54.5028],"mw10":[24.3420,54.5060],"mw11":[24.3430,54.5070],
+  "icad":[24.3311,54.5250],"khalifa industrial":[24.3311,54.5250],
+  // City centre districts
+  "al danah":[24.4672,54.3628],"al zahiyah":[24.4948,54.3744],"tourist club":[24.4948,54.3744],
+  "corniche":[24.4613,54.3220],"al bateen":[24.4430,54.3201],"khalidiyah":[24.4547,54.3481],
+  "al khalidiyah":[24.4547,54.3481],"al karamah":[24.4680,54.3540],"al mushrif":[24.4367,54.3891],
+  "al rawdah":[24.4690,54.3760],"al muntazah":[24.4530,54.3800],"al manhal":[24.4700,54.3700],
+  "al markaziyah":[24.4870,54.3650],"central":[24.4870,54.3650],
+  "hamdan":[24.4760,54.3660],"hamdan street":[24.4760,54.3660],
+  "airport road":[24.4400,54.4000],"salam street":[24.4830,54.3700],
+  "electra":[24.4880,54.3720],"electra street":[24.4880,54.3720],
+  "al nasr":[24.4550,54.3950],"al noor":[24.4560,54.3700],
+  "madinat zayed":[24.4580,54.3380],"al marina":[24.4632,54.3170],"al bateen airport":[24.4285,54.4590],
+  "rabdan":[24.4200,54.3900],"al rabdan":[24.4200,54.3900],
+  // Islands & waterfront
+  "al reem":[24.4987,54.4024],"reem island":[24.4987,54.4024],"al reem island":[24.4987,54.4024],
+  "al maryah":[24.4859,54.3848],"al maryah island":[24.4859,54.3848],"sowwah":[24.4859,54.3848],
+  "saadiyat":[24.5420,54.4350],"saadiyat island":[24.5420,54.4350],"louvre":[24.5338,54.3982],
+  "yas island":[24.4671,54.6076],"yas":[24.4671,54.6076],"ferrari world":[24.4837,54.6074],
+  "al lulu":[24.4713,54.3455],"lulu island":[24.4713,54.3455],
+  // Suburbs & outlying
+  "khalifa city":[24.3992,54.5367],"khalifa city a":[24.3992,54.5367],
+  "al raha":[24.3795,54.5897],"al raha beach":[24.3795,54.5897],
+  "shahama":[24.3060,54.5320],"al shahama":[24.3060,54.5320],
+  "baniyas":[24.3227,54.6373],"al bahia":[24.3750,54.5670],
+  "mbz city":[24.4287,54.5619],"mohammed bin zayed":[24.4287,54.5619],
+  "shakhbout":[24.3500,54.5800],"al falah":[24.2750,54.5500],
+  "al samha":[24.3900,54.5800],"mafraq":[24.2790,54.5900],
+  // Al Ain
+  "al ain":[24.2075,55.7447],"al jimi":[24.2266,55.7425],"al muwaiji":[24.2100,55.7300],
+  "al khrair":[24.0911,55.7483]
+}
 const IS=typeof window!=="undefined"&&sessionStorage.getItem("auth")==="1"
 const inp=(extra?:any)=>({width:"100%",padding:"9px 12px",border:"1px solid #CBD5E1",borderRadius:"8px",fontSize:"14px",color:"#1E293B",background:"#fff",boxSizing:"border-box" as const,marginBottom:"10px",...extra})
 const btnS=(bg:string,c="white",p="10px 18px")=>({background:bg,color:c,border:"none",borderRadius:"8px",padding:p,cursor:"pointer",fontWeight:"600",fontSize:"13px"} as const)
 
 function extractCoords(url:string|null):[number,number]|null{
   if(!url)return null
-  const m=url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/)
-  if(m)return[parseFloat(m[1]),parseFloat(m[2])]
-  const m2=url.match(/ll=(-?\d+\.\d+),(-?\d+\.\d+)/)
-  if(m2)return[parseFloat(m2[1]),parseFloat(m2[2])]
-  const m3=url.match(/q=(-?\d+\.\d+),(-?\d+\.\d+)/)
-  if(m3)return[parseFloat(m3[1]),parseFloat(m3[2])]
+  // Most precise: pin location embedded in data parameter  (e.g. !3d24.4539!4d54.3773)
+  const md=url.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/)
+  if(md)return[parseFloat(md[1]),parseFloat(md[2])]
+  // Map centre from share URL  (/@lat,lng,zoom)
+  const mc=url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/)
+  if(mc)return[parseFloat(mc[1]),parseFloat(mc[2])]
+  // ?ll=  ?q=  ?daddr=  patterns
+  for(const p of[/[?&]ll=(-?\d+\.\d+),(-?\d+\.\d+)/,/[?&]q=(-?\d+\.\d+),(-?\d+\.\d+)/,/[?&]daddr=(-?\d+\.\d+),(-?\d+\.\d+)/]){
+    const m=url.match(p);if(m)return[parseFloat(m[1]),parseFloat(m[2])]
+  }
   return null
 }
 function distCoords(text:string|null):[number,number]|null{
@@ -47,7 +85,10 @@ function getCoords(c:Co):[number,number]{
 }
 function mkIcon(cat:string){
   const col=CAT_CLR[cat]||"#64748B"
-  return L.divIcon({html:`<div style="width:14px;height:14px;border-radius:50%;background:${col};border:2.5px solid white;box-shadow:0 2px 6px rgba(0,0,0,.4)"></div>`,className:"",iconSize:[14,14],iconAnchor:[7,7],popupAnchor:[0,-10]})
+  return L.divIcon({
+    html:`<div style="width:16px;height:16px;border-radius:50%;background:${col};border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,.45);transform:translate(-50%,-50%)"></div>`,
+    className:"",iconSize:[1,1],iconAnchor:[0,0],popupAnchor:[8,-8]
+  })
 }
 
 function FitAll({coords}:{coords:[number,number][]}){
@@ -67,45 +108,104 @@ function MapView({rows,mobile}:{rows:Co[];mobile:boolean}){
   const[flyTarget,setFlyTarget]=useState<[number,number]|null>(null)
   const[locating,setLocating]=useState(false)
   const[locErr,setLocErr]=useState<string|null>(null)
+  // Nominatim geocode cache: id → [lat,lng]
+  const[geocoded,setGeocoded]=useState<Map<number,[number,number]>>(new Map())
 
-  const placed=rows.map(r=>({...r,coords:getCoords(r)}))
-  const allCoords=placed.map(r=>r.coords) as [number,number][]
+  // Async geocode companies that have no exact coords from their Maps URL
+  useEffect(()=>{
+    let alive=true
+    const queue=rows.filter(r=>!extractCoords(r.maps)&&!distCoords(r.notes)&&!distCoords(r.address))
+    ;(async()=>{
+      for(const r of queue){
+        if(!alive||geocoded.has(r.id))continue
+        try{
+          const q=encodeURIComponent(r.name+" Abu Dhabi UAE")
+          const res=await fetch(`https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1&countrycodes=ae`,
+            {headers:{"Accept-Language":"en","User-Agent":"AbuDhabiClientTracker/1.0"}})
+          const d=await res.json()
+          if(d?.[0]){
+            const c:[number,number]=[parseFloat(d[0].lat),parseFloat(d[0].lon)]
+            // Sanity check: must be in UAE roughly
+            if(c[0]>22&&c[0]<26.5&&c[1]>51&&c[1]<56.5){
+              setGeocoded(prev=>new Map(prev).set(r.id,c))
+            }
+          }
+        }catch{}
+        await new Promise(ok=>setTimeout(ok,300))
+      }
+    })()
+    return()=>{alive=false}
+  },[rows])
+
+  // Resolve coordinates: Maps URL > Nominatim cache > district keywords > jitter
+  const placed=rows.map(r=>{
+    const coords=extractCoords(r.maps)||geocoded.get(r.id)||distCoords(r.notes)||distCoords(r.address)||
+      [24.4539+(Math.random()-.5)*.018,54.3773+(Math.random()-.5)*.018] as [number,number]
+    return{...r,coords:coords as [number,number]}
+  })
+  const allCoords=placed.map(r=>r.coords)
+
+  // Build lat,lng → category map for cluster coloring
+  const coordCat=new Map<string,string>(
+    placed.map(r=>[r.coords[0].toFixed(5)+","+r.coords[1].toFixed(5),r.category])
+  )
 
   const locate=()=>{
     if(!navigator.geolocation){setLocErr("GPS not supported");return}
     setLocating(true);setLocErr(null)
     navigator.geolocation.getCurrentPosition(
-      pos=>{
-        const c:[number,number]=[pos.coords.latitude,pos.coords.longitude]
-        setUserPos(c);setFlyTarget(c);setLocating(false)
-      },
-      err=>{
-        setLocating(false)
-        setLocErr(err.code===1?"Location access denied":"Could not get location")
-        setTimeout(()=>setLocErr(null),3500)
-      },
+      pos=>{const c:[number,number]=[pos.coords.latitude,pos.coords.longitude];setUserPos(c);setFlyTarget(c);setLocating(false)},
+      err=>{setLocating(false);setLocErr(err.code===1?"Location access denied":"Could not get location");setTimeout(()=>setLocErr(null),3500)},
       {timeout:10000,enableHighAccuracy:true}
     )
   }
 
-  const userIcon=L.divIcon({html:`<div style="width:20px;height:20px;border-radius:50%;background:#2563EB;border:3px solid white;box-shadow:0 0 0 4px rgba(37,99,235,.25),0 2px 8px rgba(0,0,0,.3)"></div>`,className:"",iconSize:[20,20],iconAnchor:[10,10],popupAnchor:[0,-12]})
+  const userIcon=L.divIcon({html:`<div style="width:20px;height:20px;border-radius:50%;background:#2563EB;border:3px solid white;box-shadow:0 0 0 4px rgba(37,99,235,.25),0 2px 8px rgba(0,0,0,.3);transform:translate(-50%,-50%)"></div>`,className:"",iconSize:[1,1],iconAnchor:[0,0],popupAnchor:[10,-10]})
 
-  const clusterIcon=(cluster:any)=>L.divIcon({
-    html:`<div style="width:38px;height:38px;border-radius:50%;background:#1E293B;color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;font-family:system-ui;box-shadow:0 2px 10px rgba(0,0,0,.35);border:2.5px solid white">${cluster.getChildCount()}</div>`,
-    className:"",iconSize:[38,38],iconAnchor:[19,19]
-  })
+  // Conic-gradient cluster icon: outer ring shows category proportions, inner badge shows count
+  const clusterIcon=(cluster:any)=>{
+    const markers=cluster.getAllChildMarkers()
+    const counts:Record<string,number>={}
+    markers.forEach((m:any)=>{
+      const ll=m.getLatLng()
+      const key=ll.lat.toFixed(5)+","+ll.lng.toFixed(5)
+      const cat=coordCat.get(key)||"Other"
+      counts[cat]=(counts[cat]||0)+1
+    })
+    const total=markers.length
+    const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1])
+    // Build conic-gradient segments
+    let grad="conic-gradient("
+    let pct=0
+    sorted.forEach(([cat,n],i)=>{
+      const col=CAT_CLR[cat]||"#64748B"
+      const end=pct+(n/total)*100
+      grad+=`${col} ${pct.toFixed(1)}% ${end.toFixed(1)}%`
+      pct=end
+      if(i<sorted.length-1)grad+=","
+    })
+    grad+=")"
+    const sz=total<10?38:total<25?46:56
+    const fsz=total<100?13:11
+    const inner=sz-14
+    return L.divIcon({
+      html:`<div style="width:${sz}px;height:${sz}px;border-radius:50%;background:${grad};display:flex;align-items:center;justify-content:center;box-shadow:0 3px 12px rgba(0,0,0,.35);border:2.5px solid white">` +
+        `<div style="width:${inner}px;height:${inner}px;border-radius:50%;background:rgba(15,23,42,.75);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:${fsz}px;font-family:system-ui">${total}</div></div>`,
+      className:"",iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]
+    })
+  }
 
   const mapH=mobile?"calc(100dvh - 130px)":"calc(100dvh - 58px)"
 
   return(
     <div style={{position:"relative",height:mapH,width:"100%"}}>
       {/* Top pill */}
-      <div style={{position:"absolute",top:12,left:"50%",transform:"translateX(-50%)",zIndex:999,background:"rgba(255,255,255,.93)",borderRadius:"24px",padding:"6px 16px",fontSize:"12px",color:"#64748B",boxShadow:"0 2px 8px rgba(0,0,0,.12)",whiteSpace:"nowrap",pointerEvents:"none"}}>
+      <div style={{position:"absolute",top:12,left:"50%",transform:"translateX(-50%)",zIndex:999,background:"rgba(255,255,255,.95)",borderRadius:"24px",padding:"6px 16px",fontSize:"12px",color:"#64748B",boxShadow:"0 2px 8px rgba(0,0,0,.12)",whiteSpace:"nowrap",pointerEvents:"none"}}>
         {rows.length} companies · tap cluster to expand
       </div>
 
       {/* Locate Me button */}
-      <button onClick={locate} disabled={locating} style={{position:"absolute",top:12,right:12,zIndex:999,background:"#fff",border:"none",borderRadius:"12px",padding:"10px 14px",cursor:"pointer",boxShadow:"0 2px 10px rgba(0,0,0,.18)",fontSize:"13px",fontWeight:"700",color:locating?"#94A3B8":"#1E293B",display:"flex",alignItems:"center",gap:"6px",minWidth:"44px"}}>
+      <button onClick={locate} disabled={locating} style={{position:"absolute",top:12,right:12,zIndex:999,background:"#fff",border:"none",borderRadius:"12px",padding:"10px 14px",cursor:"pointer",boxShadow:"0 2px 10px rgba(0,0,0,.18)",fontSize:"13px",fontWeight:"700",color:locating?"#94A3B8":"#1E293B",display:"flex",alignItems:"center",gap:"6px"}}>
         {locating?"⏳":"📍"}{!mobile&&(locating?" Locating…":" Locate Me")}
       </button>
 
@@ -113,20 +213,23 @@ function MapView({rows,mobile}:{rows:Co[];mobile:boolean}){
       {locErr&&<div style={{position:"absolute",top:60,right:12,zIndex:999,background:"#FEF2F2",color:"#DC2626",borderRadius:"10px",padding:"8px 14px",fontSize:"12px",fontWeight:"600",boxShadow:"0 2px 8px rgba(0,0,0,.12)"}}>{locErr}</div>}
 
       {/* Category legend */}
-      <div style={{position:"absolute",bottom:mobile?32:24,left:12,zIndex:999,background:"rgba(255,255,255,.93)",borderRadius:"12px",padding:"10px 14px",fontSize:"11px",boxShadow:"0 2px 8px rgba(0,0,0,.12)",maxHeight:"40vh",overflowY:"auto"}}>
-        {Object.entries(CAT_CLR).map(([k,v])=><div key={k} style={{display:"flex",alignItems:"center",gap:"6px",marginBottom:"3px"}}>
-          <div style={{width:10,height:10,borderRadius:"50%",background:v,flexShrink:0}}/>
-          <span style={{color:"#334155"}}>{k}</span>
-        </div>)}
+      <div style={{position:"absolute",bottom:mobile?32:24,left:12,zIndex:999,background:"rgba(255,255,255,.95)",borderRadius:"12px",padding:"10px 14px",fontSize:"11px",boxShadow:"0 2px 8px rgba(0,0,0,.12)",maxHeight:"40vh",overflowY:"auto"}}>
+        {Object.entries(CAT_CLR).map(([k,v])=>(
+          <div key={k} style={{display:"flex",alignItems:"center",gap:"7px",marginBottom:"4px"}}>
+            <div style={{width:12,height:12,borderRadius:"50%",background:v,flexShrink:0,border:"2px solid white",boxShadow:"0 1px 3px rgba(0,0,0,.3)"}}/>
+            <span style={{color:"#1E293B",fontWeight:"500"}}>{k}</span>
+          </div>
+        ))}
+        <div style={{borderTop:"1px solid #E2E8F0",marginTop:"6px",paddingTop:"6px",color:"#94A3B8",fontSize:"10px"}}>Cluster ring = category mix</div>
       </div>
 
       <MapContainer center={[24.4539,54.3773]} zoom={12} style={{width:"100%",height:"100%"}} zoomControl={!mobile}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap contributors"/>
         <FitAll coords={allCoords}/>
         <FlyTo target={flyTarget}/>
-        <MarkerClusterGroup iconCreateFunction={clusterIcon} chunkedLoading maxClusterRadius={60} showCoverageOnHover={false}>
+        <MarkerClusterGroup iconCreateFunction={clusterIcon} chunkedLoading maxClusterRadius={60} showCoverageOnHover={false} spiderfyOnMaxZoom={true}>
           {placed.map(r=>(
-            <Marker key={r.id} position={r.coords as any} icon={mkIcon(r.category)}>
+            <Marker key={r.id} position={r.coords} icon={mkIcon(r.category)}>
               <Popup maxWidth={290} autoPan={true}>
                 <div style={{fontFamily:"system-ui,sans-serif",minWidth:"230px"}}>
                   <div style={{fontWeight:"700",fontSize:"15px",color:"#1E293B",marginBottom:"6px",lineHeight:"1.3"}}>{r.name}</div>
@@ -146,7 +249,7 @@ function MapView({rows,mobile}:{rows:Co[];mobile:boolean}){
             </Marker>
           ))}
         </MarkerClusterGroup>
-        {userPos&&<Marker position={userPos} icon={userIcon}><Popup><div style={{fontFamily:"system-ui",fontWeight:"700",color:"#2563EB",padding:"4px"}}>📍 You are here</div></Popup></Marker>}
+        {userPos&&<Marker position={userPos} icon={userIcon}><Popup><div style={{fontFamily:"system-ui",fontWeight:"700",color:"#2563EB",padding:"4px 2px"}}>📍 You are here</div></Popup></Marker>}
       </MapContainer>
     </div>
   )
