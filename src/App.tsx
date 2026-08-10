@@ -1,6 +1,5 @@
 import{useState,useEffect,useCallback,useRef}from"react"
 import{MapContainer,TileLayer,Marker,Popup}from"react-leaflet"
-import MarkerClusterGroup from"react-leaflet-cluster"
 import{useMap}from"react-leaflet"
 import L from"leaflet"
 import"leaflet/dist/leaflet.css"
@@ -115,31 +114,6 @@ function MapView({rows,mobile}:{rows:Co[];mobile:boolean}){
     .map(r=>({...r,coords:[r.lat!,r.lng!] as [number,number]}))
   const allCoords=placed.map(r=>r.coords)
 
-  // Position → category map for cluster conic-gradient
-  const positionCatMap=new Map<string,string>(
-    placed.map(r=>[r.coords[0].toFixed(4)+","+r.coords[1].toFixed(4),r.category])
-  )
-
-  const clusterIcon=useCallback((cluster:any)=>{
-    const markers=cluster.getAllChildMarkers()
-    const catCounts:Record<string,number>={}
-    markers.forEach((m:any)=>{
-      const key=m._latlng.lat.toFixed(4)+","+m._latlng.lng.toFixed(4)
-      const cat=positionCatMap.get(key)||"Interior Companies"
-      catCounts[cat]=(catCounts[cat]||0)+1
-    })
-    const total=markers.length
-    let pct=0
-    const stops=Object.entries(catCounts).map(([cat,count])=>{
-      const start=pct;pct+=(count/total)*100
-      return`${CAT_CLR[cat]||"#64748B"} ${start.toFixed(1)}% ${pct.toFixed(1)}%`
-    }).join(",")
-    const sz=total<5?36:total<15?44:54
-    return L.divIcon({
-      html:`<div style="width:${sz}px;height:${sz}px;border-radius:50%;background:conic-gradient(${stops});border:3px solid white;box-shadow:0 3px 12px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:${sz>44?14:12}px;color:white;text-shadow:0 1px 4px rgba(0,0,0,.8)">${total}</div>`,
-      className:"",iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]
-    })
-  },[rows])
 
   const locate=()=>{
     if(!navigator.geolocation){setLocErr("GPS not supported");return}
@@ -185,7 +159,7 @@ function MapView({rows,mobile}:{rows:Co[];mobile:boolean}){
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap contributors"/>
         <FitAll coords={allCoords}/>
         <FlyTo target={flyTarget}/>
-        <MarkerClusterGroup iconCreateFunction={clusterIcon} maxClusterRadius={60} disableClusteringAtZoom={15} spiderfyOnMaxZoom={true} showCoverageOnHover={false} zoomToBoundsOnClick={true}>
+        <>
           {placed.map(r=>(
             <Marker key={r.id} position={r.coords} icon={mkIcon(r.category)}>
               <Popup maxWidth={290} autoPan={true}>
@@ -206,7 +180,7 @@ function MapView({rows,mobile}:{rows:Co[];mobile:boolean}){
               </Popup>
             </Marker>
           ))}
-        </MarkerClusterGroup>
+        </>
         {userPos&&<Marker position={userPos} icon={userIcon}><Popup><div style={{fontFamily:"system-ui",fontWeight:"700",color:"#2563EB",padding:"4px 2px"}}>📍 You are here</div></Popup></Marker>}
       </MapContainer>
     </div>
