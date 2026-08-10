@@ -13,7 +13,7 @@ const DC=["Interior Companies","Design Companies","Consultants","Hotels","Holdin
 const DE=["Abu Dhabi","Dubai","Sharjah","Ajman","Umm Al Quwain","Ras Al Khaimah","Fujairah"]
 const DA=["Majen","Aashel"]
 const E0={name:"",category:DC[0],address:DE[0],procurement_email:"",office_phone:"",procurement_officer:"",notes:"",assigned_to:"",website:"",maps:""}
-const ST=[{v:"green",l:"Great",b:"#16A34A",lc:"#DCFCE7"},{v:"yellow",l:"Follow Up",b:"#D97706",lc:"#FEF3C7"},{v:"red",l:"Not a Fit",b:"#DC2626",lc:"#FEE2E2"},{v:"black",l:"Do Not Contact",b:"#1E293B",lc:"#F1F5F9"}]
+const ST=[{v:"onboarded",l:"Onboarded",b:"#16A34A",lc:"#DCFCE7"},{v:"great",l:"Great Fit",b:"#2563EB",lc:"#DBEAFE"},{v:"yellow",l:"Follow Up",b:"#D97706",lc:"#FEF3C7"},{v:"red",l:"Not a Fit",b:"#DC2626",lc:"#FEE2E2"},{v:"black",l:"Do Not Contact",b:"#1E293B",lc:"#F1F5F9"}]
 const SM:Record<string,typeof ST[0]>=Object.fromEntries(ST.map(s=>[s.v,s]))
 const CB=["physical_meeting_1","call_1","call_2","call_3","physical_meeting_2"]
 const CBL=["Meet1","Call1","Call2","Call3","Meet2"]
@@ -408,14 +408,22 @@ export default function App(){
       {tab==="main"&&!mobile&&<div style={{overflowX:"auto",padding:"16px"}}>
         <table style={{borderCollapse:"collapse",width:"100%",minWidth:"1400px",background:"#fff",borderRadius:"12px",overflow:"hidden",boxShadow:"0 1px 8px rgba(0,0,0,.08)"}}>
           <thead><tr>
-            {["Status","Company","Category","Assigned","Officer","Email","Phone","Emirate"].map(h=><th key={h} style={TH}>{h}</th>)}
+            {["Status","Company","Links","Category","Assigned","Officer","Email","Phone","Emirate"].map(h=><th key={h} style={TH}>{h}</th>)}
             {CBL.map(h=><th key={h} style={{...TH,textAlign:"center"}}>{h}</th>)}
             <th style={TH}>Notes</th><th style={TH}>Act</th>
           </tr></thead>
           <tbody>
             {display.map(r=><tr key={r.id}>
               <td style={{...TD,minWidth:"130px"}}><Pill id={r.id} status={r.status} onChange={v=>setRows(x=>x.map(c=>c.id===r.id?{...c,status:v}:c))}/></td>
-              <td style={{...TD,fontWeight:"600",minWidth:"180px"}}>{r.website?<a href={r.website.startsWith("http")?r.website:"https://"+r.website} target="_blank" rel="noreferrer" style={{color:"#1E293B",textDecoration:"none"}}>{r.name} 🔗</a>:r.name}</td>
+              <td style={{...TD,fontWeight:"600",minWidth:"180px"}}>{r.name}</td>
+              <td style={{...TD,whiteSpace:"nowrap",textAlign:"center"}}>
+                {r.website
+                  ?<a href={r.website.startsWith("http")?r.website:"https://"+r.website} target="_blank" rel="noreferrer" title={r.website} style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"28px",height:"28px",borderRadius:"6px",background:"#EFF6FF",textDecoration:"none",fontSize:"15px",marginRight:"4px"}}>🌐</a>
+                  :<span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"28px",height:"28px",borderRadius:"6px",background:"#F1F5F9",opacity:.35,fontSize:"15px",marginRight:"4px"}}>🌐</span>}
+                {r.maps
+                  ?<a href={r.maps} target="_blank" rel="noreferrer" title="Google Maps" style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"28px",height:"28px",borderRadius:"6px",background:"#F0FDF4",textDecoration:"none",fontSize:"15px"}}>📍</a>
+                  :<span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"28px",height:"28px",borderRadius:"6px",background:"#F1F5F9",opacity:.35,fontSize:"15px"}}>📍</span>}
+              </td>
               <td style={{...TD,minWidth:"140px"}}><span style={{background:"#EFF6FF",color:"#1D4ED8",borderRadius:"20px",padding:"2px 10px",fontSize:"11px",fontWeight:"600"}}>{r.category}</span></td>
               <td style={{...TD,minWidth:"120px"}}><AssignPill id={r.id} value={r.assigned_to} assignees={sett.assignees} onSave={v=>setRows(x=>x.map(c=>c.id===r.id?{...c,assigned_to:v}:c))}/></td>
               <td style={{...TD,minWidth:"130px"}}>{r.procurement_officer||<span style={{color:"#CBD5E1"}}>—</span>}</td>
@@ -434,7 +442,7 @@ export default function App(){
                 <button onClick={()=>del(r.id)} style={{...btnS("#FEF2F2","#DC2626","4px 10px"),fontSize:"12px"}}>Del</button>
               </td>
             </tr>)}
-            {display.length===0&&<tr><td colSpan={15} style={{...TD,textAlign:"center",color:"#94A3B8",padding:"40px"}}>No companies found</td></tr>}
+            {display.length===0&&<tr><td colSpan={16} style={{...TD,textAlign:"center",color:"#94A3B8",padding:"40px"}}>No companies found</td></tr>}
           </tbody>
         </table>
       </div>}
@@ -460,8 +468,8 @@ export default function App(){
               </button>
               {r.office_phone&&<a href={`tel:${r.office_phone}`} style={{background:"#EFF6FF",color:"#1D4ED8",borderRadius:"8px",padding:"6px 12px",textDecoration:"none",fontSize:"13px",fontWeight:"600"}}>📞 Call</a>}
               {r.procurement_email&&<a href={`mailto:${r.procurement_email}`} style={{background:"#F0FDF4",color:"#16A34A",borderRadius:"8px",padding:"6px 12px",textDecoration:"none",fontSize:"13px",fontWeight:"600"}}>✉️ Email</a>}
-              {r.website&&<a href={r.website.startsWith("http")?r.website:"https://"+r.website} target="_blank" rel="noreferrer" style={{background:"#1E293B",color:"#fff",borderRadius:"8px",padding:"6px 12px",textDecoration:"none",fontSize:"13px",fontWeight:"600"}}>🌐 Site</a>}
-              {(r.maps||r.name)&&<a href={r.maps||`https://www.google.com/maps/search/${encodeURIComponent(r.name+' Abu Dhabi')}`} target="_blank" rel="noreferrer" style={{background:"#DCFCE7",color:"#16A34A",borderRadius:"8px",padding:"6px 12px",textDecoration:"none",fontSize:"13px",fontWeight:"600"}}>📍 Map</a>}
+              {r.website&&<a href={r.website.startsWith("http")?r.website:"https://"+r.website} target="_blank" rel="noreferrer" style={{background:"#1E293B",color:"#fff",borderRadius:"8px",padding:"6px 12px",textDecoration:"none",fontSize:"13px",fontWeight:"600"}}>🌐</a>}
+              {(r.maps||r.name)&&<a href={r.maps||`https://www.google.com/maps/search/${encodeURIComponent(r.name+' Abu Dhabi')}`} target="_blank" rel="noreferrer" style={{background:"#DCFCE7",color:"#16A34A",borderRadius:"8px",padding:"6px 12px",textDecoration:"none",fontSize:"13px",fontWeight:"600"}}>📍</a>}
             </div>
             <div style={{display:"flex",gap:"6px",flexWrap:"wrap"}}>
               {CB.map((f,i)=><label key={f} style={{display:"flex",alignItems:"center",gap:"4px",fontSize:"12px",color:"#64748B",background:"#F8FAFC",borderRadius:"6px",padding:"4px 8px"}}>
@@ -486,8 +494,12 @@ export default function App(){
               <div style={{fontSize:"13px",color:"#475569",display:"flex",gap:"12px",flexWrap:"wrap"}}>
                 {p.office_phone&&<a href={`tel:${p.office_phone}`} style={{color:"#2563EB"}}>📞 {p.office_phone}</a>}
                 {p.procurement_email&&<a href={`mailto:${p.procurement_email}`} style={{color:"#2563EB"}}>✉️ {p.procurement_email}</a>}
-                {p.website&&<a href={p.website.startsWith("http")?p.website:"https://"+p.website} target="_blank" rel="noreferrer" style={{color:"#2563EB"}}>🌐 Site</a>}
-                {p.maps&&<a href={p.maps} target="_blank" rel="noreferrer" style={{color:"#16A34A"}}>📍 Maps</a>}
+                {p.website
+                  ?<a href={p.website.startsWith("http")?p.website:"https://"+p.website} target="_blank" rel="noreferrer" title={p.website} style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"30px",height:"30px",borderRadius:"8px",background:"#EFF6FF",textDecoration:"none",fontSize:"16px"}}>🌐</a>
+                  :<span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"30px",height:"30px",borderRadius:"8px",background:"#F1F5F9",fontSize:"16px",opacity:.3}}>🌐</span>}
+                {p.maps
+                  ?<a href={p.maps} target="_blank" rel="noreferrer" title="Google Maps" style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"30px",height:"30px",borderRadius:"8px",background:"#F0FDF4",textDecoration:"none",fontSize:"16px"}}>📍</a>
+                  :<span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"30px",height:"30px",borderRadius:"8px",background:"#F1F5F9",fontSize:"16px",opacity:.3}}>📍</span>}
               </div>
               {p.notes&&<div style={{marginTop:"8px",fontSize:"12px",color:"#94A3B8"}}>{p.notes}</div>}
             </div>
