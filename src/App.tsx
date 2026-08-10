@@ -126,7 +126,7 @@ export default function App(){
   const[rows,setRows]=useState<Co[]>([]);const[pend,setPend]=useState<Pend[]>([])
   const[sett,setSett]=useState<Sett>({categories:DC,emirates:DE,assignees:DA})
   const[search,setSearch]=useState("")
-  const[catF,setCatF]=useState("All");const[stF,setStF]=useState("All");const[emirF,setEmirF]=useState("All");const[sortBy,setSortBy]=useState("name")
+  const[catF,setCatF]=useState("All");const[asgnF,setAsgnF]=useState("All");const[stF,setStF]=useState("All");const[emirF,setEmirF]=useState("All");const[sortBy,setSortBy]=useState("name")
   const[modal,setModal]=useState(false);const[settM,setSettM]=useState(false)
   const[editId,setEditId]=useState<number|null>(null);const[form,setForm]=useState({...E0});const[saving,setSaving]=useState(false)
   const[nCat,setNCat]=useState("");const[nEm,setNEm]=useState("");const[nAsgn,setNAsgn]=useState("")
@@ -164,6 +164,7 @@ export default function App(){
 
   const filt=rows.filter(r=>{
     if(catF!=="All"&&r.category!==catF)return false
+    if(asgnF!=="All"&&r.assigned_to!==asgnF)return false
     if(stF!=="All"&&r.status!==stF)return false
     if(emirF!=="All"&&r.address!==emirF)return false
     if(search){const q=search.toLowerCase();return r.name.toLowerCase().includes(q)||!!(r.procurement_officer?.toLowerCase().includes(q))||!!(r.procurement_email?.toLowerCase().includes(q))||!!(r.office_phone?.toLowerCase().includes(q))}
@@ -232,6 +233,8 @@ export default function App(){
         {tab==="main"&&!mobile&&<>
           <select value={catF} onChange={e=>setCatF(e.target.value)} style={inp({width:"auto",marginBottom:"0",fontSize:"12px",padding:"7px 10px",color:"#F1F5F9",background:"#334155",border:"none"})}>
             <option value="All">All Categories</option>{sett.categories.map(c=><option key={c}>{c}</option>)}</select>
+          <select value={asgnF} onChange={e=>setAsgnF(e.target.value)} style={inp({width:"auto",marginBottom:"0",fontSize:"12px",padding:"7px 10px",color:"#F1F5F9",background:"#334155",border:"none"})}>
+            <option value="All">All Assigned</option>{sett.assignees.map(a=><option key={a}>{a}</option>)}</select>
           <select value={stF} onChange={e=>setStF(e.target.value)} style={inp({width:"auto",marginBottom:"0",fontSize:"12px",padding:"7px 10px",color:"#F1F5F9",background:"#334155",border:"none"})}>
             <option value="All">All Statuses</option>{ST.map(s=><option key={s.v} value={s.v}>{s.l}</option>)}</select>
           <select value={emirF} onChange={e=>setEmirF(e.target.value)} style={inp({width:"auto",marginBottom:"0",fontSize:"12px",padding:"7px 10px",color:"#F1F5F9",background:"#334155",border:"none"})}>
