@@ -1,5 +1,8 @@
 import{useState,useEffect,useCallback,useRef}from"react"
 import{MapContainer,TileLayer,Marker,Popup}from"react-leaflet"
+import MarkerClusterGroup from"react-leaflet-cluster"
+import"react-leaflet-cluster/lib/assets/MarkerCluster.Default.css"
+import"react-leaflet-cluster/lib/assets/MarkerCluster.css"
 import{useMap}from"react-leaflet"
 import L from"leaflet"
 import"leaflet/dist/leaflet.css"
@@ -17,7 +20,7 @@ const SM:Record<string,typeof ST[0]>=Object.fromEntries(ST.map(s=>[s.v,s]))
 const CB=["physical_meeting_1","call_1","call_2","call_3","physical_meeting_2"]
 const CBL=["Meet1","Call1","Call2","Call3","Meet2"]
 const CAT_CLR:Record<string,string>={"Interior Companies":"#7C3AED","Design Companies":"#2563EB","Consultants":"#0891B2","Hotels":"#D97706","Holding Companies":"#16A34A","Royal HH Offices":"#DC2626","FF&E Buying Companies":"#9333EA","Joinery Companies":"#EA580C"}
-const DIST:Record<string,[number,number]>={"mussafah":[24.3419,54.5046],"al danah":[24.4672,54.3628],"al zahiyah":[24.4948,54.3744],"tourist club":[24.4948,54.3744],"corniche":[24.4613,54.3220],"al bateen":[24.4430,54.3201],"khalidiyah":[24.4547,54.3481],"al reem":[24.4987,54.4024],"reem island":[24.4987,54.4024],"khalifa city":[24.3992,54.5367],"yas island":[24.4671,54.6076],"saadiyat":[24.5420,54.4350],"al maryah":[24.4859,54.3848],"al ain":[24.2075,55.7447],"al karamah":[24.4680,54.3540],"al mushrif":[24.4367,54.3891],"al rawdah":[24.4690,54.3760],"al muntazah":[24.4530,54.3800],"hamdan":[24.4760,54.3660],"airport road":[24.4400,54.4000],"al marina":[24.4632,54.3170],"rabdan":[24.4200,54.3900],"madinat zayed":[24.4580,54.3380],"al manhal":[24.4700,54.3700],"al mushrif":[24.4367,54.3891]}
+const DIST:Record<string,[number,number]>={"mussafah":[24.3419,54.5046],"al danah":[24.4672,54.3628],"al zahiyah":[24.4948,54.3744],"tourist club":[24.4948,54.3744],"corniche":[24.4613,54.3220],"al bateen":[24.4430,54.3201],"khalidiyah":[24.4547,54.3481],"al reem":[24.4987,54.4024],"reem island":[24.4987,54.4024],"khalifa city":[24.3992,54.5367],"yas island":[24.4671,54.6076],"saadiyat":[24.5420,54.4350],"al maryah":[24.4859,54.3848],"al ain":[24.2075,55.7447],"al karamah":[24.4680,54.3540],"al mushrif":[24.4367,54.3891],"al rawdah":[24.4690,54.3760],"al muntazah":[24.4530,54.3800],"hamdan":[24.4760,54.3660],"airport road":[24.4400,54.4000],"al marina":[24.4632,54.3170],"rabdan":[24.4200,54.3900],"madinat zayed":[24.4580,54.3380],"al manhal":[24.4700,54.3700]}
 const IS=typeof window!=="undefined"&&sessionStorage.getItem("auth")==="1"
 const inp=(extra?:any)=>({width:"100%",padding:"9px 12px",border:"1px solid #CBD5E1",borderRadius:"8px",fontSize:"14px",color:"#1E293B",background:"#fff",boxSizing:"border-box" as const,marginBottom:"10px",...extra})
 const btnS=(bg:string,c="white",p="10px 18px")=>({background:bg,color:c,border:"none",borderRadius:"8px",padding:p,cursor:"pointer",fontWeight:"600",fontSize:"13px"} as const)
@@ -69,6 +72,7 @@ function MapView({rows}:{rows:Co[]}){
       <MapContainer center={[24.4539,54.3773]} zoom={12} style={{width:"100%",height:"100%"}} zoomControl={true}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; OpenStreetMap'/>
         <FitAll coords={allCoords}/>
+        <MarkerClusterGroup chunkedLoading maxClusterRadius={60}>
         {placed.map(r=>(
           <Marker key={r.id} position={r.coords as any} icon={mkIcon(r.category)}>
             <Popup maxWidth={280}>
@@ -90,6 +94,7 @@ function MapView({rows}:{rows:Co[]}){
             </Popup>
           </Marker>
         ))}
+              </MarkerClusterGroup>
       </MapContainer>
     </div>
   )
