@@ -1,15 +1,12 @@
 import{useState,useEffect,useCallback,useRef}from"react"
 import{MapContainer,TileLayer,Marker,Popup}from"react-leaflet"
-import MarkerClusterGroup from"react-leaflet-cluster"
-import"react-leaflet-cluster/lib/assets/MarkerCluster.Default.css"
-import"react-leaflet-cluster/lib/assets/MarkerCluster.css"
 import{useMap}from"react-leaflet"
 import L from"leaflet"
 import"leaflet/dist/leaflet.css"
 import*as XLSX from"xlsx"
 import{supabase}from"./lib/supabase"
 
-type Co={id:number;name:string;category:string;address:string;website:string;maps:string;procurement_email:string;office_phone:string;procurement_officer:string;notes:string;physical_meeting_1:boolean;call_1:boolean;call_2:boolean;call_3:boolean;physical_meeting_2:boolean;status:string|null;assigned_to:string|null;added_date:string}
+type Co={id:number;name:string;category:string;address:string;website:string;maps:string;procurement_email:string;office_phone:string;procurement_officer:string;notes:string;physical_meeting_1:boolean;call_1:boolean;call_2:boolean;call_3:boolean;physical_meeting_2:boolean;status:string|null;assigned_to:string|null;added_date:string;meet_count:number|null;last_met_at:string|null}
 type Pend={id:number;name:string;category:string;address:string;city:string;website:string;maps:string;procurement_email:string;office_phone:string;procurement_officer:string;notes:string;added_date:string}
 type Sett={categories:string[];emirates:string[];assignees:string[]}
 const DC=["Interior Companies","Design Companies","Consultants","Hotels","Holding Companies","Royal HH Offices","FF&E Buying Companies","Joinery Companies"]
@@ -138,7 +135,8 @@ function MapView({rows,mobile}:{rows:Co[];mobile:boolean}){
   },[rows])
 
   // Resolve coordinates: Maps URL > Nominatim cache > district keywords > jitter
-  const placed=rows.map(r=>{
+  const uniqueRows=[...new Map(rows.map(r=>[r.id,r])).values()]
+  const placed=uniqueRows.map(r=>{
     const coords=extractCoords(r.maps)||geocoded.get(r.id)||distCoords(r.notes)||distCoords(r.address)||
       [24.4539+(Math.random()-.5)*.018,54.3773+(Math.random()-.5)*.018] as [number,number]
     return{...r,coords:coords as [number,number]}
@@ -161,39 +159,6 @@ function MapView({rows,mobile}:{rows:Co[];mobile:boolean}){
   }
 
   const userIcon=L.divIcon({html:`<div style="width:20px;height:20px;border-radius:50%;background:#2563EB;border:3px solid white;box-shadow:0 0 0 4px rgba(37,99,235,.25),0 2px 8px rgba(0,0,0,.3);transform:translate(-50%,-50%)"></div>`,className:"",iconSize:[1,1],iconAnchor:[0,0],popupAnchor:[10,-10]})
-
-  // Conic-gradient cluster icon: outer ring shows category proportions, inner badge shows count
-  const clusterIcon=(cluster:any)=>{
-    const markers=cluster.getAllChildMarkers()
-    const counts:Record<string,number>={}
-    markers.forEach((m:any)=>{
-      const ll=m.getLatLng()
-      const key=ll.lat.toFixed(5)+","+ll.lng.toFixed(5)
-      const cat=coordCat.get(key)||"Other"
-      counts[cat]=(counts[cat]||0)+1
-    })
-    const total=markers.length
-    const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1])
-    // Build conic-gradient segments
-    let grad="conic-gradient("
-    let pct=0
-    sorted.forEach(([cat,n],i)=>{
-      const col=CAT_CLR[cat]||"#64748B"
-      const end=pct+(n/total)*100
-      grad+=`${col} ${pct.toFixed(1)}% ${end.toFixed(1)}%`
-      pct=end
-      if(i<sorted.length-1)grad+=","
-    })
-    grad+=")"
-    const sz=total<10?38:total<25?46:56
-    const fsz=total<100?13:11
-    const inner=sz-14
-    return L.divIcon({
-      html:`<div style="width:${sz}px;height:${sz}px;border-radius:50%;background:${grad};display:flex;align-items:center;justify-content:center;box-shadow:0 3px 12px rgba(0,0,0,.35);border:2.5px solid white">` +
-        `<div style="width:${inner}px;height:${inner}px;border-radius:50%;background:rgba(15,23,42,.75);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:${fsz}px;font-family:system-ui">${total}</div></div>`,
-      className:"",iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]
-    })
-  }
 
   const mapH=mobile?"calc(100dvh - 130px)":"calc(100dvh - 58px)"
 
@@ -220,14 +185,14 @@ function MapView({rows,mobile}:{rows:Co[];mobile:boolean}){
             <span style={{color:"#1E293B",fontWeight:"500"}}>{k}</span>
           </div>
         ))}
-        <div style={{borderTop:"1px solid #E2E8F0",marginTop:"6px",paddingTop:"6px",color:"#94A3B8",fontSize:"10px"}}>Cluster ring = category mix</div>
+        
       </div>
 
       <MapContainer center={[24.4539,54.3773]} zoom={12} style={{width:"100%",height:"100%"}} zoomControl={!mobile}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap contributors"/>
         <FitAll coords={allCoords}/>
         <FlyTo target={flyTarget}/>
-        <MarkerClusterGroup iconCreateFunction={clusterIcon} chunkedLoading maxClusterRadius={60} showCoverageOnHover={false} spiderfyOnMaxZoom={true}>
+        <>
           {placed.map(r=>(
             <Marker key={r.id} position={r.coords} icon={mkIcon(r.category)}>
               <Popup maxWidth={290} autoPan={true}>
@@ -248,12 +213,28 @@ function MapView({rows,mobile}:{rows:Co[];mobile:boolean}){
               </Popup>
             </Marker>
           ))}
-        </MarkerClusterGroup>
+        </>
         {userPos&&<Marker position={userPos} icon={userIcon}><Popup><div style={{fontFamily:"system-ui",fontWeight:"700",color:"#2563EB",padding:"4px 2px"}}>📍 You are here</div></Popup></Marker>}
       </MapContainer>
     </div>
   )
 }
+
+function AssignPill({id,value,assignees,onSave}:{id:number;value:string|null;assignees:string[];onSave:(v:string|null)=>void}){
+  const onChange=async(e:React.ChangeEvent<HTMLSelectElement>)=>{
+    const v=e.target.value||null
+    onSave(v)
+    await supabase.from("companies").update({assigned_to:v}).eq("id",id)
+  }
+  return(
+    <select value={value||""} onChange={onChange}
+      style={{background:value?"#EFF6FF":"#F8FAFC",color:value?"#1D4ED8":"#94A3B8",border:`1.5px solid ${value?"#BFDBFE":"#E2E8F0"}`,borderRadius:"20px",padding:"3px 10px",fontSize:"12px",fontWeight:"600",cursor:"pointer",appearance:"none",WebkitAppearance:"none",outline:"none"}}>
+      <option value="">Unassigned</option>
+      {assignees.map(a=><option key={a} value={a}>{a}</option>)}
+    </select>
+  )
+}
+
 
 function Pill({id,status,onChange}:{id:number;status:string|null;onChange:(v:string|null)=>void}){
   const[o,setO]=useState(false);const[pos,setPos]=useState({top:0,left:0});const ref=useRef<HTMLButtonElement>(null)
@@ -314,6 +295,12 @@ export default function App(){
   }
   const del=async(id:number)=>{if(!confirm("Delete?"))return;await supabase.from("companies").delete().eq("id",id);setRows(r=>r.filter(x=>x.id!==id))}
   const toggle=async(id:number,f:string,v:boolean)=>{setRows(r=>r.map(x=>x.id===id?{...x,[f]:!v}:x));await supabase.from("companies").update({[f]:!v}).eq("id",id)}
+  const recordMeet=async(id:number,cur:number|null)=>{
+    const n=(cur||0)+1
+    const ts=new Date().toISOString()
+    setRows(r=>r.map(x=>x.id===id?{...x,meet_count:n,last_met_at:ts}:x))
+    await supabase.from("companies").update({meet_count:n,last_met_at:ts}).eq("id",id)
+  }
   const saveSett=async(key:string,vals:string[])=>{await supabase.from("app_settings").upsert({key,value:JSON.stringify(vals)});setSett(s=>({...s,[key]:vals}))}
 
   const filt=rows.filter(r=>{
@@ -430,14 +417,19 @@ export default function App(){
               <td style={{...TD,minWidth:"130px"}}><Pill id={r.id} status={r.status} onChange={v=>setRows(x=>x.map(c=>c.id===r.id?{...c,status:v}:c))}/></td>
               <td style={{...TD,fontWeight:"600",minWidth:"180px"}}>{r.website?<a href={r.website.startsWith("http")?r.website:"https://"+r.website} target="_blank" rel="noreferrer" style={{color:"#1E293B",textDecoration:"none"}}>{r.name} 🔗</a>:r.name}</td>
               <td style={{...TD,minWidth:"140px"}}><span style={{background:"#EFF6FF",color:"#1D4ED8",borderRadius:"20px",padding:"2px 10px",fontSize:"11px",fontWeight:"600"}}>{r.category}</span></td>
-              <td style={{...TD}}>{r.assigned_to||<span style={{color:"#CBD5E1"}}>—</span>}</td>
+              <td style={{...TD,minWidth:"120px"}}><AssignPill id={r.id} value={r.assigned_to} assignees={sett.assignees} onSave={v=>setRows(x=>x.map(c=>c.id===r.id?{...c,assigned_to:v}:c))}/></td>
               <td style={{...TD,minWidth:"130px"}}>{r.procurement_officer||<span style={{color:"#CBD5E1"}}>—</span>}</td>
               <td style={{...TD,minWidth:"160px"}}>{r.procurement_email?<a href={`mailto:${r.procurement_email}`} style={{color:"#3B82F6"}}>{r.procurement_email}</a>:<span style={{color:"#CBD5E1"}}>—</span>}</td>
               <td style={{...TD,minWidth:"130px"}}>{r.office_phone?<a href={`tel:${r.office_phone}`} style={{color:"#3B82F6"}}>{r.office_phone}</a>:<span style={{color:"#CBD5E1"}}>—</span>}</td>
               <td style={{...TD}}>{r.address||<span style={{color:"#CBD5E1"}}>—</span>}</td>
               {CB.map(f=><td key={f} style={{...TD,textAlign:"center"}}><input type="checkbox" checked={!!r[f as keyof Co]} onChange={()=>toggle(r.id,f,!!r[f as keyof Co])} style={{width:"15px",height:"15px",cursor:"pointer"}}/></td>)}
               <td style={{...TD,maxWidth:"160px",fontSize:"12px",color:"#64748B"}}>{r.notes?.slice(0,60)}</td>
-              <td style={{...TD,whiteSpace:"nowrap"}}>
+              <td style={{...TD,whiteSpace:"nowrap",minWidth:"110px"}}>
+                <div style={{display:"flex",alignItems:"center",gap:"4px",marginBottom:"5px"}}>
+                  <button onClick={()=>recordMeet(r.id,r.meet_count)} style={{...btnS("#7C3AED"),padding:"4px 8px",fontSize:"12px"}}>+ Meet</button>
+                  <span style={{fontWeight:"700",color:"#7C3AED",fontSize:"13px",minWidth:"16px"}}>{r.meet_count||0}</span>
+                </div>
+                {r.last_met_at&&<div style={{fontSize:"10px",color:"#94A3B8",marginBottom:"5px"}}>Last: {new Date(r.last_met_at).toLocaleDateString("en-GB",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})}</div>}
                 <button onClick={()=>{setEditId(r.id);setForm({name:r.name,category:r.category,address:r.address,procurement_email:r.procurement_email,office_phone:r.office_phone,procurement_officer:r.procurement_officer,notes:r.notes,assigned_to:r.assigned_to??"",website:r.website??"",maps:r.maps??""});setModal(true)}} style={{...btnS("#EFF6FF","#3B82F6","4px 10px"),fontSize:"12px",marginRight:"4px"}}>Edit</button>
                 <button onClick={()=>del(r.id)} style={{...btnS("#FEF2F2","#DC2626","4px 10px"),fontSize:"12px"}}>Del</button>
               </td>
@@ -455,11 +447,17 @@ export default function App(){
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:"8px"}}>
               <div style={{flex:1,paddingRight:"8px"}}>
                 <div style={{fontWeight:"700",fontSize:"16px",color:"#1E293B"}}>{r.name}</div>
-                <span style={{background:"#EFF6FF",color:"#1D4ED8",borderRadius:"20px",padding:"2px 10px",fontSize:"11px",fontWeight:"600"}}>{r.category}</span>
+                <div style={{display:"flex",gap:"6px",flexWrap:"wrap",marginTop:"4px"}}>
+                  <span style={{background:"#EFF6FF",color:"#1D4ED8",borderRadius:"20px",padding:"2px 10px",fontSize:"11px",fontWeight:"600"}}>{r.category}</span>
+                  <AssignPill id={r.id} value={r.assigned_to} assignees={sett.assignees} onSave={v=>setRows(x=>x.map(c=>c.id===r.id?{...c,assigned_to:v}:c))}/>
+                </div>
               </div>
               <Pill id={r.id} status={r.status} onChange={v=>setRows(x=>x.map(co=>co.id===r.id?{...co,status:v}:co))}/>
             </div>
             <div style={{display:"flex",gap:"8px",flexWrap:"wrap",marginBottom:"10px"}}>
+              <button onClick={()=>recordMeet(r.id,r.meet_count)} style={{background:"#F5F3FF",color:"#7C3AED",borderRadius:"8px",padding:"6px 12px",border:"none",cursor:"pointer",fontSize:"13px",fontWeight:"700"}}>
+                🤝 {r.meet_count||0}{r.last_met_at?<span style={{fontWeight:"400",fontSize:"11px",color:"#94A3B8",marginLeft:"4px"}}>Last: {new Date(r.last_met_at).toLocaleDateString("en-GB",{day:"2-digit",month:"short"})}</span>:null}
+              </button>
               {r.office_phone&&<a href={`tel:${r.office_phone}`} style={{background:"#EFF6FF",color:"#1D4ED8",borderRadius:"8px",padding:"6px 12px",textDecoration:"none",fontSize:"13px",fontWeight:"600"}}>📞 Call</a>}
               {r.procurement_email&&<a href={`mailto:${r.procurement_email}`} style={{background:"#F0FDF4",color:"#16A34A",borderRadius:"8px",padding:"6px 12px",textDecoration:"none",fontSize:"13px",fontWeight:"600"}}>✉️ Email</a>}
               {r.website&&<a href={r.website.startsWith("http")?r.website:"https://"+r.website} target="_blank" rel="noreferrer" style={{background:"#1E293B",color:"#fff",borderRadius:"8px",padding:"6px 12px",textDecoration:"none",fontSize:"13px",fontWeight:"600"}}>🌐 Site</a>}
