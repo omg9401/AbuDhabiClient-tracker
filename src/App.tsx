@@ -1,19 +1,21 @@
 import{useState,useEffect,useCallback,useRef}from"react"
 import{MapContainer,TileLayer,Marker,Popup}from"react-leaflet"
+import MarkerClusterGroup from"react-leaflet-cluster"
 import{useMap}from"react-leaflet"
 import L from"leaflet"
 import"leaflet/dist/leaflet.css"
 import*as XLSX from"xlsx"
 import{supabase}from"./lib/supabase"
 
-type Co={id:number;name:string;category:string;address:string;website:string;maps:string;procurement_email:string;office_phone:string;procurement_officer:string;notes:string;physical_meeting_1:boolean;call_1:boolean;call_2:boolean;call_3:boolean;physical_meeting_2:boolean;status:string|null;assigned_to:string|null;added_date:string;meet_count:number|null;last_met_at:string|null}
+type Co={id:number;name:string;category:string;address:string;website:string;maps:string;procurement_email:string;office_phone:string;procurement_officer:string;notes:string;physical_meeting_1:boolean;call_1:boolean;call_2:boolean;call_3:boolean;physical_meeting_2:boolean;status:string|null;assigned_to:string|null;added_date:string;meet_count:number|null;last_met_at:string|null;lat:number|null;lng:number|null}
 type Pend={id:number;name:string;category:string;address:string;city:string;website:string|null;maps:string|null;procurement_email:string;office_phone:string;procurement_officer:string;notes:string;added_date:string}
+type Contact={id:number;company_id:number;type:"email"|"phone";label:string;value:string;created_at:string}
 type Sett={categories:string[];emirates:string[];assignees:string[]}
 const DC=["Interior Companies","Design Companies","Consultants","Hotels","Holding Companies","Royal HH Offices","FF&E Buying Companies","Joinery Companies"]
 const DE=["Abu Dhabi","Dubai","Sharjah","Ajman","Umm Al Quwain","Ras Al Khaimah","Fujairah"]
 const DA=["Majen","Aashel"]
 const E0={name:"",category:DC[0],address:DE[0],procurement_email:"",office_phone:"",procurement_officer:"",notes:"",assigned_to:"",website:"",maps:""}
-const ST=[{v:"onboarded",l:"Onboarded",b:"#16A34A",lc:"#DCFCE7"},{v:"great",l:"Great Fit",b:"#2563EB",lc:"#DBEAFE"},{v:"yellow",l:"Follow Up",b:"#D97706",lc:"#FEF3C7"},{v:"red",l:"Not a Fit",b:"#DC2626",lc:"#FEE2E2"},{v:"black",l:"Do Not Contact",b:"#1E293B",lc:"#F1F5F9"}]
+const ST=[{v:"onboarded",l:"Onboarded",b:"#16A34A",lc:"#DCFCE7"},{v:"great",l:"Great Fit",b:"#2563EB",lc:"#DBEAFE"},{v:"yellow",l:"Follow Up",b:"#D97706",lc:"#FEF3C7"},{v:"red",l:"Not a Fit",b:"#DC2626",lc:"#FEE2E2"},{v:"black",l:"Do Not Contact",b:"#1E293B",lc:"#F1F5F9"},{v:"nopay",l:"Doesn't Pay",b:"#B91C1C",lc:"#FEE2E2"}]
 const SM:Record<string,typeof ST[0]>=Object.fromEntries(ST.map(s=>[s.v,s]))
 const CB=["physical_meeting_1","call_1","call_2","call_3","physical_meeting_2"]
 const CBL=["Meet1","Call1","Call2","Call3","Meet2"]
@@ -106,48 +108,38 @@ function MapView({rows,mobile}:{rows:Co[];mobile:boolean}){
   const[flyTarget,setFlyTarget]=useState<[number,number]|null>(null)
   const[locating,setLocating]=useState(false)
   const[locErr,setLocErr]=useState<string|null>(null)
-  // Nominatim geocode cache: id → [lat,lng]
-  const[geocoded,setGeocoded]=useState<Map<number,[number,number]>>(new Map())
 
-  // Async geocode companies that have no exact coords from their Maps URL
-  useEffect(()=>{
-    let alive=true
-    const queue=rows.filter(r=>!extractCoords(r.maps)&&!distCoords(r.notes)&&!distCoords(r.address))
-    ;(async()=>{
-      for(const r of queue){
-        if(!alive||geocoded.has(r.id))continue
-        try{
-          const q=encodeURIComponent(r.name+" Abu Dhabi UAE")
-          const res=await fetch(`https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1&countrycodes=ae`,
-            {headers:{"Accept-Language":"en","User-Agent":"AbuDhabiClientTracker/1.0"}})
-          const d=await res.json()
-          if(d?.[0]){
-            const c:[number,number]=[parseFloat(d[0].lat),parseFloat(d[0].lon)]
-            // Sanity check: must be in UAE roughly
-            if(c[0]>22&&c[0]<26.5&&c[1]>51&&c[1]<56.5){
-              setGeocoded(prev=>new Map(prev).set(r.id,c))
-            }
-          }
-        }catch{}
-        await new Promise(ok=>setTimeout(ok,300))
-      }
-    })()
-    return()=>{alive=false}
-  },[rows])
-
-  // Resolve coordinates: Maps URL > Nominatim cache > district keywords > jitter
-  const uniqueRows=[...new Map(rows.map(r=>[r.id,r])).values()]
-  const placed=uniqueRows.map(r=>{
-    const coords=extractCoords(r.maps)||geocoded.get(r.id)||distCoords(r.notes)||distCoords(r.address)||
-      [24.4539+(Math.random()-.5)*.018,54.3773+(Math.random()-.5)*.018] as [number,number]
-    return{...r,coords:coords as [number,number]}
-  })
+  // Use lat/lng from DB — no runtime geocoding
+  const placed=[...new Map(rows.map(r=>[r.id,r])).values()]
+    .filter(r=>r.lat!=null&&r.lng!=null)
+    .map(r=>({...r,coords:[r.lat!,r.lng!] as [number,number]}))
   const allCoords=placed.map(r=>r.coords)
 
-  // Build lat,lng → category map for cluster coloring
-  const coordCat=new Map<string,string>(
-    placed.map(r=>[r.coords[0].toFixed(5)+","+r.coords[1].toFixed(5),r.category])
+  // Position → category map for cluster conic-gradient
+  const positionCatMap=new Map<string,string>(
+    placed.map(r=>[r.coords[0].toFixed(4)+","+r.coords[1].toFixed(4),r.category])
   )
+
+  const clusterIcon=useCallback((cluster:any)=>{
+    const markers=cluster.getAllChildMarkers()
+    const catCounts:Record<string,number>={}
+    markers.forEach((m:any)=>{
+      const key=m._latlng.lat.toFixed(4)+","+m._latlng.lng.toFixed(4)
+      const cat=positionCatMap.get(key)||"Interior Companies"
+      catCounts[cat]=(catCounts[cat]||0)+1
+    })
+    const total=markers.length
+    let pct=0
+    const stops=Object.entries(catCounts).map(([cat,count])=>{
+      const start=pct;pct+=(count/total)*100
+      return`${CAT_CLR[cat]||"#64748B"} ${start.toFixed(1)}% ${pct.toFixed(1)}%`
+    }).join(",")
+    const sz=total<5?36:total<15?44:54
+    return L.divIcon({
+      html:`<div style="width:${sz}px;height:${sz}px;border-radius:50%;background:conic-gradient(${stops});border:3px solid white;box-shadow:0 3px 12px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:${sz>44?14:12}px;color:white;text-shadow:0 1px 4px rgba(0,0,0,.8)">${total}</div>`,
+      className:"",iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]
+    })
+  },[rows])
 
   const locate=()=>{
     if(!navigator.geolocation){setLocErr("GPS not supported");return}
@@ -167,7 +159,7 @@ function MapView({rows,mobile}:{rows:Co[];mobile:boolean}){
     <div style={{position:"relative",height:mapH,width:"100%"}}>
       {/* Top pill */}
       <div style={{position:"absolute",top:12,left:"50%",transform:"translateX(-50%)",zIndex:999,background:"rgba(255,255,255,.95)",borderRadius:"24px",padding:"6px 16px",fontSize:"12px",color:"#64748B",boxShadow:"0 2px 8px rgba(0,0,0,.12)",whiteSpace:"nowrap",pointerEvents:"none"}}>
-        {rows.length} companies · tap cluster to expand
+        {rows.length} companies · {placed.length} mapped
       </div>
 
       {/* Locate Me button */}
@@ -193,7 +185,7 @@ function MapView({rows,mobile}:{rows:Co[];mobile:boolean}){
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap contributors"/>
         <FitAll coords={allCoords}/>
         <FlyTo target={flyTarget}/>
-        <>
+        <MarkerClusterGroup iconCreateFunction={clusterIcon} maxClusterRadius={60} disableClusteringAtZoom={15} spiderfyOnMaxZoom={true} showCoverageOnHover={false} zoomToBoundsOnClick={true}>
           {placed.map(r=>(
             <Marker key={r.id} position={r.coords} icon={mkIcon(r.category)}>
               <Popup maxWidth={290} autoPan={true}>
@@ -214,7 +206,7 @@ function MapView({rows,mobile}:{rows:Co[];mobile:boolean}){
               </Popup>
             </Marker>
           ))}
-        </>
+        </MarkerClusterGroup>
         {userPos&&<Marker position={userPos} icon={userIcon}><Popup><div style={{fontFamily:"system-ui",fontWeight:"700",color:"#2563EB",padding:"4px 2px"}}>📍 You are here</div></Popup></Marker>}
       </MapContainer>
     </div>
@@ -268,16 +260,22 @@ export default function App(){
   const[nCat,setNCat]=useState("");const[nEm,setNEm]=useState("");const[nAsgn,setNAsgn]=useState("")
   const[mobile,setMobile]=useState(window.innerWidth<768)
   useEffect(()=>{const h=()=>setMobile(window.innerWidth<768);window.addEventListener("resize",h);return()=>window.removeEventListener("resize",h)},[])
+  const[contacts,setContacts]=useState<Map<number,Contact[]>>(new Map())
+  const[contactModal,setContactModal]=useState<Co|null>(null)
+  const[newEmail,setNewEmail]=useState({label:"",value:""})
+  const[newPhone,setNewPhone]=useState({label:"",value:""})
 
   const load=useCallback(async()=>{
-    const[{data:cos},{data:ps},{data:cfg}]=await Promise.all([
+    const[{data:cos},{data:ps},{data:cfg},{data:cts}]=await Promise.all([
       supabase.from("companies").select("*").order("category").order("name"),
       supabase.from("pending_companies").select("*").order("added_date",{ascending:false}),
-      supabase.from("app_settings").select("*")
+      supabase.from("app_settings").select("*"),
+      supabase.from("company_contacts").select("*")
     ])
     if(cos)setRows(cos as Co[])
     if(ps)setPend(ps as Pend[])
     if(cfg&&cfg.length){const m:any=Object.fromEntries(cfg.map((r:any)=>[r.key,JSON.parse(r.value)]));setSett({categories:m.categories??DC,emirates:m.emirates??DE,assignees:m.assignees??DA})}
+    if(cts){const m=new Map<number,Contact[]>();(cts as Contact[]).forEach(c=>{if(!m.has(c.company_id))m.set(c.company_id,[]);m.get(c.company_id)!.push(c)});setContacts(m)}
   },[])
   useEffect(()=>{if(auth)load()},[auth,load])
   useEffect(()=>{if(!auth)return;const t=setInterval(load,30000);return()=>clearInterval(t)},[auth,load])
@@ -303,6 +301,15 @@ export default function App(){
     await supabase.from("companies").update({meet_count:n,last_met_at:ts}).eq("id",id)
   }
   const saveSett=async(key:string,vals:string[])=>{await supabase.from("app_settings").upsert({key,value:JSON.stringify(vals)});setSett(s=>({...s,[key]:vals}))}
+  const addContact=async(companyId:number,type:"email"|"phone",label:string,value:string)=>{
+    if(!value.trim())return
+    const{data}=await supabase.from("company_contacts").insert({company_id:companyId,type,label:label.trim()||type,value:value.trim()}).select()
+    if(data&&data[0])setContacts(prev=>{const n=new Map(prev);const arr=[...(n.get(companyId)||[])];arr.push(data[0] as Contact);n.set(companyId,arr);return n})
+  }
+  const removeContact=async(companyId:number,contactId:number)=>{
+    await supabase.from("company_contacts").delete().eq("id",contactId)
+    setContacts(prev=>{const n=new Map(prev);n.set(companyId,(n.get(companyId)||[]).filter(c=>c.id!==contactId));return n})
+  }
 
   const filt=rows.filter(r=>{
     if(catF!=="All"&&r.category!==catF)return false
@@ -409,12 +416,12 @@ export default function App(){
       {tab==="main"&&!mobile&&<div style={{overflowX:"auto",padding:"16px"}}>
         <table style={{borderCollapse:"collapse",width:"100%",minWidth:"1400px",background:"#fff",borderRadius:"12px",overflow:"hidden",boxShadow:"0 1px 8px rgba(0,0,0,.08)"}}>
           <thead><tr>
-            {["Status","Company","Links","Category","Assigned","Officer","Email","Phone","Emirate"].map(h=><th key={h} style={TH}>{h}</th>)}
+            {["Status","Company","Links","Category","Assigned","Officer","Contacts","Emirate"].map(h=><th key={h} style={TH}>{h}</th>)}
             {CBL.map(h=><th key={h} style={{...TH,textAlign:"center"}}>{h}</th>)}
             <th style={TH}>Notes</th><th style={TH}>Act</th>
           </tr></thead>
           <tbody>
-            {display.map(r=><tr key={r.id}>
+            {display.map(r=>{const rcts=contacts.get(r.id)||[];const eCount=rcts.filter(c=>c.type==="email").length;const pCount=rcts.filter(c=>c.type==="phone").length;return(<tr key={r.id}>
               <td style={{...TD,minWidth:"130px"}}><Pill id={r.id} status={r.status} onChange={v=>setRows(x=>x.map(c=>c.id===r.id?{...c,status:v}:c))}/></td>
               <td style={{...TD,fontWeight:"600",minWidth:"180px"}}>{r.name}</td>
               <td style={{...TD,whiteSpace:"nowrap",textAlign:"center"}}>
@@ -423,13 +430,12 @@ export default function App(){
                   :<span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"28px",height:"28px",borderRadius:"6px",background:"#F1F5F9",opacity:.35,fontSize:"15px",marginRight:"4px"}}>🌐</span>}
                 {r.maps&&r.maps.trim()
                   ?<a href={r.maps.trim()} target="_blank" rel="noopener noreferrer" title="Google Maps" onClick={e=>e.stopPropagation()} style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"28px",height:"28px",borderRadius:"6px",background:"#F0FDF4",textDecoration:"none",fontSize:"15px",cursor:"pointer",pointerEvents:"auto"}}>📍</a>
-                  :<span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"28px",height:"28px",borderRadius:"6px",background:"#F1F5F9",opacity:.35,fontSize:"15px"}}>📍</span>
+                  :<span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"28px",height:"28px",borderRadius:"6px",background:"#F1F5F9",opacity:.35,fontSize:"15px"}}>📍</span>}
               </td>
               <td style={{...TD,minWidth:"140px"}}><span style={{background:"#EFF6FF",color:"#1D4ED8",borderRadius:"20px",padding:"2px 10px",fontSize:"11px",fontWeight:"600"}}>{r.category}</span></td>
               <td style={{...TD,minWidth:"120px"}}><AssignPill id={r.id} value={r.assigned_to} assignees={sett.assignees} onSave={v=>setRows(x=>x.map(c=>c.id===r.id?{...c,assigned_to:v}:c))}/></td>
               <td style={{...TD,minWidth:"130px"}}>{r.procurement_officer||<span style={{color:"#CBD5E1"}}>—</span>}</td>
-              <td style={{...TD,minWidth:"160px"}}>{r.procurement_email?<a href={`mailto:${r.procurement_email}`} style={{color:"#3B82F6"}}>{r.procurement_email}</a>:<span style={{color:"#CBD5E1"}}>—</span>}</td>
-              <td style={{...TD,minWidth:"130px"}}>{r.office_phone?<a href={`tel:${r.office_phone}`} style={{color:"#3B82F6"}}>{r.office_phone}</a>:<span style={{color:"#CBD5E1"}}>—</span>}</td>
+              <td style={{...TD,minWidth:"100px",textAlign:"center"}}><button onClick={()=>setContactModal(r)} style={{background:"#F8FAFC",border:"1.5px solid #E2E8F0",borderRadius:"8px",padding:"5px 10px",cursor:"pointer",fontSize:"12px",color:"#1E293B",display:"flex",alignItems:"center",gap:"4px",margin:"0 auto",whiteSpace:"nowrap"}}><span style={{color:eCount>0?"#2563EB":"#CBD5E1",fontWeight:eCount>0?"700":"400"}}>📧{eCount}</span><span style={{color:"#E2E8F0"}}>·</span><span style={{color:pCount>0?"#16A34A":"#CBD5E1",fontWeight:pCount>0?"700":"400"}}>📞{pCount}</span></button></td>
               <td style={{...TD}}>{r.address||<span style={{color:"#CBD5E1"}}>—</span>}</td>
               {CB.map(f=><td key={f} style={{...TD,textAlign:"center"}}><input type="checkbox" checked={!!r[f as keyof Co]} onChange={()=>toggle(r.id,f,!!r[f as keyof Co])} style={{width:"15px",height:"15px",cursor:"pointer"}}/></td>)}
               <td style={{...TD,maxWidth:"160px",fontSize:"12px",color:"#64748B"}}>{r.notes?.slice(0,60)}</td>
@@ -442,8 +448,8 @@ export default function App(){
                 <button onClick={()=>{setEditId(r.id);setForm({name:r.name,category:r.category,address:r.address,procurement_email:r.procurement_email,office_phone:r.office_phone,procurement_officer:r.procurement_officer,notes:r.notes,assigned_to:r.assigned_to??"",website:r.website??"",maps:r.maps??""});setModal(true)}} style={{...btnS("#EFF6FF","#3B82F6","4px 10px"),fontSize:"12px",marginRight:"4px"}}>Edit</button>
                 <button onClick={()=>del(r.id)} style={{...btnS("#FEF2F2","#DC2626","4px 10px"),fontSize:"12px"}}>Del</button>
               </td>
-            </tr>)}
-            {display.length===0&&<tr><td colSpan={16} style={{...TD,textAlign:"center",color:"#94A3B8",padding:"40px"}}>No companies found</td></tr>}
+            </tr>)})}
+            {display.length===0&&<tr><td colSpan={15} style={{...TD,textAlign:"center",color:"#94A3B8",padding:"40px"}}>No companies found</td></tr>}
           </tbody>
         </table>
       </div>}
@@ -467,8 +473,7 @@ export default function App(){
               <button onClick={()=>recordMeet(r.id,r.meet_count)} style={{background:"#F5F3FF",color:"#7C3AED",borderRadius:"8px",padding:"6px 12px",border:"none",cursor:"pointer",fontSize:"13px",fontWeight:"700"}}>
                 🤝 {r.meet_count||0}{r.last_met_at?<span style={{fontWeight:"400",fontSize:"11px",color:"#94A3B8",marginLeft:"4px"}}>Last: {new Date(r.last_met_at).toLocaleDateString("en-GB",{day:"2-digit",month:"short"})}</span>:null}
               </button>
-              {r.office_phone&&<a href={`tel:${r.office_phone}`} style={{background:"#EFF6FF",color:"#1D4ED8",borderRadius:"8px",padding:"6px 12px",textDecoration:"none",fontSize:"13px",fontWeight:"600"}}>📞 Call</a>}
-              {r.procurement_email&&<a href={`mailto:${r.procurement_email}`} style={{background:"#F0FDF4",color:"#16A34A",borderRadius:"8px",padding:"6px 12px",textDecoration:"none",fontSize:"13px",fontWeight:"600"}}>✉️ Email</a>}
+              {(()=>{const mc=contacts.get(r.id)||[];const ec=mc.filter(c=>c.type==="email").length;const pc=mc.filter(c=>c.type==="phone").length;const tot=ec+pc;return<button onClick={()=>setContactModal(r)} style={{background:tot>0?"#EFF6FF":"#F8FAFC",color:tot>0?"#1D4ED8":"#94A3B8",borderRadius:"8px",padding:"6px 12px",border:"none",cursor:"pointer",fontSize:"13px",fontWeight:"600"}}>📇 Contacts{tot>0?` (${tot})`:""}</button>})()}
               {r.website&&<a href={r.website.startsWith("http")?r.website:"https://"+r.website} target="_blank" rel="noreferrer" style={{background:"#1E293B",color:"#fff",borderRadius:"8px",padding:"6px 12px",textDecoration:"none",fontSize:"13px",fontWeight:"600"}}>🌐</a>}
               {(r.maps||r.name)&&<a href={r.maps||`https://www.google.com/maps/search/${encodeURIComponent(r.name+' Abu Dhabi')}`} target="_blank" rel="noreferrer" style={{background:"#DCFCE7",color:"#16A34A",borderRadius:"8px",padding:"6px 12px",textDecoration:"none",fontSize:"13px",fontWeight:"600"}}>📍</a>}
             </div>
@@ -539,6 +544,59 @@ export default function App(){
             <button onClick={()=>setModal(false)} style={{...btnS("#F1F5F9","#64748B"),flex:1,padding:"13px"}}>Cancel</button>
             <button onClick={save} disabled={saving} style={{...btnS("#3B82F6"),flex:2,padding:"13px"}}>{saving?"Saving...":"Save"}</button>
           </div>
+        </div>
+      </div>}
+
+
+      {/* Contacts Modal */}
+      {contactModal&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.6)",zIndex:2000,display:"flex",alignItems:"flex-end",justifyContent:"center"}}>
+        <div style={{background:"#fff",borderRadius:"20px 20px 0 0",padding:"24px",width:"100%",maxWidth:"540px",maxHeight:"90vh",overflowY:"auto"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"20px"}}>
+            <div style={{fontWeight:"700",fontSize:"17px",color:"#1E293B"}}>📇 {contactModal.name}</div>
+            <button onClick={()=>{setContactModal(null);setNewEmail({label:"",value:""});setNewPhone({label:"",value:""})}} style={{background:"none",border:"none",fontSize:"24px",cursor:"pointer",color:"#94A3B8",lineHeight:"1"}}>×</button>
+          </div>
+
+          {/* Emails section */}
+          <div style={{marginBottom:"24px"}}>
+            <div style={{fontWeight:"700",fontSize:"11px",color:"#64748B",textTransform:"uppercase",letterSpacing:"1.2px",marginBottom:"10px"}}>📧 Emails</div>
+            {(contacts.get(contactModal.id)||[]).filter(c=>c.type==="email").length===0&&<div style={{color:"#CBD5E1",fontSize:"13px",fontStyle:"italic",marginBottom:"8px"}}>No emails added yet</div>}
+            {(contacts.get(contactModal.id)||[]).filter(c=>c.type==="email").map(c=>(
+              <div key={c.id} style={{display:"flex",gap:"8px",alignItems:"center",marginBottom:"8px",background:"#F8FAFC",borderRadius:"10px",padding:"10px 14px"}}>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontSize:"10px",color:"#94A3B8",fontWeight:"700",textTransform:"uppercase",letterSpacing:"0.5px",marginBottom:"2px"}}>{c.label||"Email"}</div>
+                  <a href={`mailto:${c.value}`} style={{color:"#2563EB",fontSize:"14px",fontWeight:"500",textDecoration:"none",wordBreak:"break-all"}}>{c.value}</a>
+                </div>
+                <button onClick={()=>removeContact(contactModal.id,c.id)} style={{background:"#FEF2F2",color:"#DC2626",border:"none",borderRadius:"6px",width:"28px",height:"28px",cursor:"pointer",fontSize:"16px",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>×</button>
+              </div>
+            ))}
+            <div style={{display:"flex",gap:"6px",marginTop:"8px"}}>
+              <input value={newEmail.label} onChange={e=>setNewEmail(v=>({...v,label:e.target.value}))} placeholder="Label (e.g. Procurement)" style={{...inp(),flex:"0 0 150px",marginBottom:"0",fontSize:"13px"}}/>
+              <input value={newEmail.value} onChange={e=>setNewEmail(v=>({...v,value:e.target.value}))} placeholder="email@company.com" type="email" style={{...inp(),flex:1,marginBottom:"0",fontSize:"13px"}} onKeyDown={e=>{if(e.key==="Enter"&&newEmail.value.trim()){addContact(contactModal.id,"email",newEmail.label,newEmail.value);setNewEmail({label:"",value:""})}}}/>
+              <button onClick={()=>{if(!newEmail.value.trim())return;addContact(contactModal.id,"email",newEmail.label,newEmail.value);setNewEmail({label:"",value:""})}} style={{...btnS("#2563EB"),padding:"9px 14px",flexShrink:0}}>+</button>
+            </div>
+          </div>
+
+          {/* Phones section */}
+          <div style={{marginBottom:"24px"}}>
+            <div style={{fontWeight:"700",fontSize:"11px",color:"#64748B",textTransform:"uppercase",letterSpacing:"1.2px",marginBottom:"10px"}}>📞 Phone Numbers</div>
+            {(contacts.get(contactModal.id)||[]).filter(c=>c.type==="phone").length===0&&<div style={{color:"#CBD5E1",fontSize:"13px",fontStyle:"italic",marginBottom:"8px"}}>No phone numbers added yet</div>}
+            {(contacts.get(contactModal.id)||[]).filter(c=>c.type==="phone").map(c=>(
+              <div key={c.id} style={{display:"flex",gap:"8px",alignItems:"center",marginBottom:"8px",background:"#F8FAFC",borderRadius:"10px",padding:"10px 14px"}}>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontSize:"10px",color:"#94A3B8",fontWeight:"700",textTransform:"uppercase",letterSpacing:"0.5px",marginBottom:"2px"}}>{c.label||"Phone"}</div>
+                  <a href={`tel:${c.value}`} style={{color:"#16A34A",fontSize:"14px",fontWeight:"500",textDecoration:"none"}}>{c.value}</a>
+                </div>
+                <button onClick={()=>removeContact(contactModal.id,c.id)} style={{background:"#FEF2F2",color:"#DC2626",border:"none",borderRadius:"6px",width:"28px",height:"28px",cursor:"pointer",fontSize:"16px",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>×</button>
+              </div>
+            ))}
+            <div style={{display:"flex",gap:"6px",marginTop:"8px"}}>
+              <input value={newPhone.label} onChange={e=>setNewPhone(v=>({...v,label:e.target.value}))} placeholder="Label (e.g. Reception)" style={{...inp(),flex:"0 0 150px",marginBottom:"0",fontSize:"13px"}}/>
+              <input value={newPhone.value} onChange={e=>setNewPhone(v=>({...v,value:e.target.value}))} placeholder="+971 2 xxx xxxx" type="tel" style={{...inp(),flex:1,marginBottom:"0",fontSize:"13px"}} onKeyDown={e=>{if(e.key==="Enter"&&newPhone.value.trim()){addContact(contactModal.id,"phone",newPhone.label,newPhone.value);setNewPhone({label:"",value:""})}}}/>
+              <button onClick={()=>{if(!newPhone.value.trim())return;addContact(contactModal.id,"phone",newPhone.label,newPhone.value);setNewPhone({label:"",value:""})}} style={{...btnS("#16A34A"),padding:"9px 14px",flexShrink:0}}>+</button>
+            </div>
+          </div>
+
+          <button onClick={()=>{setContactModal(null);setNewEmail({label:"",value:""});setNewPhone({label:"",value:""})}} style={{...btnS("#F1F5F9","#64748B"),width:"100%",padding:"13px"}}>Done</button>
         </div>
       </div>}
 
