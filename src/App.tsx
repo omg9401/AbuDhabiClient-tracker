@@ -7,7 +7,7 @@ import*as XLSX from"xlsx"
 import{supabase}from"./lib/supabase"
 
 type Co={id:number;name:string;category:string;address:string;website:string;maps:string;procurement_email:string;office_phone:string;procurement_officer:string;notes:string;physical_meeting_1:boolean;call_1:boolean;call_2:boolean;call_3:boolean;physical_meeting_2:boolean;status:string|null;assigned_to:string|null;added_date:string;meet_count:number|null;last_met_at:string|null}
-type Pend={id:number;name:string;category:string;address:string;city:string;website:string;maps:string;procurement_email:string;office_phone:string;procurement_officer:string;notes:string;added_date:string}
+type Pend={id:number;name:string;category:string;address:string;city:string;website:string|null;maps:string|null;procurement_email:string;office_phone:string;procurement_officer:string;notes:string;added_date:string}
 type Sett={categories:string[];emirates:string[];assignees:string[]}
 const DC=["Interior Companies","Design Companies","Consultants","Hotels","Holding Companies","Royal HH Offices","FF&E Buying Companies","Joinery Companies"]
 const DE=["Abu Dhabi","Dubai","Sharjah","Ajman","Umm Al Quwain","Ras Al Khaimah","Fujairah"]
@@ -57,6 +57,7 @@ const IS=typeof window!=="undefined"&&sessionStorage.getItem("auth")==="1"
 const inp=(extra?:any)=>({width:"100%",padding:"9px 12px",border:"1px solid #CBD5E1",borderRadius:"8px",fontSize:"14px",color:"#1E293B",background:"#fff",boxSizing:"border-box" as const,marginBottom:"10px",...extra})
 const btnS=(bg:string,c="white",p="10px 18px")=>({background:bg,color:c,border:"none",borderRadius:"8px",padding:p,cursor:"pointer",fontWeight:"600",fontSize:"13px"} as const)
 
+const href=(u:string|null)=>!u||!u.trim()?null:u.startsWith("http")?u:"https://"+u.trim()
 function extractCoords(url:string|null):[number,number]|null{
   if(!url)return null
   // Most precise: pin location embedded in data parameter  (e.g. !3d24.4539!4d54.3773)
@@ -494,12 +495,12 @@ export default function App(){
               <div style={{fontSize:"13px",color:"#475569",display:"flex",gap:"12px",flexWrap:"wrap"}}>
                 {p.office_phone&&<a href={`tel:${p.office_phone}`} style={{color:"#2563EB"}}>📞 {p.office_phone}</a>}
                 {p.procurement_email&&<a href={`mailto:${p.procurement_email}`} style={{color:"#2563EB"}}>✉️ {p.procurement_email}</a>}
-                {p.website
-                  ?<a href={p.website.startsWith("http")?p.website:"https://"+p.website} target="_blank" rel="noreferrer" title={p.website} style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"30px",height:"30px",borderRadius:"8px",background:"#EFF6FF",textDecoration:"none",fontSize:"16px"}}>🌐</a>
-                  :<span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"30px",height:"30px",borderRadius:"8px",background:"#F1F5F9",fontSize:"16px",opacity:.3}}>🌐</span>}
-                {p.maps
-                  ?<a href={p.maps} target="_blank" rel="noreferrer" title="Google Maps" style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"30px",height:"30px",borderRadius:"8px",background:"#F0FDF4",textDecoration:"none",fontSize:"16px"}}>📍</a>
-                  :<span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"30px",height:"30px",borderRadius:"8px",background:"#F1F5F9",fontSize:"16px",opacity:.3}}>📍</span>}
+                {(()=>{const u=href(p.website);return u
+                  ?<a href={u} target="_blank" rel="noopener noreferrer" title={u} style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"30px",height:"30px",borderRadius:"8px",background:"#EFF6FF",textDecoration:"none",fontSize:"16px",cursor:"pointer"}}>🌐</a>
+                  :<span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"30px",height:"30px",borderRadius:"8px",background:"#F1F5F9",fontSize:"16px",opacity:.3,cursor:"default"}}>🌐</span>})()}
+                {(()=>{const u=href(p.maps);return u
+                  ?<a href={u} target="_blank" rel="noopener noreferrer" title="Google Maps" style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"30px",height:"30px",borderRadius:"8px",background:"#F0FDF4",textDecoration:"none",fontSize:"16px",cursor:"pointer"}}>📍</a>
+                  :<span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"30px",height:"30px",borderRadius:"8px",background:"#F1F5F9",fontSize:"16px",opacity:.3,cursor:"default"}}>📍</span>})()}
               </div>
               {p.notes&&<div style={{marginTop:"8px",fontSize:"12px",color:"#94A3B8"}}>{p.notes}</div>}
             </div>
