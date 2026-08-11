@@ -1352,5 +1352,125 @@
     "website": "abudhabi.corniche-hotels.com",
     "notes": "Verified: Khalifa Street / Corniche area, Abu Dhabi \u2014 confirmed via official hotel website and multiple travel directories listing Abu Dhabi location with +971 2 phone prefix",
     "added_date": "2026-08-10"
+  },
+  {
+    "name": "Yas Holding",
+    "category": "Holding Companies",
+    "address": "Level 1, City Gate Towers, Zayed City, Abu Dhabi",
+    "phone": "+971 2 614 9000",
+    "email": "info@yasholding.ae",
+    "website": "yasholding.ae",
+    "notes": "Verified: Zayed City, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-11"
+  },
+  {
+    "name": "Citicore Interior Design LLC",
+    "category": "Interior Companies",
+    "address": "Al Reem Tower, Khalifa Bin Zayed The First St, Al Danah, Zone 1, Abu Dhabi",
+    "phone": "+971 2 676 1772",
+    "email": "info@citicore-interiordesign.com",
+    "website": "citicore-interiordesign.com",
+    "notes": "Verified: Al Danah, Zone 1, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-11"
+  },
+  {
+    "name": "WSP Abu Dhabi",
+    "category": "Consultants",
+    "address": "Office Units 1203 & 1204, Landmark Tower, Level 12, Corniche St, Al Markaziyah West, Abu Dhabi",
+    "phone": "+971 2 652 9222",
+    "email": "",
+    "website": "wsp.com",
+    "notes": "Verified: Al Markaziyah West, Corniche St, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-11"
+  },
+  {
+    "name": "BEAD Architects & Engineers LLC",
+    "category": "Design Companies",
+    "address": "Villa 9, Al Qutb Street, next to Sheikh Khalifa Palace, Al Bateen, Abu Dhabi",
+    "phone": "+971 2 666 8110",
+    "email": "info@bead-architects.com",
+    "website": "bead-architects.com",
+    "notes": "Verified: Al Bateen, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-11"
+  },
+  {
+    "name": "Hill International",
+    "category": "Consultants",
+    "address": "Al Khalidiyah, W9, Abu Dhabi",
+    "phone": "+971 2 627 7358",
+    "email": "",
+    "website": "hillintl.com",
+    "notes": "Verified: Al Khalidiyah, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-11"
+  },
+  {
+    "name": "Design Hub Interior Design and Decoration",
+    "category": "Interior Companies",
+    "address": "Al Muhary Building, Office 501, Al Danah, Zone 1, Abu Dhabi",
+    "phone": "+971 2 644 1107",
+    "email": "",
+    "website": "designhubae.com",
+    "notes": "Verified: Al Danah, Zone 1, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-11"
+  },
+  {
+    "name": "Monolith Interior Design and Construction LLC",
+    "category": "Interior Companies",
+    "address": "E25, AL Mamoura, Murror Street, Abu Dhabi",
+    "phone": "+971 2 443 0002",
+    "email": "",
+    "website": "monolithme.com",
+    "notes": "Verified: AL Mamoura, Murror Street, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-11"
+  },
+  {
+    "name": "Nest Interiors Decoration",
+    "category": "Interior Companies",
+    "address": "P979 Al Shoidi Building, Mezzanine Floor, Airport Road, Abu Dhabi",
+    "phone": "+971 2 886 7650",
+    "email": "",
+    "website": "nestinteriorsae.com",
+    "notes": "Verified: Airport Road, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-11"
+  },
+  {
+    "name": "Abu Dhabi Holding Co",
+    "category": "Holding Companies",
+    "address": "Sheikh Hamdan Bin Mohammed St, Al Danah, Zone 1, Abu Dhabi",
+    "phone": "+971 2 626 7000",
+    "email": "",
+    "website": "",
+    "notes": "Verified: Al Danah, Zone 1, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-11"
+  },
+  {
+    "name": "Faisal Holding",
+    "category": "Holding Companies",
+    "address": "Gibca Tower, 9th Floor, Khalifa Bin Zayed The First St, Al Danah, Zone 1, Abu Dhabi",
+    "phone": "+971 2 626 0620",
+    "email": "",
+    "website": "faisalholding.com",
+    "notes": "Verified: Al Danah, Zone 1, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-11"
+  },
+  {
+    "name": "ACG Architectural Consulting Group",
+    "category": "Design Companies",
+    "address": "617 Zayed The First St, Al Hisn, W6, Abu Dhabi",
+    "phone": "+971 2 634 4991",
+    "email": "",
+    "website": "",
+    "notes": "Verified: Al Hisn, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-11"
+  },
+  {
+    "name": "Luxury and More Interiors",
+    "category": "Interior Companies",
+    "address": "Istiqlal Street, Al Hisn, W5, Abu Dhabi",
+    "phone": "+971 2 886 9553",
+    "email": "",
+    "website": "luxuryandmore.net",
+    "notes": "Verified: Al Hisn, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-11"
   }
 ]
