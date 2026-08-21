@@ -1562,5 +1562,105 @@
     "website": "",
     "notes": "Verified: Abu Dhabi \u2014 confirmed via Yellow Pages UAE and multiple Abu Dhabi business directories (+971 2 phone prefix)",
     "added_date": "2026-08-21"
+  },
+  {
+    "name": "Lignum for Joinery Work",
+    "category": "Joinery Companies",
+    "address": "92, 2 Street, M17, Mussafah, Abu Dhabi",
+    "phone": "+971 2 6211050",
+    "email": "info@lignumuae.ae",
+    "website": "lignumuae.ae",
+    "notes": "Verified: Mussafah M17, Abu Dhabi \u2014 confirmed via 2GIS and Yango Maps",
+    "added_date": "2026-08-21"
+  },
+  {
+    "name": "APG - Architecture & Planning Group",
+    "category": "Design Companies",
+    "address": "Al Masaood Building, Floor 4-5, 606, Hamdan Bin Mohammed Street, Abu Dhabi",
+    "phone": "+971 2 6333022",
+    "email": "",
+    "website": "apgarch.ae",
+    "notes": "Verified: Hamdan Street (Al Danah), Abu Dhabi \u2014 confirmed via 2GIS and EmaratFinder",
+    "added_date": "2026-08-21"
+  },
+  {
+    "name": "Capital Engineering Consultancy",
+    "category": "Consultants",
+    "address": "Unit M 1-4, Building C402, Shabia Mussafah Sector 10, Abu Dhabi",
+    "phone": "+971 2 5537568",
+    "email": "",
+    "website": "capitalengg.com",
+    "notes": "Verified: Mussafah (Shabia Sector 10), Abu Dhabi \u2014 confirmed via 2GIS and official website",
+    "added_date": "2026-08-21"
+  },
+  {
+    "name": "CEO Engineering Consultancies",
+    "category": "Consultants",
+    "address": "ADCP Building, Office 401, Al Nahyan, Abu Dhabi",
+    "phone": "+971 2 5629799",
+    "email": "info@ceoengineering.ae",
+    "website": "ceoengineering.ae",
+    "notes": "Verified: Al Nahyan, Abu Dhabi \u2014 confirmed via 2GIS (Wadi An Niyabiyah street) and official website",
+    "added_date": "2026-08-21"
+  },
+  {
+    "name": "Amiral Consultant Engineers",
+    "category": "Consultants",
+    "address": "Dar Al Salam Building, 24, Jeddah Street, Al Danah, Abu Dhabi",
+    "phone": "+971 2 6314884",
+    "email": "",
+    "website": "amiralce.com",
+    "notes": "Verified: Al Danah, Abu Dhabi \u2014 confirmed via 2GIS and Yango Maps",
+    "added_date": "2026-08-21"
+  },
+  {
+    "name": "Senaat General Holding Corporation",
+    "category": "Holding Companies",
+    "address": "Level 41, Tower 3, Etihad Towers, Corniche Street, Abu Dhabi",
+    "phone": "+971 2 6144444",
+    "email": "",
+    "website": "senaat.co",
+    "notes": "Verified: Corniche (Etihad Towers), Abu Dhabi \u2014 confirmed via official website and Dun & Bradstreet",
+    "added_date": "2026-08-21"
+  },
+  {
+    "name": "Emirates Investment Authority",
+    "category": "Holding Companies",
+    "address": "International Tower, ADNEC Capital Centre, Abu Dhabi",
+    "phone": "+971 2 4190000",
+    "email": "",
+    "website": "eia.gov.ae",
+    "notes": "Verified: ADNEC Capital Centre, Abu Dhabi \u2014 confirmed via official EIA website and SEC filings",
+    "added_date": "2026-08-21"
+  },
+  {
+    "name": "Abu Dhabi Investment Group (ADIG)",
+    "category": "Holding Companies",
+    "address": "Al Wahda Newspaper Building, Moroor Road, Abu Dhabi",
+    "phone": "+971 2 4482000",
+    "email": "info@adiguae.com",
+    "website": "adiguae.com",
+    "notes": "Verified: Al Wahda, Abu Dhabi \u2014 confirmed via official ADIG website",
+    "added_date": "2026-08-21"
+  },
+  {
+    "name": "Eldiar Furniture & Design",
+    "category": "FF&E Buying Companies",
+    "address": "Basement Level, Marina Mall, King Salman Bin Abdulaziz Al Saud Street, Abu Dhabi",
+    "phone": "+971 2 6578444",
+    "email": "info@eldiar.ae",
+    "website": "eldiar.ae",
+    "notes": "Verified: Marina Mall (Al Marina area), Abu Dhabi \u2014 confirmed via 2GIS and official website; luxury FF&E showroom and bespoke interiors established 1989",
+    "added_date": "2026-08-21"
+  },
+  {
+    "name": "Al Bateen Engineering Consultancy (BEC)",
+    "category": "Consultants",
+    "address": "24, Al Tunoub Street, W1, Abu Dhabi",
+    "phone": "+971 2 6322203",
+    "email": "",
+    "website": "bec-consultancy.com",
+    "notes": "Verified: Al Bateen (W1), Abu Dhabi \u2014 confirmed via Yango Maps and corporate directory",
+    "added_date": "2026-08-21"
   }
 ]
