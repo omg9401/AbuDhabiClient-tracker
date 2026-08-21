@@ -1472,5 +1472,95 @@
     "website": "luxuryandmore.net",
     "notes": "Verified: Al Hisn, Abu Dhabi \u2014 confirmed via Google Maps",
     "added_date": "2026-08-11"
+  },
+  {
+    "name": "Mercure Abu Dhabi Downtown",
+    "category": "Hotels",
+    "phone": "+971 2 205 5555",
+    "email": "",
+    "address": "Saeed Bin Ahmed Al Otaiba St, Downtown Abu Dhabi",
+    "website": "https://all.accor.com/hotel/C3Q9/index.en.shtml",
+    "notes": "Verified: Downtown Abu Dhabi \u2014 confirmed via Accor official website and multiple hotel directories",
+    "added_date": "2026-08-21"
+  },
+  {
+    "name": "Mercure Abu Dhabi Centre Hotel",
+    "category": "Hotels",
+    "phone": "+971 2 633 3555",
+    "email": "",
+    "address": "Hamdan Street, Abu Dhabi",
+    "website": "",
+    "notes": "Verified: Hamdan Street, Al Danah, Abu Dhabi \u2014 confirmed via hotel directories",
+    "added_date": "2026-08-21"
+  },
+  {
+    "name": "Howard Johnson by Wyndham Abu Dhabi",
+    "category": "Hotels",
+    "phone": "+971 2 493 9333",
+    "email": "",
+    "address": "Sheikh Khalifa Street, Abu Dhabi",
+    "website": "https://www.wyndhamhotels.com/hojo/abu-dhabi-united-arab-emirates/howard-johnson-hotel-diplomat-abu-dhabi-ae/overview",
+    "notes": "Verified: Sheikh Khalifa Street, Abu Dhabi \u2014 confirmed via Wyndham Hotels official website",
+    "added_date": "2026-08-21"
+  },
+  {
+    "name": "Hawthorn Suites by Wyndham Abu Dhabi City Center",
+    "category": "Hotels",
+    "phone": "+971 2 676 5000",
+    "email": "reservation@hawthornabudhabi.com",
+    "address": "Salam Street, Abu Dhabi",
+    "website": "https://hawthornabudhabi.com",
+    "notes": "Verified: Salam Street, Abu Dhabi City Center \u2014 confirmed via Wyndham Hotels official website and property website",
+    "added_date": "2026-08-21"
+  },
+  {
+    "name": "EHAF Consulting Engineers",
+    "category": "Consultants",
+    "phone": "+971 2 631 9161",
+    "email": "ehafuae@ehaf.com",
+    "address": "7th Floor, Addax Tower, Al Reem Island, Abu Dhabi",
+    "website": "https://ehaf.com",
+    "notes": "Verified: Al Reem Island, Abu Dhabi \u2014 confirmed via EHAF official website and Yellow Pages UAE",
+    "added_date": "2026-08-21"
+  },
+  {
+    "name": "Nasab Carpentry & Decor Works",
+    "category": "Joinery Companies",
+    "phone": "+971 2 551 1266",
+    "email": "info@nasabcd.com",
+    "address": "Mussafah M37, Abu Dhabi",
+    "website": "https://nasabcd.com",
+    "notes": "Verified: Mussafah M37, Abu Dhabi \u2014 confirmed via Yellow Pages UAE and 2GIS business directory",
+    "added_date": "2026-08-21"
+  },
+  {
+    "name": "Spazio Design & Build International",
+    "category": "Interior Companies",
+    "phone": "+971 2 626 8383",
+    "email": "",
+    "address": "Zone 1, E6, 10th Street, Abu Dhabi",
+    "website": "https://www.spaziodb.com",
+    "notes": "Verified: Zone 1, Abu Dhabi \u2014 confirmed via 2GIS and Yellow Pages UAE",
+    "added_date": "2026-08-21"
+  },
+  {
+    "name": "Danube Home Abu Dhabi",
+    "category": "FF&E Buying Companies",
+    "phone": "+971 2 309 6087",
+    "email": "",
+    "address": "34/3, 14 Street, M40, Mussafah, Abu Dhabi",
+    "website": "https://www.danubehome.com",
+    "notes": "Verified: Mussafah M40, Abu Dhabi \u2014 confirmed via Danube Home official website store locator",
+    "added_date": "2026-08-21"
+  },
+  {
+    "name": "Boudoir Interiors",
+    "category": "Interior Companies",
+    "phone": "+971 2 645 1152",
+    "email": "",
+    "address": "Abu Dhabi, UAE",
+    "website": "",
+    "notes": "Verified: Abu Dhabi \u2014 confirmed via Yellow Pages UAE and multiple Abu Dhabi business directories (+971 2 phone prefix)",
+    "added_date": "2026-08-21"
   }
 ]
