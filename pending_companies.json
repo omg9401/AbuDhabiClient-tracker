@@ -1822,5 +1822,55 @@
     "website": "atechinteriors.ae",
     "notes": "Verified: Musaffah MN6, Abu Dhabi \u2014 confirmed via Google Maps",
     "added_date": "2026-08-24"
+  },
+  {
+    "name": "Summertown Interiors LLC",
+    "category": "Interior Companies",
+    "address": "Al Hisn - W4 - Abu Dhabi",
+    "phone": "02 665 2003",
+    "email": "",
+    "website": "summertown.ae",
+    "notes": "Verified: Al Hisn, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-24"
+  },
+  {
+    "name": "Arcave Architecture and Interiors LLC",
+    "category": "Design Companies",
+    "address": "M01 - Building 8 Al Ghatfah St - Al Danah - Zone 1 - Abu Dhabi",
+    "phone": "050 353 2545",
+    "email": "",
+    "website": "arcave.ae",
+    "notes": "Verified: Al Danah, Zone 1, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-24"
+  },
+  {
+    "name": "Dewan Architects + Engineers",
+    "category": "Design Companies",
+    "address": "Villa B21, Al Marina - Abu Dhabi",
+    "phone": "02 681 5777",
+    "email": "",
+    "website": "dewan-architects.com",
+    "notes": "Verified: Al Marina, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-24"
+  },
+  {
+    "name": "Traders Hotel Qaryat Al Beri",
+    "category": "Hotels",
+    "address": "Khor Al Maqta, Qaryat Al Beri - Abu Dhabi",
+    "phone": "02 510 8888",
+    "email": "",
+    "website": "shangri-la.com",
+    "notes": "Verified: Khor Al Maqta, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-24"
+  },
+  {
+    "name": "Kareemi Carpentry",
+    "category": "Joinery Companies",
+    "address": "Al Bees 3 St - Musaffah - M14 - Abu Dhabi",
+    "phone": "050 124 0765",
+    "email": "",
+    "website": "simplife.ae",
+    "notes": "Verified: Musaffah M14, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-24"
   }
 ]
