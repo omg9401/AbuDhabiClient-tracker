@@ -2322,5 +2322,122 @@
     "address": "Khalifa City, Sector 13, Abu Dhabi",
     "notes": "Verified: Khalifa City, Abu Dhabi \u2014 confirmed via Google Maps. Plus Code: CH2H+97J Abu Dhabi",
     "added_date": "2026-08-25"
+  },
+  {
+    "name": "Rixos Marina Abu Dhabi",
+    "category": "Hotels",
+    "phone": "02 498 0000",
+    "email": "",
+    "address": "Marina Mall - Ring Road - Al Kasir - Al Marina - Abu Dhabi",
+    "notes": "Verified: Al Marina, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-25"
+  },
+  {
+    "name": "ERTH Abu Dhabi Hotel",
+    "category": "Hotels",
+    "phone": "02 441 5900",
+    "email": "",
+    "address": "Khor Al Maqta, Al Khaleej Al Arabi - Road - Abu Dhabi",
+    "notes": "Verified: Khor Al Maqta'a, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-25"
+  },
+  {
+    "name": "Park Arjaan by Rotana",
+    "category": "Hotels",
+    "phone": "02 657 3333",
+    "email": "",
+    "address": "Eastern Ring Road - Al Muntazah - Ministries Area - Abu Dhabi",
+    "notes": "Verified: Al Muntazah, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-25"
+  },
+  {
+    "name": "Millennium Al Rawdah Hotel",
+    "category": "Hotels",
+    "phone": "02 617 0000",
+    "email": "",
+    "address": "1778 Sheikh Rashid Bin Saeed St - Al Rawdah - W68 - Abu Dhabi",
+    "notes": "Verified: Al Rawdah, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-25"
+  },
+  {
+    "name": "Aparthotel Adagio Abu Dhabi Al Bustan",
+    "category": "Hotels",
+    "phone": "02 501 6444",
+    "email": "",
+    "address": "Shk. Rashid Bin Saeed - 29 Rabdan St - Abu Dhabi",
+    "notes": "Verified: Rabdan, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-25"
+  },
+  {
+    "name": "Capital Centre Arjaan by Rotana",
+    "category": "Hotels",
+    "phone": "02 495 4444",
+    "email": "",
+    "address": "Al Khaleej Al Arabi St - Al Rawdah - W59 01 - Abu Dhabi",
+    "notes": "Verified: Capital Centre / Al Rawdah, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-25"
+  },
+  {
+    "name": "Centro Capital Centre",
+    "category": "Hotels",
+    "phone": "02 409 6666",
+    "email": "",
+    "address": "Al Khaleej Al Arabi St - Al Rawdah - W59 01 - Abu Dhabi",
+    "notes": "Verified: Capital Centre / Al Rawdah, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-25"
+  },
+  {
+    "name": "VOGO Abu Dhabi Golf Resort & Spa",
+    "category": "Hotels",
+    "phone": "02 616 9999",
+    "email": "info.abudhabi@vogohotels.com",
+    "address": "Abu Dhabi Golf Club, Abu Dhabi",
+    "notes": "Verified: Abu Dhabi Golf Club, Khalifa City area \u2014 confirmed via Google Maps and official website",
+    "added_date": "2026-08-25"
+  },
+  {
+    "name": "MORE International Engineering Consulting",
+    "category": "Consultants",
+    "phone": "02 633 3400",
+    "email": "",
+    "address": "Falcon Tower - Al Naser Street - 9th Floor - Abu Dhabi",
+    "notes": "Verified: Al Nasr Street, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-25"
+  },
+  {
+    "name": "National Consulting Office For Engineering",
+    "category": "Consultants",
+    "phone": "02 678 0713",
+    "email": "",
+    "address": "Burq Hamamah St - Al Danah - E11 - Abu Dhabi",
+    "notes": "Verified: Al Danah, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-25"
+  },
+  {
+    "name": "Close System Architecture Consultancy LLC",
+    "category": "Consultants",
+    "phone": "02 677 3166",
+    "email": "",
+    "address": "Al Bateen - W10 - Abu Dhabi",
+    "notes": "Verified: Al Bateen, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-25"
+  },
+  {
+    "name": "East Consult Engineering Consultancy",
+    "category": "Consultants",
+    "phone": "050 417 1435",
+    "email": "",
+    "address": "314 Street Khalifa Building - 8th Floor, Office 842 - Al Danah - Zone 1 - Abu Dhabi",
+    "notes": "Verified: Al Danah, Zone 1, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-25"
+  },
+  {
+    "name": "Royal Palace Engineering Consultancy",
+    "category": "Consultants",
+    "phone": "02 658 5870",
+    "email": "",
+    "address": "72, 402 - Ar Ramlah St - Al Nahyan - E19 02 - Abu Dhabi",
+    "notes": "Verified: Al Nahyan, Abu Dhabi \u2014 confirmed via Google Maps",
+    "added_date": "2026-08-25"
   }
 ]
